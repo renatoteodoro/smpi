@@ -1,0 +1,324 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMPI — Sistema de Manutenção Prescritiva Inteligente</title>
+
+<style>
+@font-face {
+  font-family: MuseoSans;
+  font-style: normal;
+  font-weight: 300;
+  src: url(https://fiesc.com.br/themes/custom/fsi/dist/styles/assets/styleguide/fonts/MuseoSans/MuseoSans-300.otf) format("opentype");
+  font-display: swap;
+}
+@font-face {
+  font-family: MuseoSans;
+  font-style: normal;
+  font-weight: 500;
+  src: url(https://fiesc.com.br/themes/custom/fsi/dist/styles/assets/styleguide/fonts/MuseoSans/MuseoSans_500.otf) format("opentype");
+  font-display: swap;
+}
+@font-face {
+  font-family: MuseoSans;
+  font-style: normal;
+  font-weight: 700;
+  src: url(https://fiesc.com.br/themes/custom/fsi/dist/styles/assets/styleguide/fonts/MuseoSans/MuseoSans_700.otf) format("opentype");
+  font-display: swap;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: MuseoSans, Arial, sans-serif;
+  background: hsl(220 74% 33%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* ── Layout ── */
+.landing {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  max-width: 1100px;
+  width: 100%;
+  align-items: center;
+}
+
+/* ── Hero (left column) ── */
+.landing__hero { color: #fff; }
+
+.landing__logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.landing__logo img {
+  height: 48px;
+  filter: brightness(0) invert(1);
+}
+
+.landing__tagline {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.landing__desc {
+  font-size: 1rem;
+  opacity: .85;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.landing__features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.landing__features li {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  font-size: .9rem;
+  opacity: .9;
+}
+
+.landing__features .icon { font-size: 1.3rem; }
+
+/* ── Login card (right column) ── */
+.login-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
+}
+
+.login-card__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: hsl(220 74% 33%);
+  margin-bottom: .5rem;
+}
+
+.login-card__subtitle {
+  font-size: .9rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.form-group { margin-bottom: 1.25rem; }
+
+.form-group label {
+  display: block;
+  font-size: .85rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: .4rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: .7rem 1rem;
+  border: 1.5px solid #ddd;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: MuseoSans, Arial, sans-serif;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: hsl(220 74% 33%);
+  box-shadow: 0 0 0 3px hsl(212 100% 90% / .5);
+}
+
+.btn-login {
+  width: 100%;
+  padding: .8rem;
+  border-radius: 30px;
+  background: hsl(239, 79%, 29%);
+  color: #fff;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+  font-family: MuseoSans, Arial, sans-serif;
+}
+
+.btn-login:hover { background: #005ca9; }
+
+.btn-login:focus {
+  outline: 3px solid rgba(0, 125, 250, 0.7);
+  outline-offset: 1px;
+}
+
+.forgot-link {
+  display: block;
+  text-align: center;
+  margin-top: 1.25rem;
+  font-size: .85rem;
+  color: hsl(220 74% 33%);
+  text-decoration: none;
+}
+
+.forgot-link:hover { text-decoration: underline; }
+
+.forgot-link:focus {
+  outline: 3px solid rgba(0, 125, 250, 0.7);
+  outline-offset: 1px;
+}
+
+.error-msg {
+  background: #fed7d7;
+  color: #c53030;
+  border-radius: 8px;
+  padding: .75rem 1rem;
+  font-size: .85rem;
+  margin-bottom: 1.25rem;
+  border-left: 4px solid #fc8181;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .landing { grid-template-columns: 1fr; }
+  .landing__hero { display: none; }
+}
+</style>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+<div class="landing">
+
+  {# ── Hero column ── #}
+  <section class="landing__hero" aria-label="Informações do sistema">
+
+    <div class="landing__logo">
+      <img src="{% static 'img/smpi-logo.png' %}"
+           alt="SMPI"
+           onerror="this.style.display='none'">
+      <span style="font-size:1.5rem;font-weight:700">SMPI</span>
+    </div>
+
+    <h1 class="landing__tagline">Manutenção Prescritiva Inteligente</h1>
+
+    <p class="landing__desc">
+      Detecte anomalias em equipamentos rotativos, identifique defeitos por similaridade
+      histórica e receba prescrições fundamentadas em documentação técnica —
+      nunca em suposições.
+    </p>
+
+    <ul class="landing__features">
+      <li>
+        <span class="material-icons icon" aria-hidden="true">analytics</span>
+        Análise de sensores de vibração em tempo real
+      </li>
+      <li>
+        <span class="material-icons icon" aria-hidden="true">search</span>
+        Busca por similaridade vetorial (pgvector)
+      </li>
+      <li>
+        <span class="material-icons icon" aria-hidden="true">auto_awesome</span>
+        Prescrições grounded com RAG + LangGraph
+      </li>
+      <li>
+        <span class="material-icons icon" aria-hidden="true">chat</span>
+        Chat com IA com stream em tempo real
+      </li>
+      <li>
+        <span class="material-icons icon" aria-hidden="true">whatsapp</span>
+        Integração WhatsApp para técnicos de campo
+      </li>
+    </ul>
+
+  </section>
+
+  {# ── Login card ── #}
+  <section class="login-card" aria-label="Área de login">
+
+    <h2 class="login-card__title">Entrar no sistema</h2>
+    <p class="login-card__subtitle">Acesso exclusivo para usuários cadastrados.</p>
+
+    {% if form.errors %}
+    <div class="error-msg" role="alert">
+      E-mail ou senha inválidos. Verifique os dados e tente novamente.
+    </div>
+    {% endif %}
+
+    {% if form.non_field_errors %}
+    <div class="error-msg" role="alert">
+      {{ form.non_field_errors.0 }}
+    </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'accounts:login' %}" novalidate>
+      {% csrf_token %}
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+      <div class="form-group">
+        <label for="id_email">E-mail</label>
+        <input type="email"
+               id="id_email"
+               name="username"
+               value="{{ form.username.value|default:'' }}"
+               autocomplete="email"
+               autofocus
+               placeholder="seu@email.com"
+               required
+               aria-required="true"
+               aria-describedby="{% if form.username.errors %}email-error{% endif %}">
+        {% if form.username.errors %}
+        <span id="email-error" style="color:#c53030;font-size:.8rem">
+          {{ form.username.errors.0 }}
+        </span>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="id_password">Senha</label>
+        <input type="password"
+               id="id_password"
+               name="password"
+               autocomplete="current-password"
+               required
+               aria-required="true">
+      </div>
+
+      <button type="submit" class="btn-login">
+        Entrar
+      </button>
+
+      <a href="{% url 'accounts:password_reset' %}" class="forgot-link">
+        Esqueci minha senha
+      </a>
+    </form>
+
+  </section>
+
+</div>
+
+{# ── VLibras (obrigatório) ── #}
+<div vw class="enabled">
+  <div vw-access-button class="active"></div>
+  <div vw-plugin-wrapper>
+    <div class="vw-plugin-top-wrapper"></div>
+  </div>
+</div>
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
+
+</body>
+</html>

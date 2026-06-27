@@ -1,0 +1,45 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views import View
+from django.views.generic import DetailView, ListView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_POST
+
+from .models import Prescription
+
+
+class PrescriptionListView(LoginRequiredMixin, ListView):
+    model = Prescription
+    template_name = 'prescriptions/prescription_list.html'
+    context_object_name = 'prescriptions'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return super().get_queryset().select_related(
+            'fault', 'sensor_reading__measurement_point__equipment'
+        )
+
+
+class PrescriptionDetailView(LoginRequiredMixin, DetailView):
+    model = Prescription
+    template_name = 'prescriptions/prescription_detail.html'
+    context_object_name = 'prescription'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['source_chunks'] = self.object.source_chunks.select_related('document').all()
+        return ctx
+
+
+@login_required
+@require_POST
+def trigger_analysis(request, reading_id):
+    """Enqueue the prescription pipeline for a SensorReading."""
+    from monitoring.models import SensorReading
+    from .tasks import run_prescription_pipeline
+
+    reading = get_object_or_404(SensorReading, pk=reading_id)
+    task = run_prescription_pipeline.delay(reading.pk)
+    return JsonResponse({'status': 'queued', 'task_id': task.id})

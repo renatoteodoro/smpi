@@ -1,0 +1,65 @@
+site_name: SMPI — Manutenção Prescritiva Inteligente
+site_description: Documentação técnica do SMPI · FIESC
+site_author: Equipe FIESC
+docs_dir: docs
+site_dir: docs_site
+
+theme:
+  name: material
+  language: pt
+  icon:
+    logo: material/factory
+  palette:
+    - scheme: default
+      primary: custom
+      accent: blue
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.code.annotate
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search:
+      lang: pt
+  - mermaid2
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - tables
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/solid/industry
+      link: https://fiesc.com.br
+      name: FIESC
+
+nav:
+  - Início: index.md
+  - Arquitetura:
+    - Visão geral: architecture/overview.md
+    - Modelo de dados: architecture/data-model.md
+    - Pipeline IA: architecture/ai-pipeline.md
+  - Deploy:
+    - Docker Swarm: deploy/swarm.md
+    - Variáveis de ambiente: deploy/env-vars.md
+  - API REST: api/index.md
+  - Desenvolvimento:
+    - Setup local: dev/commands.md

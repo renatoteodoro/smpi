@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{# Safe URL resolution for endpoints that may not yet be wired #}
+{% url 'reports:report_create' as url_report_create %}
+
+{% block title %}Relatórios{% endblock %}
+{% block page_title %}Relatórios Exportados{% endblock %}
+
+{% block content %}
+
+{# Generate new report form #}
+<div class="smpi-card" style="max-width:500px;margin-bottom:1.5rem">
+  <div class="smpi-card__title">Gerar Novo Relatório</div>
+
+  <div class="smpi-alert smpi-alert--info" style="margin-bottom:1.25rem" role="note">
+    <span class="material-icons" aria-hidden="true">info</span>
+    A geração é assíncrona. Você será notificado quando o arquivo estiver disponível para download.
+  </div>
+
+  {% if url_report_create %}
+  <form method="post" action="{{ url_report_create }}" novalidate aria-label="Formulário para gerar relatório">
+    {% csrf_token %}
+    <div class="smpi-form-group">
+      <label for="report-format">Formato</label>
+      <select id="report-format" name="format">
+        <option value="csv">CSV — planilha de dados</option>
+        <option value="pdf">PDF — relatório formatado</option>
+      </select>
+    </div>
+    <div class="smpi-form-group">
+      <label for="report-status">Filtrar leituras por status (opcional)</label>
+      <select id="report-status" name="status">
+        <option value="">Todos os status</option>
+        <option value="problem">Problemas</option>
+        <option value="state">Estados normais</option>
+        <option value="pending">Pendentes</option>
+      </select>
+    </div>
+    <button type="submit"
+            class="smpi-btn smpi-btn--primary"
+            onclick="smpiButtonLoading(this, 'Solicitando...')">
+      <span class="material-icons" aria-hidden="true" style="font-size:1rem">file_download</span>
+      Solicitar Geração
+    </button>
+  </form>
+  {% else %}
+  <p style="color:#666;font-size:var(--fs-200)">Geração de relatórios não está disponível no momento.</p>
+  {% endif %}
+</div>
+
+{# Existing reports table #}
+<div class="smpi-card" style="overflow-x:auto">
+  <div class="smpi-card__title">Relatórios Gerados</div>
+  <table class="smpi-table" aria-label="Lista de relatórios gerados">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Formato</th>
+        <th scope="col">Filtro</th>
+        <th scope="col">Status</th>
+        <th scope="col">Solicitado em</th>
+        <th scope="col">Arquivo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for report in reports %}
+      <tr>
+        <td style="font-weight:600;color:var(--fsi-clr-1)">#{{ report.pk }}</td>
+        <td>
+          <span class="smpi-badge smpi-badge--info">{{ report.format|upper }}</span>
+        </td>
+        <td>{{ report.get_status_filter_display|default:"Todos" }}</td>
+        <td>
+          {% if report.status == 'done' %}
+          <span class="smpi-badge smpi-badge--success">
+            <span class="material-icons" style="font-size:.85rem" aria-hidden="true">check_circle</span>
+            Concluído
+          </span>
+          {% elif report.status == 'failed' %}
+          <span class="smpi-badge smpi-badge--danger">
+            <span class="material-icons" style="font-size:.85rem" aria-hidden="true">error</span>
+            Falhou
+          </span>
+          {% else %}
+          <span class="smpi-badge smpi-badge--warning">
+            <span class="material-icons" style="font-size:.85rem" aria-hidden="true">pending</span>
+            {{ report.get_status_display|default:"Processando" }}
+          </span>
+          {% endif %}
+        </td>
+        <td style="white-space:nowrap">{{ report.created_at|date:"d/m/Y H:i" }}</td>
+        <td>
+          {% if report.status == 'done' and report.file %}
+          <a href="{% url 'reports:report_download' report.pk %}"
+             class="smpi-btn smpi-btn--sm smpi-btn--outline"
+             aria-label="Baixar relatório {{ report.pk }}">
+            <span class="material-icons" aria-hidden="true" style="font-size:1rem">download</span>
+            Baixar
+          </a>
+          {% else %}
+          <span style="color:#999;font-size:var(--fs-100)">—</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6" style="text-align:center;padding:2.5rem;color:#666">
+          <span class="material-icons" style="font-size:2.5rem;display:block;margin-bottom:.5rem;color:var(--fsi-clr-9)">description</span>
+          Nenhum relatório gerado. Use o formulário acima para solicitar o primeiro relatório.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if is_paginated %}
+<nav aria-label="Paginação de relatórios" class="smpi-pagination">
+  {% if page_obj.has_previous %}
+  <a href="?page={{ page_obj.previous_page_number }}" aria-label="Página anterior">&laquo;</a>
+  {% endif %}
+  <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}" aria-label="Próxima página">&raquo;</a>
+  {% endif %}
+</nav>
+{% endif %}
+{% endblock %}

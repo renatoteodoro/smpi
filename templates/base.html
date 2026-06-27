@@ -1,0 +1,417 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="{{ csrf_token }}">
+<title>{% block title %}SMPI{% endblock %} — Sistema de Manutenção Prescritiva Inteligente</title>
+
+<!-- Nunito (Google Fonts) — substituto para MuseoSans (CDN FIESC retorna 403) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+/* Alias para manter compatibilidade com referências MuseoSans no CSS */
+@font-face {
+  font-family: MuseoSans;
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito Light'), local('Nunito');
+  font-display: swap;
+}
+@font-face {
+  font-family: MuseoSans;
+  font-style: normal;
+  font-weight: 500;
+  src: local('Nunito Medium'), local('Nunito');
+  font-display: swap;
+}
+@font-face {
+  font-family: MuseoSans;
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito Bold'), local('Nunito');
+  font-display: swap;
+}
+
+/* ── FIESC design-system tokens ── */
+body {
+  --fsi-clr-1: hsl(220 74% 33% / 1);
+  --fsi-clr-2: hsl(212 100% 90% / 1);
+  --fsi-clr-3: hsl(212 100% 90% / 0.32);
+  --fsi-clr-4: hsl(0 0% 16% / 1);
+  --fsi-clr-5: hsl(0 0% 96% / 1);
+  --fsi-clr-6: hsl(0 0% 100% / 1);
+  --fsi-clr-7: hsl(0 0% 7% / 1);
+  --fsi-clr-8: hsl(232 86% 22% / 1);
+  --fsi-clr-9: hsl(0 0% 87% / 1);
+  --fsi-border-rad: 20px;
+  --fsi-shadow-1: rgb(99 99 99 / 0.2) 0px 2px 8px 0px;
+  --fsi-clr-primaria: hsl(220 74% 33% / 1);
+  --fsi-clr-button: hsl(239, 79%, 29%);
+  --fsi-clr-button-hover: #005ca9;
+  --fsi-clr-txt: #333333;
+  --fs-100: .8rem;
+  --fs-200: .9rem;
+  --fs-300: 1rem;
+  --fs-400: 1.25rem;
+  --fs-500: 1.5rem;
+  --fs-600: 1.75rem;
+  --fs-700: 2rem;
+  --fs-800: 2.5rem;
+  font-family: MuseoSans, Arial, sans-serif;
+  color: var(--fsi-clr-4);
+  background: var(--fsi-clr-5);
+  margin: 0;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+</style>
+
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- SMPI custom CSS -->
+<link rel="stylesheet" href="{% static 'css/smpi.css' %}?v=8">
+
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+{# ── Safe URL resolution — silently empty when app URLs are not wired yet ── #}
+{% url 'monitoring:reading_list'    as url_monitoring    %}
+{% url 'analytics:dashboard'        as url_analytics     %}
+{% url 'assets:equipment_list'      as url_assets        %}
+{% url 'faults:fault_list'          as url_faults        %}
+{% url 'knowledge:document_list'    as url_knowledge     %}
+{% url 'prescriptions:prescription_list' as url_prescriptions %}
+{% url 'ai:session_list'            as url_ai            %}
+{% url 'reports:index'              as url_reports       %}
+{% url 'accounts:user_list'         as url_users         %}
+
+{# ── Skip-to-content link (WCAG) ── #}
+<a href="#main-content"
+   class="sr-only"
+   style="position:absolute;left:-9999px;top:0;background:var(--fsi-clr-1);color:#fff;padding:.5rem 1rem;z-index:9999;border-radius:0 0 8px 0"
+   onfocus="this.style.left='0'"
+   onblur="this.style.left='-9999px'">
+  Ir para o conteúdo principal
+</a>
+
+<div class="smpi-sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()" aria-hidden="true"></div>
+
+<div class="smpi-layout">
+
+  {# ── Sidebar navigation ── #}
+  <nav class="smpi-sidebar" aria-label="Navegação principal">
+
+    <div class="smpi-sidebar__logo">
+      <a href="{{ url_monitoring|default:'/' }}" aria-label="SMPI — Página inicial">
+        <div class="smpi-sidebar__brand-bar">
+          <div class="smpi-sidebar__brand-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+              <path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.92c.04-.36.07-.72.07-1.08s-.03-.73-.07-1.08l2.32-1.82c.21-.16.27-.46.13-.7l-2.2-3.81c-.13-.24-.42-.33-.66-.24l-2.74 1.1c-.57-.44-1.18-.8-1.84-1.08L14.47 2.1c-.05-.26-.28-.45-.55-.45H9.92c-.27 0-.5.19-.55.45L9 5.07c-.66.28-1.27.64-1.84 1.08L4.42 5.05c-.24-.09-.53 0-.66.24L1.56 9.1c-.14.24-.08.54.13.7l2.32 1.82c-.04.35-.07.72-.07 1.08s.03.73.07 1.08L1.69 15.6c-.21.16-.27.46-.13.7l2.2 3.81c.13.24.42.33.66.24l2.74-1.1c.57.44 1.18.8 1.84 1.08l.37 2.97c.05.26.28.45.55.45h4.4c.27 0 .5-.19.55-.45l.37-2.97c.66-.28 1.27-.64 1.84-1.08l2.74 1.1c.24.09.53 0 .66-.24l2.2-3.81c.14-.24.08-.54-.13-.7l-2.32-1.82z"/>
+            </svg>
+            <span class="smpi-sidebar__brand">SMPI</span>
+          </div>
+          <div class="smpi-sidebar__brand-sub">Manutenção Prescritiva</div>
+        </div>
+      </a>
+    </div>
+
+    <ul class="smpi-nav" role="list">
+
+      <li class="smpi-nav__section" aria-hidden="true">Monitoramento</li>
+
+      <li class="smpi-nav__item">
+        <a href="{{ url_monitoring|default:'#' }}"
+           {% if request.resolver_match.namespace == 'monitoring' %}class="active" aria-current="page"{% endif %}>
+          <span class="material-icons" aria-hidden="true">sensors</span>
+          Leituras
+        </a>
+      </li>
+
+      <li class="smpi-nav__item">
+        <a href="{{ url_analytics|default:'#' }}"
+           {% if request.resolver_match.namespace == 'analytics' %}class="active" aria-current="page"{% endif %}>
+          <span class="material-icons" aria-hidden="true">dashboard</span>
+          Dashboard
+        </a>
+      </li>
+
+      <li class="smpi-nav__section" aria-hidden="true">Equipamentos</li>
+
+      <li class="smpi-nav__item">
+        <a href="{{ url_assets|default:'#' }}"
+           {% if request.resolver_match.namespace == 'assets' %}class="active" aria-current="page"{% endif %}>
+          <span class="material-icons" aria-hidden="true">precision_manufacturing</span>
+          Equipamentos
+        </a>
+      </li>
+
+      <li class="smpi-nav__item">
+        <a href="{{ url_faults|default:'#' }}"
+           {% if request.resolver_match.namespace == 'faults' %}class="active" aria-current="page"{% endif %}>
+          <span class="material-icons" aria-hidden="true">warning</span>
+          Defeitos
+        </a>
+      </li>
+
+      <li class="smpi-nav__section" aria-hidden="true">Conhecimento</li>
+
+      <li class="smpi-nav__item">
+        <a href="{{ url_knowledge|default:'#' }}"
+           {% if request.resolver_match.namespace == 'knowledge' %}class="active" aria-current="page"{% endif %}>
+          <span class="material-icons" aria-hidden="true">library_books</span>
+          Documentos
+        </a>
+      </li>
+
+      <li class="smpi-nav__item">
+        <a href="{{ url_prescriptions|default:'#' }}"
+           {% if request.resolver_match.namespace == 'prescriptions' %}class="active" aria-current="page"{% endif %}>
+          <span class="material-icons" aria-hidden="true">medical_services</span>
+          Prescrições
+        </a>
+      </li>
+
+      <li class="smpi-nav__section" aria-hidden="true">IA &amp; Chat</li>
+
+      <li class="smpi-nav__item">
+        <a href="{{ url_ai|default:'#' }}"
+           {% if request.resolver_match.namespace == 'ai' %}class="active" aria-current="page"{% endif %}>
+          <span class="material-icons" aria-hidden="true">chat</span>
+          Chat IA
+        </a>
+      </li>
+
+      <li class="smpi-nav__section" aria-hidden="true">Relatórios</li>
+
+      <li class="smpi-nav__item">
+        <a href="{{ url_reports|default:'#' }}"
+           {% if request.resolver_match.namespace == 'reports' %}class="active" aria-current="page"{% endif %}>
+          <span class="material-icons" aria-hidden="true">description</span>
+          Relatórios
+        </a>
+      </li>
+
+      {% if request.user.role == 'admin' %}
+      <li class="smpi-nav__section" aria-hidden="true">Administração</li>
+
+      <li class="smpi-nav__item">
+        <a href="{{ url_users|default:'#' }}"
+           {% if request.resolver_match.namespace == 'accounts' and request.resolver_match.url_name == 'user_list' %}class="active" aria-current="page"{% endif %}>
+          <span class="material-icons" aria-hidden="true">group</span>
+          Usuários
+        </a>
+      </li>
+
+      <li class="smpi-nav__item">
+        <a href="/api/v1/">
+          <span class="material-icons" aria-hidden="true">api</span>
+          API
+        </a>
+      </li>
+
+      <li class="smpi-nav__item">
+        <a href="/docs/" target="_blank" rel="noopener">
+          <span class="material-icons" aria-hidden="true">menu_book</span>
+          Documentação
+        </a>
+      </li>
+
+      <li class="smpi-nav__item">
+        <a href="/api/docs/">
+          <span class="material-icons" aria-hidden="true">integration_instructions</span>
+          Swagger
+        </a>
+      </li>
+      {% endif %}
+
+    </ul>
+
+    <div class="smpi-sidebar__footer">
+      <img src="{% static 'img/fiesc-logo.png' %}"
+           alt="FIESC — Federação das Indústrias do Estado de Santa Catarina"
+           class="smpi-sidebar__fiesc-logo">
+      <div class="smpi-sidebar__footer-version">v1.0 &mdash; SMPI</div>
+    </div>
+
+  </nav>{# /sidebar #}
+
+  {# ── Main content area ── #}
+  <div class="smpi-content">
+
+    {# ── Topbar ── #}
+    <header class="smpi-topbar" role="banner">
+
+      <button id="sidebar-toggle"
+              class="smpi-sidebar-toggle-btn"
+              aria-label="Abrir menu lateral"
+              aria-expanded="false"
+              aria-controls="smpi-sidebar">
+        <span class="material-icons" aria-hidden="true">menu</span>
+      </button>
+
+      <h1 style="font-size:var(--fs-400);font-weight:700;margin:0;flex:1">
+        {% block page_title %}SMPI{% endblock %}
+      </h1>
+
+      {# Notification bell #}
+      <div style="position:relative">
+        <button aria-label="Notificações{% if unread_count > 0 %} ({{ unread_count }} não lidas){% endif %}"
+                aria-controls="notif-dropdown"
+                aria-expanded="false"
+                style="background:none;border:none;cursor:pointer;color:var(--fsi-clr-4);position:relative;padding:.25rem"
+                onclick="toggleNotifDropdown(); this.setAttribute('aria-expanded', document.getElementById('notif-dropdown').classList.contains('open'))">
+          <span class="material-icons" aria-hidden="true">notifications</span>
+          {% if unread_count > 0 %}
+          <span class="smpi-notif-badge"
+                style="position:absolute;top:-4px;right:-4px"
+                aria-hidden="true">{{ unread_count }}</span>
+          {% endif %}
+        </button>
+
+        <div id="notif-dropdown" role="menu" aria-label="Notificações">
+          <div style="padding:.75rem 1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--fsi-clr-9)">
+            <strong style="font-size:var(--fs-300)">Notificações</strong>
+            {% if unread_count > 0 %}
+            <button id="mark-all-read"
+                    class="smpi-btn smpi-btn--sm smpi-btn--outline"
+                    style="font-size:.75rem">
+              Marcar todas como lidas
+            </button>
+            {% endif %}
+          </div>
+
+          {% for notif in unread_notifications %}
+          <div style="padding:.75rem 1rem;border-bottom:1px solid var(--fsi-clr-9);font-size:var(--fs-200);cursor:pointer"
+               role="menuitem"
+               data-notif-read="{{ notif.pk }}">
+            <div style="font-weight:600">{{ notif.title }}</div>
+            <div style="color:#666;margin-top:.25rem">{{ notif.message|truncatechars:80 }}</div>
+            {% if notif.link %}
+            <a href="{{ notif.link }}"
+               style="font-size:var(--fs-100);color:var(--fsi-clr-1)">
+              Ver detalhes
+            </a>
+            {% endif %}
+          </div>
+          {% empty %}
+          <div style="padding:1.25rem;color:#666;text-align:center;font-size:var(--fs-200)">
+            Nenhuma notificação nova.
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      {# User menu #}
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <span class="material-icons" aria-hidden="true" style="color:var(--fsi-clr-1)">account_circle</span>
+        <a href="{% url 'accounts:profile' %}"
+           style="font-size:var(--fs-200);color:var(--fsi-clr-4);text-decoration:none">
+          {{ request.user.display_name }}
+        </a>
+        <form method="post" action="{% url 'accounts:logout' %}" style="margin:0">
+          {% csrf_token %}
+          <button type="submit"
+                  class="smpi-btn smpi-btn--sm smpi-btn--outline"
+                  aria-label="Sair do sistema">
+            <span class="material-icons" style="font-size:1rem" aria-hidden="true">logout</span>
+          </button>
+        </form>
+      </div>
+
+    </header>{# /topbar #}
+
+    {# ── Django messages ── #}
+    {% if messages %}
+    <div role="alert" aria-live="polite">
+      {% for message in messages %}
+      <div class="smpi-alert smpi-alert--{{ message.tags|default:'info' }}" data-auto-dismiss>
+        <span class="material-icons" aria-hidden="true">
+          {% if message.tags == 'success' %}check_circle
+          {% elif message.tags == 'error' %}error
+          {% elif message.tags == 'warning' %}warning
+          {% else %}info{% endif %}
+        </span>
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {# ── Page content ── #}
+    <main id="main-content" role="main" tabindex="-1">
+      {% block content %}{% endblock %}
+    </main>
+
+  </div>{# /smpi-content #}
+
+</div>{# /smpi-layout #}
+
+{# ── Floating chatbot (authenticated only) ── #}
+{% if request.user.is_authenticated %}
+<button class="smpi-chatbot-btn"
+        onclick="toggleChatbot()"
+        aria-label="Abrir assistente de IA"
+        aria-controls="chatbot-panel"
+        aria-expanded="false">
+  <span class="material-icons" aria-hidden="true">smart_toy</span>
+</button>
+
+<div class="smpi-chatbot-panel"
+     id="chatbot-panel"
+     role="dialog"
+     aria-label="Chat com assistente IA"
+     aria-modal="false">
+
+  <div class="smpi-chatbot-header">
+    <span><strong>Chat IA</strong> — SMPI Assistente</span>
+    <button onclick="toggleChatbot()"
+            style="background:none;border:none;color:#fff;cursor:pointer;padding:.25rem"
+            aria-label="Fechar chat">
+      <span class="material-icons" aria-hidden="true">close</span>
+    </button>
+  </div>
+
+  <div class="smpi-chatbot-messages"
+       id="chatbot-messages"
+       aria-live="polite"
+       aria-label="Mensagens do chat"
+       role="log">
+  </div>
+
+  <div class="smpi-chatbot-input">
+    <input type="text"
+           id="chatbot-input"
+           placeholder="Digite sua pergunta..."
+           aria-label="Mensagem para o assistente de IA"
+           autocomplete="off">
+    <button class="smpi-btn smpi-btn--primary smpi-btn--sm"
+            onclick="sendChatbotMessage()"
+            aria-label="Enviar mensagem">
+      <span class="material-icons" aria-hidden="true" style="font-size:1rem">send</span>
+    </button>
+  </div>
+
+</div>
+{% endif %}
+
+{# ── VLibras (acessibilidade — obrigatório) ── #}
+<div vw class="enabled">
+  <div vw-access-button class="active"></div>
+  <div vw-plugin-wrapper>
+    <div class="vw-plugin-top-wrapper"></div>
+  </div>
+</div>
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
+
+{# ── SMPI JS ── #}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="{% static 'js/smpi.js' %}?v=3"></script>
+
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

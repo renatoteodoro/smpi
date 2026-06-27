@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}{{ document.title }}{% endblock %}
+{% block page_title %}{{ document.title }}{% endblock %}
+
+{% block content %}
+<nav aria-label="Navegação estrutural"
+     style="font-size:var(--fs-100);color:#888;margin-bottom:1.25rem;display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
+  <a href="{% url 'knowledge:document_list' %}" style="color:var(--fsi-clr-1);text-decoration:none">Base de Conhecimento</a>
+  <span class="material-icons" aria-hidden="true" style="font-size:.9rem">chevron_right</span>
+  <span aria-current="page">{{ document.title|truncatechars:50 }}</span>
+</nav>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+
+  {# Document metadata #}
+  <div class="smpi-card">
+    <div class="smpi-card__title">Informações do Documento</div>
+    <dl style="display:grid;grid-template-columns:auto 1fr;gap:.65rem 1.25rem;font-size:var(--fs-200)">
+      <dt style="font-weight:600;color:#666">Status de indexação</dt>
+      <dd style="margin:0">
+        {% if document.is_ingested %}
+        <span class="smpi-badge smpi-badge--success">
+          <span class="material-icons" style="font-size:.85rem" aria-hidden="true">verified</span>
+          Indexado
+        </span>
+        {% else %}
+        <span class="smpi-badge smpi-badge--warning">
+          <span class="material-icons" style="font-size:.85rem" aria-hidden="true">pending</span>
+          Aguardando indexação
+        </span>
+        {% endif %}
+      </dd>
+
+      <dt style="font-weight:600;color:#666">Defeito associado</dt>
+      <dd style="margin:0">
+        {% if document.fault %}
+        <code style="background:var(--fsi-clr-5);padding:.15rem .4rem;border-radius:6px">{{ document.fault.code }}</code>
+        — {{ document.fault.name }}
+        {% else %}
+        <span style="color:#999">Nenhum</span>
+        {% endif %}
+      </dd>
+
+      <dt style="font-weight:600;color:#666">Tags</dt>
+      <dd style="margin:0">
+        {% if document.tags %}
+        <div style="display:flex;flex-wrap:wrap;gap:.25rem">
+          {% for tag in document.tags.split %}
+          <span style="background:var(--fsi-clr-5);color:var(--fsi-clr-1);padding:.15rem .5rem;border-radius:20px;font-size:.7rem;font-weight:600">#{{ tag }}</span>
+          {% endfor %}
+        </div>
+        {% else %}
+        <span style="color:#999">—</span>
+        {% endif %}
+      </dd>
+
+      <dt style="font-weight:600;color:#666">Chunks indexados</dt>
+      <dd style="margin:0">{{ chunks|length }}</dd>
+
+      <dt style="font-weight:600;color:#666">Criado em</dt>
+      <dd style="margin:0">{{ document.created_at|date:"d/m/Y H:i" }}</dd>
+
+      <dt style="font-weight:600;color:#666">Atualizado em</dt>
+      <dd style="margin:0">{{ document.updated_at|date:"d/m/Y H:i" }}</dd>
+    </dl>
+
+    {% if document.description %}
+    <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--fsi-clr-9)">
+      <p style="font-size:var(--fs-200);color:#555;line-height:1.6;margin:0">{{ document.description }}</p>
+    </div>
+    {% endif %}
+
+    {% if request.user.role == 'admin' or request.user.role == 'maintenance' %}
+    <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--fsi-clr-9);display:flex;gap:.75rem;flex-wrap:wrap">
+      <a href="{% url 'knowledge:document_update' document.pk %}" class="smpi-btn smpi-btn--outline smpi-btn--sm">
+        <span class="material-icons" aria-hidden="true" style="font-size:1rem">edit</span>
+        Editar
+      </a>
+      <a href="{% url 'knowledge:document_delete' document.pk %}"
+         class="smpi-btn smpi-btn--sm smpi-btn--danger"
+         onclick="return confirm('Confirma exclusão do documento e todos os seus chunks?')">
+        <span class="material-icons" aria-hidden="true" style="font-size:1rem">delete</span>
+        Excluir
+      </a>
+    </div>
+    {% endif %}
+  </div>
+
+  {# Chunks preview #}
+  <div class="smpi-card">
+    <div class="smpi-card__title">Trechos Indexados{% if chunks|length >= 20 %} (primeiros 20){% endif %}</div>
+    {% if chunks %}
+    <div style="display:flex;flex-direction:column;gap:.75rem;max-height:500px;overflow-y:auto">
+      {% for chunk in chunks %}
+      <div style="padding:.75rem;background:var(--fsi-clr-5);border-radius:10px;font-size:var(--fs-100)">
+        <div style="font-weight:600;color:var(--fsi-clr-1);margin-bottom:.25rem">Trecho {{ chunk.chunk_index }}</div>
+        <p style="margin:0;color:#555;line-height:1.5">{{ chunk.content|truncatechars:300 }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p style="color:#666;font-size:var(--fs-200)">Nenhum trecho indexado ainda.</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

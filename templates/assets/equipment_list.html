@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Equipamentos{% endblock %}
+{% block page_title %}Equipamentos{% endblock %}
+
+{% block content %}
+{# Search + filter bar #}
+<div style="display:flex;gap:1rem;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap">
+  <form method="get" role="search" style="display:flex;gap:.5rem;flex:1;max-width:400px">
+    <input type="search" name="q" value="{{ request.GET.q }}" placeholder="Buscar por nome ou setor..."
+           aria-label="Buscar equipamentos"
+           style="flex:1;padding:.5rem 1rem;border:1.5px solid var(--fsi-clr-9);border-radius:30px;font-family:inherit;font-size:var(--fs-200);background:#fff">
+    {% if request.GET.status %}
+    <input type="hidden" name="status" value="{{ request.GET.status }}">
+    {% endif %}
+    <button type="submit" class="smpi-btn smpi-btn--primary smpi-btn--sm">Buscar</button>
+  </form>
+
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
+    <a href="?" class="smpi-btn smpi-btn--sm {% if not request.GET.status %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}">Todos</a>
+    {% for val, label in status_choices %}
+    <a href="?status={{ val }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+       class="smpi-btn smpi-btn--sm {% if request.GET.status == val %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}">
+      {{ label }}
+    </a>
+    {% endfor %}
+
+    {% if request.user.role in "admin maintenance" %}
+    <a href="{% url 'assets:equipment_create' %}" class="smpi-btn smpi-btn--primary" style="margin-left:.5rem">
+      <span class="material-icons" aria-hidden="true" style="font-size:1.1rem">add</span> Novo
+    </a>
+    {% endif %}
+  </div>
+</div>
+
+{# Equipment grid #}
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem"
+     role="list"
+     aria-label="Lista de equipamentos">
+  {% for eq in equipments %}
+  <article class="smpi-card" role="listitem" style="display:flex;flex-direction:column;gap:.75rem">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem">
+      <div style="min-width:0">
+        <h2 style="font-size:var(--fs-400);font-weight:700;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+          <a href="{% url 'assets:equipment_detail' eq.pk %}"
+             style="color:var(--fsi-clr-4);text-decoration:none">
+            {{ eq.name }}
+          </a>
+        </h2>
+        <p style="color:#666;font-size:var(--fs-200);margin:.25rem 0 0">
+          {{ eq.equipment_type }} &middot; {{ eq.sector }}
+        </p>
+      </div>
+      <span class="smpi-badge {% if eq.status == 'active' %}smpi-badge--success{% elif eq.status == 'maintenance' %}smpi-badge--warning{% else %}smpi-badge--danger{% endif %}"
+            style="flex-shrink:0">
+        {{ eq.get_status_display }}
+      </span>
+    </div>
+
+    <div style="font-size:var(--fs-100);color:#888;display:flex;align-items:center;gap:.3rem">
+      <span class="material-icons" aria-hidden="true" style="font-size:1rem">sensors</span>
+      {{ eq.measurement_points.count }} ponto(s) de medição
+    </div>
+
+    <a href="{% url 'assets:equipment_detail' eq.pk %}"
+       class="smpi-btn smpi-btn--outline smpi-btn--sm"
+       style="align-self:flex-start"
+       aria-label="Ver detalhes de {{ eq.name }}">
+      <span class="material-icons" aria-hidden="true" style="font-size:1rem">arrow_forward</span>
+      Ver detalhes
+    </a>
+  </article>
+  {% empty %}
+  <div style="grid-column:1/-1;text-align:center;padding:3rem;color:#888" role="status">
+    <span class="material-icons" style="font-size:3rem;display:block;margin-bottom:.75rem;color:var(--fsi-clr-9)">
+      precision_manufacturing
+    </span>
+    <p style="margin:0 0 1rem;font-size:var(--fs-300)">Nenhum equipamento encontrado.</p>
+    {% if request.user.role in "admin maintenance" %}
+    <a href="{% url 'assets:equipment_create' %}" class="smpi-btn smpi-btn--primary">
+      Cadastrar primeiro equipamento
+    </a>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+{# Pagination #}
+{% if is_paginated %}
+<nav aria-label="Paginação de equipamentos" class="smpi-pagination">
+  {% if page_obj.has_previous %}
+  <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"
+     aria-label="Página anterior">&laquo; Anterior</a>
+  {% endif %}
+  <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"
+     aria-label="Próxima página">Próxima &raquo;</a>
+  {% endif %}
+</nav>
+{% endif %}
+{% endblock %}

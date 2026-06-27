@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr" class="js">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design System | FIESC</title>
+
+<!-- Mesmos assets do original: fontes MuseoSans (preload) -->
+<link rel="preload" href="https://fiesc.com.br/themes/custom/fsi/dist/styles/assets/styleguide/fonts/MuseoSans/MuseoSans-300.otf" as="font" type="font/otf" crossorigin="anonymous">
+<link rel="preload" href="https://fiesc.com.br/themes/custom/fsi/dist/styles/assets/styleguide/fonts/MuseoSans/MuseoSans_500.otf" as="font" type="font/otf" crossorigin="anonymous">
+
+<!-- Mesmas folhas de estilo compiladas do tema (importam FontAwesome 4.7 + Material Icons + @font-face MuseoSans) -->
+<link rel="stylesheet" media="all" href="./refs/Página Inicial _ FIESC_files/css_93saQJEKnAVsRGjm4o80HLraGT0up_WAEVfsVOgMzY0.css">
+<link rel="stylesheet" media="all" href="./refs/Página Inicial _ FIESC_files/css_3O3QoGWZtWBOjmVSgPBMwRWewoDane6t87B7RBknKIY.css">
+
+<!-- jQuery (mesma versão do original) usada pelo mega-menu -->
+<script src="./refs/Página Inicial _ FIESC_files/jquery-3.7.1.min.js.download"></script>
+
+<!-- @font-face MuseoSans apontando para os mesmos arquivos do original (path absoluto resolvível) -->
+<style>
+@font-face{font-family:MuseoSans;font-style:normal;font-weight:300;src:url(https://fiesc.com.br/themes/custom/fsi/dist/styles/assets/styleguide/fonts/MuseoSans/MuseoSans-300.otf) format("opentype");font-display:swap;}
+@font-face{font-family:MuseoSans;font-style:normal;font-weight:500;src:url(https://fiesc.com.br/themes/custom/fsi/dist/styles/assets/styleguide/fonts/MuseoSans/MuseoSans_500.otf) format("opentype");font-display:swap;}
+@font-face{font-family:MuseoSans;font-style:normal;font-weight:700;src:url(https://fiesc.com.br/themes/custom/fsi/dist/styles/assets/styleguide/fonts/MuseoSans/MuseoSans_700.otf) format("opentype");font-display:swap;}
+</style>
+
+<!-- ============================================================ -->
+<!-- CSS ORIGINAL — Tokens FSI + redesign (bloco block-fsi-fiescredesigncss / block-cssglobalstyles) -->
+<!-- ============================================================ -->
+<style>
+body {
+    --fsi-clr-1: hsl(220 74% 33% / 1);
+    --fsi-clr-2: hsl(212 100% 90% / 1);
+    --fsi-clr-3: hsl(212 100% 90% / 0.32);
+    --fsi-clr-4: hsl(0 0% 16% / 1);
+    --fsi-clr-5: hsl(0 0% 96% / 1);
+    --fsi-clr-6: hsl(0 0% 100% / 1);
+    --fsi-clr-7: hsl(0 0% 7% / 1);
+    --fsi-clr-8: hsl(232 86% 22% / 1);
+    --fsi-clr-9: hsl(0 0% 87% / 1);
+    --fsi-clr-10: hsl(0 6.98% 91.57% / 1);
+    --fsi-border-rad: 20px;
+    --fsi-pad-bl: 2.5rem;
+    --fsi-shadow-1: rgb(99 99 99 / 0.2) 0px 2px 8px 0px;
+    --fsi-clr-primaria: hsl(220 74% 33% / 1);
+    --fsi-clr-txt: #333333;
+    --fsi-clr-neutra-100: #ffffff;
+    --fsi-clr-neutra-200: #f9f9f9;
+    --fsi-clr-button: hsl(239,79%,29%);
+    --fsi-clr-button-hover: #005ca9;
+    --fsi-clr-accordion: hsl(239, 79%, 29%);--fsi-clr-accordion-hover: hsl(231, 60%, 48%);--fsi-clr-servico: #6dceff;
+    --fs-100: .8rem;--fs-200: .9rem;--fs-300: 1rem;--fs-400: 1.25rem;--fs-500: 1.5rem;--fs-600: 1.75rem;--fs-700: 2rem;--fs-800: 2.5rem;
+    color: var(--fsi-clr-4);
+    background-color: var(--fsi-clr-5);
+}
+html {scroll-behavior: smooth;scroll-padding-top: 5rem;}
+body .ckeditor__ckeditor__text {-webkit-hyphens: none;-ms-hyphens: none;hyphens: none;}
+a:active, a:focus, button:active, button:focus {outline: 3px solid rgba(0,125,250,0.7);outline-offset: 1px;}
+h1, h2, h3, h4, h5, h6, .field__label {color: #333;}
+
+/* ---- CTA ---- */
+.fsi-cta {
+    color: var(--fsi-clr-6);
+    border-radius: 30px;
+    margin-top: 1.5rem;
+    padding: .75rem 3.5rem .8rem;
+    font-size: 1rem;
+    font-weight: 600;
+    width: fit-content;
+    display: flex;
+    gap: .8rem;
+    align-items: center;
+    transition-duration: 0.5s;
+}
+.fsi-cta:focus span,
+.fsi-cta:hover span {text-decoration: underline;text-underline-offset: .25rem;}
+.fsi-cta--primario {background-color: var(--fsi-clr-1);}
+.fsi-cta--negativo {background-color: var(--fsi-clr-6);color: var(--fsi-clr-1);}
+.fsi-cta--wired {border: 1px solid var(--fsi-clr-6);}
+.fsi-cta--link {background-color: transparent;padding: 0;color: var(--fsi-clr-1);}
+.fsi-cta--noticias {margin-inline: auto;margin-top: 3rem;}
+.fsi-cta--agenda {margin-top: 0;margin-right: 0;}
+.fsi-cta__icon {transition: .2s ease-in-out;}
+.fsi-cta--arrow-right:focus .fsi-cta__icon,
+.fsi-cta--arrow-right:hover .fsi-cta__icon {transform: translateX(7px);}
+
+/* ---- Header / nav ---- */
+.region--header-bottom__region--header-bottom__container nav {overflow: visible;}
+body {overflow-x: hidden;}
+.fsi-nav {position: relative;z-index: 100;background-color: #fff;padding-block: .7rem;box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px #0000000d;}
+@media (max-width: 1000px) {.fsi-nav__mobile {display: flex;align-items: center;justify-content: space-between;}}
+.fsi-nav__logo {display: block;}
+.logo--senai {width: 144.5px;}
+.fsi-nav--header {transition: 0.5s all ease;z-index: 100;}
+@media (max-width: 1000px) {.fsi-nav--header {top: 0;}}
+.fsi-nav--header a,.fsi-nav--header a:visited,.fsi-nav--header a:active {transition: 200ms all linear;}
+.fsi-nav--header .logo {padding: 0 1rem;transition: 200ms all linear;opacity: 1;}
+@media (max-width: 1000px) {.fsi-nav--header .logo {padding: 0;}}
+.fsi-nav--header .mobile-menu {transition: 200ms all linear;}
+@media (max-width: 1000px) {.fsi-nav--header .mobile-menu {position: fixed;top: 0;bottom: 0;right: -100%;width: 100%;height: 100%;background: #fff;overflow-y: scroll;overflow-x: hidden;-ms-overflow-style: none;scrollbar-width: none;}
+.fsi-nav--header .mobile-menu::-webkit-scrollbar {display: none;}}
+.fsi-nav--header #mega-menu {margin: 0 0 0 auto;position: relative;padding-inline: 0;text-align: right;}
+@media (max-width: 1000px) {.fsi-nav--header #mega-menu {margin: 0 1rem 0 auto;width: 100%;padding: 4rem 0 2rem 0;background: #fff;}}
+.fsi-nav--header #mega-menu .droplet {display: none;position: absolute;max-width: 100%;top: 67px;right: 0;left: 0;background-color: #fff;z-index: 2000;font-weight: 600;padding: 3rem;text-align: left;}
+@media (min-width: 1001px) {.fsi-nav--header #mega-menu .droplet {top: 64px;box-shadow: 0 0 0 100vmax #fff;clip-path: inset(0 -100vmax);padding: 1rem 0 2rem;}}
+.fsi-nav--header #mega-menu .droplet ul li {width: 100%;margin: 0;}
+h2.padding-3 {font-size: 1.2rem;color: #fff;}
+@media (min-width: 1001px) {h2.padding-3 {color: var(--fsi-clr-1);}.fsi-nav--header #mega-menu .droplet a {color: var(--fsi-clr-4);font-weight: 600;}}
+.fsi-nav--header #mega-menu .droplet a:hover {color: var(--fsi-clr-primaria);}
+.fsi-nav--header #mega-menu li {list-style-type: none;display: inline-block;vertical-align: middle;}
+.fsi-nav--header #mega-menu li .mega-menu-link {line-height: 0.85rem;font-weight: 600;position: relative;display: block;text-align: left;background-color: transparent;color: #1a1a1a;display: flex;align-items: center;gap: 7px;}
+.fsi-nav--header #mega-menu li .mega-menu-link span:hover {text-decoration: underline;}
+.fsi-nav--header #mega-menu li .mega-menu-link:hover {color: var(--fsi-clr-primaria);cursor:pointer;}
+.fsi-nav--header #mega-menu li .mega-menu-link .fa {font-size: 1.3rem;transition: all .3 ease-in;}
+.fsi-nav--header #mega-menu li.active .mega-menu-link .fa {transform: rotate(180deg);}
+.fsi-nav--header #mega-menu li.active .mega-menu-link span {text-decoration: underline;}
+.fsi-nav--header #mega-menu li.active .mega-menu-link {color: var(--fsi-clr-primaria);}
+@media (min-width: 1001px) {.mega-menu-open-items {display: flex;gap: 6rem;}}
+.fsi-nav--header #mega-menu li .mega-menu-sub-link {padding: 0.4rem 0;font-size: 0.8125rem;font-family: "Open Sans", sans-serif;text-transform: uppercase;line-height: 1.2em;border: none;text-align: left;position: relative;}
+.fsi-nav--header #mega-menu li .mega-menu-back-link {display: none;}
+.fsi-nav--header #mobile-menu {display: none;z-index: 1000;right: 1rem;top: 3.5rem;margin: 0 0 0 auto;width: 30px;height: 20px;transform: rotate(0deg);transition: 0.5s ease-in-out;cursor: pointer;}
+@media (max-width: 1000px) {.fsi-nav--header #mobile-menu {display: block;}}
+.fsi-nav--header #mobile-menu span {display: block;position: absolute;height: 3px;width: 100%;background: #000;border-radius: 0;opacity: 1;left: 0;transform: rotate(0deg);transition: 0.25s ease-in-out;}
+.fsi-nav--header #mobile-menu span:nth-child(1) {top: 0;}
+.fsi-nav--header #mobile-menu span:nth-child(2), .fsi-nav--header #mobile-menu span:nth-child(3) {top: 8px;}
+.fsi-nav--header #mobile-menu span:nth-child(4) {top: 16px;}
+.fsi-nav--header #mobile-menu.open span:nth-child(1) {top: 18px;width: 0;left: 50%;}
+.fsi-nav--header #mobile-menu.open span:nth-child(2) {transform: rotate(45deg);}
+.fsi-nav--header #mobile-menu.open span:nth-child(3) {transform: rotate(-45deg);}
+.fsi-nav--header #mobile-menu.open span:nth-child(4) {top: 18px;width: 0;left: 50%;}
+.logo-mobile {display: block;}
+@media (min-width:1001px) {.logo-mobile {display: none;}}
+.fsi-nav--header #mega-menu {display: flex;justify-content: flex-end;align-items: center;gap: 1.5rem;}
+.fsi-nav--header #mega-menu li:nth-child(1) {margin-right: auto;}
+.fsi-nav--header #mega-menu li div a {display: block;margin-block: .5rem;width: fit-content;}
+.fsi-nav--header #mega-menu li div a:hover {text-decoration: underline;}
+
+/* ---- Nav entidades (topo) ---- */
+.fsi__nav--entidades {background-color: var(--fsi-clr-primaria);z-index: 3;position: relative;box-shadow: 0 0 0 100vmax var(--fsi-clr-primaria);clip-path: inset(0 -100vmax);}
+.fsi__nav--entidades ul {list-style: none;display: flex;gap: 1.2em;margin: 0 auto;padding: .6rem 0 .3rem 0;}
+.fsi__nav--entidades a {color: var(--fsi-clr-neutra-100);font-family: MuseoSans,Arial,sans-serif;font-size: 0.9rem;font-weight: bold;opacity: 0.8;transition: all 0.2s ease-out;}
+.fsi__nav--entidades a:hover {opacity: 1;}
+
+/* ---- Containers ---- */
+.secao-completa {max-width: 100%;width: 1200px;margin: 0 auto;padding-inline: 2rem !important;box-sizing: border-box;}
+.fsi__container,.fsi-container {width: calc(100% - 2rem);margin-right: auto;margin-left: auto;}
+.fsi__container__p,.fsi-container--p {margin-inline: auto;width: min(90ch,100vw - 4rem);}
+@media screen and (min-width: 1024px) {.fsi__container,.fsi-container {max-width: 100%;width: 940px;}}
+@media screen and (min-width: 1240px) {.fsi__container,.fsi-container {width: 1140px;}}
+@media only screen and (max-width: 1199px) {.secao-completa {width: calc(100% - 2rem);}}
+@media only screen and (max-width: 515px) {.fsi-desktop,.fsi__desktop,.fsi__browser,.new-browser-size {display: none !important;}}
+@media only screen and (min-width: 516px) {.fsi-mobile,.fsi__mobile,.new-mobile-size {display: none !important;}}
+
+/* ---- Tipografia utilitária ---- */
+.fsi-home__h2, .fsi__servicos__section h2 {font-size: 2.5em;font-weight: 700;margin-top: -15px;text-align: center;}
+.new-text-style {line-height: calc(1.6em + .2vw);letter-spacing: .8px;}
+.fsi__txt {line-height: 1.6; color: var(--fsi-clr-txt);}
+.fsi-titulo {margin-top: 0;}
+
+/* ---- Links ---- */
+a.link--estilizado,.fsi-link, .fsi__link {color: var(--fsi-clr-primaria); text-decoration: underline;text-underline-offset: 0.3em; transition: all .1s ease;}
+a.link--estilizado:visited,.fsi-link:visited,.fsi__link:visited {color: hsl(271, 68%, 32%);border-bottom: 2.5px solid hsl(271, 68%, 32%);}
+a.link--estilizado:hover,.fsi-link:hover,.fsi__link:hover {text-decoration: none;cursor: pointer;}
+
+/* ---- Botões legado (new-button) ---- */
+.new-button {transition: all 0.2s ease-out;}
+.new-button:hover {text-decoration-line: underline;}
+.new-button__verde {color: var(--fsi-clr-button) !important;}
+.new-button__verde:hover {background-color: var(--fsi-clr-button);color: #fff !important;}
+.new-button__branco {color: #fff !important;border: 2px solid #fff !important;}
+.new-button__branco:hover {background-color:#fff;color: #2b2b2b !important;}
+.new-button__branco:active {background-color: #ddd;border: 2px solid #ddd !important;}
+
+/* ---- Botões fsi ---- */
+.fsi__section__buttons {display: flex; justify-content: center;gap: 2em;flex-wrap: wrap;}
+@media only screen and (min-width: 600px) {.fsi__section__buttons {gap: 3em;}}
+.fsi__button {background-color: var(--fsi-clr-button); font-size: var(--fs-100); color: var(--fsi-clr-neutra-100);text-decoration: none; cursor: pointer; font-weight: 700; transition: 0.3s ease all; text-align: center; padding: .5rem 1rem;display: grid;align-content: center;line-height: 1.5;border-radius: 5px;}
+.fsi__button:hover {background-color: var(--fsi-clr-button-hover);text-decoration: underline;}
+.fsi__button-2 {background-color: transparent;color: var(--fsi-clr-neutra-100);border: 2px solid var(--fsi-clr-neutra-100);}
+.fsi__button-2:hover {background-color: var(--fsi-clr-neutra-100);color: var(--fsi-clr-button)}
+.fsi__button__fit {width: fit-content;}
+.fsi__button__whatsapp {background: #25d366;color: #fff;font-size: 40px;display: flex;justify-content: center;align-items: center;width: 0;height: 0;padding: 35px;text-decoration: none;border-radius: 50%;animation-name: pulse;animation-duration: 1.5s;animation-timing-function: ease-out;animation-iteration-count: infinite;z-index: 100;}
+@keyframes pulse {0% {box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);} 80% {box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);}}
+
+/* ---- Transições / sombras ---- */
+.fsi__transition, .new-transition {transition: all 0.2s ease-out;}
+.fsi__transition__shadow:hover, .new-transition_shadow:hover {box-shadow: 6px 8px 20px rgba(0,0,0,0.19), 4px 4px 6px rgba(0,0,0,0.23);}
+
+/* ---- Destaques (cards overlay) ---- */
+.fsi__destaques__section {background-image: url(https://fiesc.com.br/sites/default/files/2023-10/Fundo%20Azul%20copy.jpg);background-position: center;background-repeat: no-repeat;background-size: cover;}
+.fsi__destaques__section .fsi__container {padding: 3.5em 0 4em;}
+.fsi__destaques__home .fsi__destaques {margin: 0 auto; max-width: 1000px;}
+.fsi__destaques {display: flex; flex-wrap: wrap;justify-content: space-evenly; text-align: center;gap: 1rem;}
+.fsi__destaques p {color: #fff;font-weight: 600;font-size: 1.3rem}
+.fsi__destaques__item {position: relative;box-shadow: 0px 3px 6px #00000066;overflow: hidden;flex-grow: 1;max-width: 300px;width: 250px;height: 220px;}
+.fsi__destaques__item .fsi__destaques__overlay {background: rgba(0,0,0,0.7);border-radius: 5px;position: absolute;width: 100%;left: 0;top: 0;bottom: 0;right: 0;transition: all 0.4s ease-in-out 0s;}
+.fsi__destaques__item>div:nth-child(1) {box-shadow: 0px 3px 6px #00000066;border-radius: 5px; background-repeat: no-repeat;background-size: cover;background-position: center; height: 220px;}
+.fsi__destaques__titulo {position: absolute;text-align: center;padding-left: 1em;padding-right: 1em;width: 100%;top: 50%;left: 50%;transform: translate(-50%, -50%);transition: all 0.3s ease-in-out 0s;line-height: calc(1.6em + .2vw);letter-spacing: .8px;}
+.fsi__destaques__item .fsi__destaques__overlay__fadein,
+.fsi__destaques__titulo__fadein {opacity: 0;}
+.fsi__destaques__item:hover .fsi__destaques__overlay__fadein {opacity: 1;}
+.fsi__destaques__item:hover .fsi__destaques__titulo__fadein {top: 50%;left: 50%;opacity: 1;}
+
+/* ---- Serviços ---- */
+.fsi__servicos__section {padding-block: 4rem;}
+.fsi__servicos {grid-gap: 3rem;display: grid;padding: 0;}
+.fsi__servicos__item {color: #fff;background-color: rgba(12,0,65,0.6);justify-content: space-between;box-shadow: 0 1px 3px rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.24);flex-direction: column;display: flex;}
+.fsi__servicos__item:hover {background-color: rgb(9, 1, 47);}
+.fsi__servicos__item:hover .fsi__servicos__link {background-color: var(--fsi-clr-servico);}
+.fsi__servicos__item > div {padding-inline: 1.8rem;}
+.fsi__servicos__item h3 {color:var(--fsi-clr-servico); font-size: 1.1em;line-height: calc(1.5em + .2vw);letter-spacing: 1px;margin: 1.5em 0 1em;text-transform: uppercase;}
+.fsi__servicos__item > div > p {line-height: calc(1.5em + .2vw);letter-spacing: .7px;}
+.fsi__servicos__link {background-color: #fff;padding: 15px 15px 18px 20px;margin-block: 0px;font-weight: 700;align-self: flex-end;}
+.fsi__servicos__link a {color: #170085;}
+.fsi__servicos__link i {font-size: .9em;margin-left: 12px;}
+.fsi__servicos__link>a:hover i {transform: translateX(10px);}
+.fsi__servicos__item,.fsi__servicos__link,.fsi__servicos__link a,.fsi__servicos__link i {transition: all 0.3s ease-in;}
+@media only screen and (min-width: 516px) {.fsi__servicos {grid-template-columns: repeat(auto-fit,minmax(40ch,1fr));}}
+
+/* ---- Cards (hover reveal) ---- */
+.fsi__cards {display: flex;justify-content: center;flex-wrap: wrap;margin-top: 2rem;gap: 3rem;}
+.fsi__cards__item {width: 280px;height: 360px;border-radius: 15px;padding: 1.5rem;background: white;position: relative;display: flex;align-items: flex-end;transition: 0.4s ease-out;box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.5);}
+.fsi__cards__item:hover {transform: translateY(20px);}
+.fsi__cards__item:hover:before {opacity: 1;}
+.fsi__cards__item:hover .fsi__cards__content {opacity: 1;transform: translateY(0px);}
+.fsi__cards__item:before {content: "";position: absolute;top: 0;left: 0;display: block;width: 100%;height: 100%;border-radius: 15px;background: rgba(0, 0, 0, 0.9);z-index: 2;transition: 0.5s;opacity: 0;}
+.fsi__cards__item img {width: 100%;height: 100%;object-fit: cover;position: absolute;top: 0;left: 0;border-radius: 15px;}
+.fsi__cards__item .fsi__cards__content {position: relative;z-index: 3;color: white;opacity: 0;transform: translateY(30px);transition: 0.5s;width: 100%;}
+.fsi__cards__item .fsi__cards__content h3 {color: var(--fsi-clr-6);font-size: var(--fs-500);margin-bottom: 0;}
+.fsi__cards__item .fsi__cards__content p {letter-spacing: .85px;font-size: 16px;margin-block: 1.2rem 1.7rem;line-height: 1.5;}
+
+/* ---- Breadcrumb ---- */
+.breadcrumb__breadcrumb__breadcrumb {padding-top: .5rem;border-top: 2px solid #E0E0E0;margin-top: 0;background-color: transparent;}
+.breadcrumb__breadcrumb__breadcrumbItem {color: var(--fsi-clr-4);}
+.breadcrumb__breadcrumb__breadcrumbLink {color: var(--fsi-clr-primaria);}
+
+/* ---- Paginador ---- */
+.pager__pager__pager {margin-top: 2rem;}
+.pager__pager__numberActive {background-color: var(--fsi-clr-primaria);}
+.ui__buttons__button,.pager__pager__number a,.pager__pager__pill a {color: var(--fsi-clr-primaria);}
+.pager__pager__number {border: 1px solid var(--fsi-clr-primaria);}
+.pager__pager__numberActive a {color: #fff;}
+
+/* ---- Footer ---- */
+.page__page__footer {background-color:var(--fsi-clr-5);padding-top: 0;}
+.senai-footer__top {display: grid;gap: 2rem 5rem;padding-block: 2rem;}
+@media screen and (min-width: 750px) {.senai-footer__top {grid-template-columns: 1fr 1.5fr;}}
+.senai-footer__links {display: grid;grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));gap: 2rem;font-size: .95rem;}
+.senai-footer__list {list-style-type: none;padding: 0;margin-block: 0;}
+.senai-footer__links h2 {color: var(--fsi-clr-4);font-size: 1.1rem;margin-block: 2rem 0.3rem;}
+.senai-footer__links>div h2:first-of-type {margin-top: 0;}
+.senai-footer__links ul {padding: 0;list-style-type: none;margin-top: 0.5rem;}
+.senai-footer__links ul li {margin-bottom: 0.4rem;}
+.senai-footer__links a {color: #666666;font-weight: 400;}
+.senai-footer__links a:hover {text-decoration: underline;color: var(--fsi-clr-primaria);}
+.senai-footer__contatos {list-style-type: none;padding: 0;}
+.senai-footer__contatos__item {display: flex;align-items: center;gap: .7rem;margin-block: .8rem;}
+.senai-footer__contatos__item p,.senai-footer__contatos__item a {margin-block: 0;display: block;color: #666666;}
+.senai-footer__contatos__item a:hover {text-decoration: underline;text-underline-offset: .25rem;color: var(--fsi-clr-primaria);}
+.senai-footer__icon {font-size: 1.2rem;color: #666666;width: 23px;text-align: center;}
+.footer-indnews p {line-height: 1.7;color: #333333;font-weight: 400;margin-top: .7rem;text-align: center;}
+.footer-indnews__img {width: 345px;display: block;margin-inline: auto;}
+.footer-indnews__button {box-shadow: 3px 3px 8px #75757566;border-radius: 30px;margin-block: 1.5rem;transition: 0.2s ease all;background-color: var(--fsi-clr-1);position: relative;overflow: hidden;}
+.footer-indnews__button:hover {box-shadow: 3px 3px 8px #757575e6;}
+a.footer-indnews__button p {margin-block: 0;color:var(--fsi-clr-6);font-size: 1.2rem;}
+a.footer-indnews__button:hover p {text-decoration: underline; text-decoration-color:var(--fsi-clr-6)}
+a.footer-indnews__button {padding: .5rem;box-sizing: border-box;text-align: center;display: block;}
+a.footer-indnews__button img {position: absolute;}
+a.footer-indnews__button:nth-child(1) img {width: 100px;right: -26px;top: -2px;}
+a.footer-indnews__button:nth-child(2) img {width: 80px;right: -6px;top: -5px;}
+a.footer-indnews__button:nth-child(3) img {width: 70px;right: 0;top: 0;}
+.fsi-footer__bottom {display: flex;align-items: center;gap: 2rem 3rem;flex-wrap: wrap;justify-content: space-between;background-color: #EEEEEE;box-shadow: 0 0 0 100vmax #EEEEEE;clip-path: inset(0 -100vmax);padding-block: 2rem;}
+.fsi-footer__logos {display: flex;gap: 1rem;}
+.fsi-footer__logos a, .fsi-footer__logos img {display: block;}
+.fsi-footer__logos--senai {width: 144.5px;}
+.fsi-footer__social {margin: 0;padding: 0;display: flex;list-style-type: none;gap: 1.5rem;}
+.fsi-footer__social .senai-footer__icon, .fsi-footer__social .fa.fa-twitter::before {font-size: 1.4rem;}
+.fsi-footer__social .senai-footer__icon:hover {color: var(--fsi-clr-1);}
+.fa.fa-twitter{font-family:sans-serif;}
+.fa.fa-twitter::before{content:"𝕏";font-size:1.2em;}
+</style>
+
+<!-- CSS dos componentes de notícias (blocos noticia-destaque / complementares / lista) -->
+<style>
+.fsi-noticias {padding-left: 0;list-style-type: none;margin-block: 0;}
+.fsi-noticias a>div:nth-child(1) {position: relative;overflow: hidden;border-radius: 20px;}
+.fsi-noticias a img {display: block;transform: scale(1);transition: .3s ease-in-out;border-radius: 20px;}
+.fsi-noticias a:hover img {transform: scale(1.2);}
+.fsi-noticias a:hover h3 {text-decoration: underline;text-underline-offset: .25rem;color: var(--fsi-clr-1);}
+.fsi-noticias h3 {font-size: 1.1rem; text-wrap:balance; margin-block: 0;}
+.fsi-noticias p:nth-child(1) {text-transform: uppercase;margin-block: 1rem .7rem;display: inline-block;background-color: var(--fsi-clr-2);color: var(--fsi-clr-4);font-weight: 600;padding: .3rem .4rem;border-radius: 5px;font-size: .6rem;letter-spacing: 1px;}
+.fsi-noticias p:nth-child(3) {line-height: 1.7;font-weight: 300;margin-bottom: 0;}
+.fsi-noticias--destaque a {display:grid;background-color: var(--fsi-clr-10);align-items: center;border-radius: 20px;color: var(--fsi-clr-4);}
+.fsi-noticias--destaque a>div:nth-child(1) {padding-left: 1.5rem;padding-block: 1rem;order:2}
+.fsi-noticias--destaque a>div:nth-child(2) {position: relative;overflow: hidden;border-radius: 0 20px 20px 0;}
+.fsi-noticias--destaque a img {border-radius:0}
+@media (min-width: 750px) {.fsi-noticias--destaque a {grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));column-gap: 2rem;}.fsi-noticias--destaque a>div:nth-child(1) {order:0}}
+.fsi-noticias--destaque p:nth-child(1) {margin-block: 0rem 1rem;}
+.fsi-noticias--destaque h3 {font-size: 1.3rem;margin-bottom: 0;}
+.fsi-noticias--compl {display:grid;grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));column-gap: 2rem;grid-gap:2rem;}
+.fsi-noticias--compl a {display:block;color: var(--fsi-clr-4);}
+.fsi-noticias--compl a:hover h3 {color: var(--fsi-clr-1);}
+.fsi-noticias--lista {background-color: var(--fsi-clr-10);padding: 1.5rem;border-radius: var(--fsi-border-rad);display: block;margin-bottom: 0;line-height: 1.5;}
+.fsi-noticias--lista li:not(:last-of-type) {padding-block: 1rem;border-bottom: 2px solid #b8b8b8;}
+.fsi-noticias--lista li:first-of-type {padding-top: 0;}
+.fsi-noticias--lista li:last-of-type {padding-block: 1rem 0;}
+.fsi-noticias--lista a {display: block;color: var(--fsi-clr-4);}
+.fsi-noticias--lista a:hover {text-decoration-line: underline;color: var(--fsi-clr-1);}
+</style>
+
+<!-- CSS Indústria News / Agenda de eventos / Multimídia / Produções / Publicações / Banners -->
+<style>
+.indnews-faixa {margin: 0;padding: 0;list-style-type: none;}
+.indnews-faixa__section {background-color: var(--fsi-clr-8);padding-block: var(--fsi-pad-bl);box-shadow: 0 0 0 100vmax var(--fsi-clr-8);clip-path: inset(0 -100vmax);gap: 2rem 4rem;display: flex;flex-wrap: wrap;justify-content: center;align-items: center;}
+.indnews-faixa__img {position: relative;max-width: 250px;}
+.indnews-faixa__content {max-width: 55ch;}
+@media (min-width: 750px) {.indnews-faixa__content {flex: 1 1 270px;}}
+.indnews-faixa__cartola {color:var(--fsi-clr-5);margin-block: 0 .3rem;font-weight: 800;text-transform: uppercase;font-size: .9rem;}
+.indnews-faixa__title {color: var(--fsi-clr-5);margin-block: 0;font-size: 1.2rem;}
+.indnews-faixa__chamada {color: var(--fsi-clr-5);font-weight: 300;font-size: 1.1rem;margin-block: .2rem 0;line-height: 1.45;}
+.indnews-faixa .fsi-cta {margin-inline: auto;margin-top: 1rem;}
+
+.fsi__agenda__eventos {display: grid;margin-block: 4rem;}
+.fsi__agenda__eventos>div:not(:last-of-type) {border-bottom: 2px solid var(--fsi-clr-primaria);}
+.fsi__agenda__header {display: flex;justify-content: space-between;align-items: center;}
+.fsi__agenda__titulo {margin-block: 0px;}
+.fsi__evento {display: flex;padding-block: 0.8rem;height: 100%;box-sizing: border-box;align-items: center;}
+.fsi__evento:hover {background-color: #e1f4ff;}
+.fsi__evento__data {text-align: center;padding-inline: 15px;align-self: center;min-width: 100px;}
+.fsi__evento__dia {font-size: 1.5rem;color: var(--fsi-clr-primaria);margin-block: 0;font-weight: 600;}
+.fsi__evento__mes {color: var(--fsi-clr-primaria);font-size: 1.5rem;font-weight: 600;margin-block: 0;}
+.fsi__evento>div:nth-child(2) {padding:0 1rem;}
+.fsi__evento__nome {margin-block: 0;font-size: 1.1rem;color: var(--fsi-clr-primaria);}
+.fsi__evento:hover .fsi__evento__nome {text-decoration: underline;}
+.fsi__evento__dados {display: flex;padding-left: 18px;margin-block: 10px 0;margin-top: 10px;flex-wrap: wrap;gap: .3rem 1.8rem;color: #6f6e6e;list-style:none;}
+
+.mult-inst__lista {gap: 2rem;display: flex;flex-wrap: wrap;margin-block: 0;list-style-type: none;padding: 0;justify-content: center;}
+.mult-inst__item {width: 260px;}
+.mult-inst__item img {display: block;width:100%;}
+
+.fsi__multimidia {padding-left: 0;list-style-type: none;display: grid;grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));gap: 2.4rem 1.6rem;margin-bottom: 3rem;}
+.fsi__multimidia a:hover p {text-underline-offset: 0.2em;text-decoration: underline;text-decoration-thickness: 1px;}
+.fsi__multimidia li img {display: block;box-shadow: 0px 3px 6px #00000066;width:100%;}
+.fsi__multimidia li p {color:var(--fsi-clr-4);margin-bottom: 0;font-size: .8rem;}
+
+.producoes-lista {padding: 0;list-style-type: none;display: grid;grid-gap: 1rem;}
+.producoes-item a {display: block;height: 100%;}
+.producoes-item img {width: 100%;height: 100%;object-fit: cover;object-position: center;border-radius: var(--fsi-border-rad);}
+@media only screen and (min-width: 600px) {.producoes-lista {grid-template-rows: repeat(2, 1fr);grid-template-columns: repeat(2, .8fr) 1fr;}.producoes-item:nth-child(1) {grid-area: 1 / 1 / 3 / 3;}.producoes-item:nth-child(2) {grid-area: 1 / 3 / 2 / 4;}.producoes-item:nth-child(3) {grid-area: 2 / 3 / 3 / 4;}}
+
+.publicacoes__lista {display: grid;grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));gap: 2rem 3rem;margin-block: 0;list-style-type: none;padding: 0;}
+.publicacoes__lista>li {position: relative;}
+.publicacoes__lista>li img:nth-child(1) {width: 300px;max-width:100%;border: 1px solid #000;}
+.publicacoes__lista>li a:nth-child(2) {color: #333;font-size: 1rem;font-weight: bold;margin-block: 0.5rem 1rem;display: block;line-height: 1.6}
+.publicacoes__lista>li a:nth-child(2):hover {color: var(--fsi-clr-primaria);text-decoration: underline;text-underline-offset: 0.3em;}
+
+.banner-lista--homecab {list-style-type: none;padding: 0;margin:0;}
+.banner-item--homecab a {display:block;border-radius: var(--fsi-border-rad);}
+.banner-item--homecab img {width: 100%;border-radius: var(--fsi-border-rad);display: block;}
+.banner-lista--homeduplo {list-style-type: none;padding: 0;display: grid;gap: 1rem;}
+.banner-item--homeduplo a {display:block;border-radius: var(--fsi-border-rad);}
+.banner-item--homeduplo img {width: 100%;border-radius: var(--fsi-border-rad);display: block;}
+@media (min-width:650px) {.banner-lista--homeduplo {grid-template-columns: 1fr 1fr;}}
+</style>
+
+<!-- ============================================================ -->
+<!-- CHROME DA DOCUMENTAÇÃO (scaffolding do design system).        -->
+<!-- Cores/tipografia herdadas dos tokens originais (var(--fsi-*)).-->
+<!-- ============================================================ -->
+<style id="ds-chrome">
+.ds-topnav{position:fixed;top:0;left:0;right:0;z-index:5000;background:var(--fsi-clr-1);box-shadow:var(--fsi-shadow-1);}
+.ds-topnav__inner{display:flex;align-items:center;gap:.4rem;overflow-x:auto;padding:.5rem 1rem;-ms-overflow-style:none;scrollbar-width:thin;}
+.ds-topnav__brand{color:var(--fsi-clr-6);font-weight:700;font-family:MuseoSans,Arial,sans-serif;white-space:nowrap;margin-right:1rem;}
+.ds-topnav a{color:var(--fsi-clr-2);font-family:MuseoSans,Arial,sans-serif;font-size:.8rem;font-weight:700;text-decoration:none;white-space:nowrap;padding:.35rem .6rem;border-radius:6px;transition:all .2s ease-out;}
+.ds-topnav a:hover{background:var(--fsi-clr-8);color:var(--fsi-clr-6);}
+body.fiesc{padding-top:52px;}
+.ds-section{max-width:1200px;margin:0 auto;padding:3.5rem 2rem;border-bottom:2px solid var(--fsi-clr-9);}
+.ds-section__title{font-size:2rem;font-weight:700;color:var(--fsi-clr-1);margin:0 0 .25rem;font-family:MuseoSans,Arial,sans-serif;}
+.ds-section__lead{color:#666;margin:0 0 2rem;line-height:1.6;max-width:75ch;}
+.ds-h3{font-size:1.15rem;color:var(--fsi-clr-8);margin:2.5rem 0 1rem;border-left:4px solid var(--fsi-clr-1);padding-left:.6rem;}
+.ds-note{font-size:.8rem;color:#777;margin:.4rem 0 0;}
+.ds-card{background:var(--fsi-clr-6);border:1px solid var(--fsi-clr-9);border-radius:12px;padding:1.5rem;box-shadow:var(--fsi-shadow-1);}
+.ds-grid{display:grid;gap:1.5rem;}
+.ds-grid--states{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
+.ds-grid--swatch{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+.ds-state{background:var(--fsi-clr-6);border:1px solid var(--fsi-clr-9);border-radius:10px;padding:1.2rem;display:flex;flex-direction:column;gap:.8rem;align-items:flex-start;}
+.ds-state__label{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:#888;font-weight:700;}
+.ds-state--dark{background:var(--fsi-clr-1);}
+.ds-state--dark .ds-state__label{color:var(--fsi-clr-2);}
+.ds-swatch{border:1px solid var(--fsi-clr-9);border-radius:10px;overflow:hidden;background:var(--fsi-clr-6);}
+.ds-swatch__color{height:84px;}
+.ds-swatch__meta{padding:.6rem .7rem;}
+.ds-swatch__name{font-weight:700;font-size:.82rem;color:var(--fsi-clr-4);}
+.ds-swatch__val{font-size:.72rem;color:#777;font-family:monospace;}
+.ds-sw--1{background:var(--fsi-clr-1);} .ds-sw--2{background:var(--fsi-clr-2);} .ds-sw--3{background:var(--fsi-clr-3);}
+.ds-sw--4{background:var(--fsi-clr-4);} .ds-sw--5{background:var(--fsi-clr-5);} .ds-sw--6{background:var(--fsi-clr-6);}
+.ds-sw--7{background:var(--fsi-clr-7);} .ds-sw--8{background:var(--fsi-clr-8);} .ds-sw--9{background:var(--fsi-clr-9);}
+.ds-sw--10{background:var(--fsi-clr-10);} .ds-sw--btn{background:var(--fsi-clr-button);} .ds-sw--btnh{background:var(--fsi-clr-button-hover);}
+.ds-sw--servico{background:var(--fsi-clr-servico);} .ds-sw--txt{background:var(--fsi-clr-txt);} .ds-sw--n200{background:var(--fsi-clr-neutra-200);}
+.ds-type-row{display:flex;justify-content:space-between;align-items:baseline;gap:2rem;padding:1rem 0;border-bottom:1px solid var(--fsi-clr-9);flex-wrap:wrap;}
+.ds-type-row__spec{font-family:monospace;font-size:.75rem;color:#888;white-space:nowrap;}
+.ds-trunc{max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ds-shadow-box{height:90px;border-radius:12px;background:var(--fsi-clr-6);display:flex;align-items:center;justify-content:center;color:#999;font-size:.8rem;}
+.ds-shadow-1{box-shadow:var(--fsi-shadow-1);}
+.ds-shadow-card{box-shadow:0px 7px 10px rgba(0,0,0,0.5);}
+.ds-shadow-hover{box-shadow:6px 8px 20px rgba(0,0,0,0.19), 4px 4px 6px rgba(0,0,0,0.23);}
+.ds-shadow-soft{box-shadow:0 1px 3px rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.24);}
+.ds-icon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:1rem;}
+.ds-icon-cell{display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:1rem .5rem;border:1px solid var(--fsi-clr-9);border-radius:10px;background:var(--fsi-clr-6);}
+.ds-icon-cell .fa{font-size:1.6rem;color:var(--fsi-clr-1);}
+.ds-icon-cell code{font-size:.66rem;color:#888;text-align:center;}
+.ds-divider-demo{height:0;border-top:2px solid var(--fsi-clr-9);margin:.5rem 0;}
+.ds-shell-frame{border:1px solid var(--fsi-clr-9);border-radius:14px;overflow:hidden;box-shadow:var(--fsi-shadow-1);background:var(--fsi-clr-6);}
+.ds-shell-content{padding:2.5rem 2rem;}
+.ds-motion-list li{margin-bottom:.6rem;line-height:1.6;}
+.ds-motion-list code{background:var(--fsi-clr-10);padding:.1rem .35rem;border-radius:4px;font-size:.8rem;}
+</style>
+</head>
+
+<body class="fiesc">
+
+<!-- ===================== NAV FIXA DA DOCUMENTAÇÃO ===================== -->
+<nav class="ds-topnav" aria-label="Navegação do Design System">
+  <div class="ds-topnav__inner">
+    <span class="ds-topnav__brand">FIESC · Design System</span>
+    <a href="#sec-0">Shell</a>
+    <a href="#sec-1">Tipografia</a>
+    <a href="#sec-2">Cores</a>
+    <a href="#sec-3">Navegação</a>
+    <a href="#sec-4">Formulários</a>
+    <a href="#sec-5">Dados</a>
+    <a href="#sec-6">Componentes</a>
+    <a href="#sec-7">Layout</a>
+    <a href="#sec-8">Motion</a>
+    <a href="#sec-9">Ícones</a>
+  </div>
+</nav>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 0 — APPLICATION SHELL (Clone exato)                     -->
+<!-- ============================================================ -->
+<section id="sec-0" class="ds-section">
+  <h2 class="ds-section__title">0 · Application Shell</h2>
+  <p class="ds-section__lead">Clone direto do shell do site institucional FIESC: barra de entidades, mega-menu de navegação, banner de cabeçalho, área de conteúdo, breadcrumb e rodapé. Mesma estrutura HTML, classes e proporções do original — apenas os textos de título/breadcrumb foram adaptados para apresentar o Design System.</p>
+
+  <div class="ds-shell-frame">
+    <!-- Barra de entidades (block-topheaderentidadesredesign) -->
+    <nav class="fsi__nav--entidades fsi__container" aria-label="Navegação entidades">
+      <ul>
+        <li><a href="#sec-0">FIESC</a></li>
+        <li><a href="#sec-0">CIESC</a></li>
+        <li><a href="#sec-0">SESI</a></li>
+        <li><a href="#sec-0">SENAI</a></li>
+        <li><a href="#sec-0">IEL</a></li>
+      </ul>
+    </nav>
+
+    <!-- Mega-menu (block-fsi-fiescnavegacao) -->
+    <div class="fsi-nav">
+      <nav class="fsi__container fsi-nav--header">
+        <div class="fsi-nav__mobile">
+          <div class="logo-mobile">
+            <a href="#sec-0"><img class="fsi-nav__logo logo--senai" src="./refs/Página Inicial _ FIESC_files/marca-fiesc-reduzida_cor.webp" alt="Logo FIESC"></a>
+          </div>
+          <div>
+            <div id="mobile-menu"><span></span><span></span><span></span><span></span></div>
+            <div class="mobile-menu">
+              <div role="menubar">
+                <ul id="mega-menu" role="group">
+                  <li>
+                    <div><a href="#sec-0"><img class="fsi-nav__logo logo--senai" src="./refs/Página Inicial _ FIESC_files/marca-fiesc-reduzida_cor.webp" alt="Logo FIESC"></a></div>
+                  </li>
+                  <li class="has-drop" id="calendar">
+                    <a class="mega-menu-link" role="menuitem" tabindex="0"><span>Institucional</span><i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                    <div class="droplet" style="display: none;">
+                      <a class="mega-menu-back-link" tabindex="0">Institucional</a>
+                      <div class="mega-menu-open-items">
+                        <div>
+                          <a href="#sec-0">Sobre a FIESC</a>
+                          <a href="#sec-0">Diretorias e Conselhos</a>
+                          <a href="#sec-0">Perfil do Presidente</a>
+                          <a href="#sec-0">Relatório Anual</a>
+                        </div>
+                        <div>
+                          <a href="#sec-0">Entidades</a>
+                          <a href="#sec-0">Publicações</a>
+                          <a href="#sec-0">Imprensa</a>
+                          <a href="#sec-0">Agenda de Eventos</a>
+                        </div>
+                        <div>
+                          <a href="#sec-0">Sindicatos Filiados</a>
+                          <a href="#sec-0">Conselhos Setoriais e Temáticos</a>
+                          <a href="#sec-0">Responsabilidade Social</a>
+                          <a href="#sec-0">Revista Indústria &amp; Competitividade</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="has-drop" id="visit">
+                    <a aria-haspopup="true" class="mega-menu-link" role="menuitem" tabindex="0"><span>Áreas de atuação</span><i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                    <div class="droplet" style="display: none;">
+                      <a class="mega-menu-back-link" tabindex="0">Áreas de atuação</a>
+                      <div class="mega-menu-open-items">
+                        <div>
+                          <a href="#sec-0">Associativismo</a>
+                          <a href="#sec-0">Defesa da Indústria</a>
+                          <a href="#sec-0">Educação</a>
+                        </div>
+                        <div>
+                          <a href="#sec-0">Infraestrutura e Meio Ambiente</a>
+                          <a href="#sec-0">Inovação</a>
+                          <a href="#sec-0">Internacionalização</a>
+                        </div>
+                        <div>
+                          <a href="#sec-0">Observatório FIESC</a>
+                          <a href="#sec-0">Saúde e Segurança</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li><a class="mega-menu-link" role="menuitem" href="#sec-0"><span>Compliance</span></a></li>
+                  <li><a class="mega-menu-link" role="menuitem" href="#sec-0"><span>Trabalhe Conosco</span></a></li>
+                  <li><a class="mega-menu-link" role="menuitem" href="#sec-0"><span>Indústria News</span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Banner de cabeçalho (block-fsi-views-block-banners-block-2) -->
+    <div>
+      <ul class="banner-lista--homecab fsi-container">
+        <li class="banner-item--homecab"><a href="#sec-0">
+          <img loading="lazy" src="./refs/Página Inicial _ FIESC_files/Home FIESC Cabeçalho Desktop- 1200x240.png" width="1201" height="241" alt="Banner de cabeçalho">
+        </a></li>
+      </ul>
+    </div>
+
+    <!-- Área de conteúdo (adaptada para apresentar o DS) -->
+    <main class="ds-shell-content fsi__container" role="main">
+      <h1 class="fsi-home__h2" style="margin-top:0;">Design System</h1>
+      <p class="fsi__txt" style="text-align:center;">Biblioteca viva de padrões de interface do Sistema FIESC — documentando tipografia, cores, navegação, componentes e movimento extraídos fielmente da aplicação de referência.</p>
+    </main>
+
+    <!-- Rodapé (block-fsi-fiescrodape) -->
+    <footer class="page__page__footer">
+      <nav class="breadcrumb__breadcrumb__breadcrumb fsi__container" role="navigation" aria-label="Trilha de navegação">
+        <ol class="breadcrumb__breadcrumb__breadcrumbList">
+          <li class="breadcrumb__breadcrumb__breadcrumbItem">Página Inicial</li>
+          <li class="breadcrumb__breadcrumb__breadcrumbItem">Design System</li>
+        </ol>
+      </nav>
+      <div class="senai-footer fsi__container">
+        <div class="senai-footer__top">
+          <div class="senai-footer__boletim">
+            <div class="footer-indnews">
+              <img alt="Indústria News" src="./refs/Página Inicial _ FIESC_files/Logo-news.png" class="footer-indnews__img" width="600" height="237" loading="lazy">
+              <p>Inscreva-se e receba diariamente as atualizações da indústria de Santa Catarina.</p>
+              <div>
+                <a class="footer-indnews__button" href="#sec-0">
+                  <img alt="" src="./refs/Página Inicial _ FIESC_files/news-mail.png" width="211" height="150" loading="lazy">
+                  <p>Receber por e-mail</p>
+                </a>
+                <a class="footer-indnews__button" href="#sec-0">
+                  <img alt="" src="./refs/Página Inicial _ FIESC_files/news-whats.png" width="150" height="150" loading="lazy">
+                  <p>Receber no WhatsApp</p>
+                </a>
+                <a class="footer-indnews__button" href="#sec-0">
+                  <img alt="" src="./refs/Página Inicial _ FIESC_files/news-linkedin.png" width="150" height="150" loading="lazy">
+                  <p>Receber no LinkedIn</p>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="senai-footer__links">
+            <div>
+              <h2>Institucional</h2>
+              <ul>
+                <li><a href="#sec-0">Sobre a FIESC</a></li>
+                <li><a href="#sec-0">Diretoria e Conselhos</a></li>
+                <li><a href="#sec-0">Perfil do Presidente</a></li>
+                <li><a href="#sec-0">Entidades</a></li>
+                <li><a href="#sec-0">Publicações</a></li>
+                <li><a href="#sec-0">Relatório Anual</a></li>
+              </ul>
+            </div>
+            <div>
+              <h2>Áreas de atuação</h2>
+              <ul>
+                <li><a href="#sec-0">Associativismo</a></li>
+                <li><a href="#sec-0">Defesa da Indústria</a></li>
+                <li><a href="#sec-0">Educação</a></li>
+                <li><a href="#sec-0">Inovação</a></li>
+                <li><a href="#sec-0">Internacionalização</a></li>
+              </ul>
+              <h2>Contato</h2>
+              <ul class="senai-footer__contatos">
+                <li class="senai-footer__contatos__item"><i class="fa fa-phone senai-footer__icon" aria-hidden="true"></i><p>0800-048-1212</p></li>
+                <li class="senai-footer__contatos__item"><i class="fa fa-envelope senai-footer__icon" aria-hidden="true"></i><p>faleconosco@fiesc.com.br</p></li>
+                <li class="senai-footer__contatos__item"><i class="fa fa-map-marker senai-footer__icon" aria-hidden="true"></i><p>Rod. Admar Gonzaga, 2765<br>Florianópolis/SC, 88034-001</p></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="fsi-footer__bottom">
+          <div class="fsi-footer__logos">
+            <a href="#sec-0"><img class="logo--senai" src="./refs/Página Inicial _ FIESC_files/marca-fiesc-reduzida_cor.webp" alt="Logo FIESC"></a>
+          </div>
+          <ul class="fsi-footer__social">
+            <li><a href="#sec-0" aria-label="Instagram"><i class="fa fa-instagram senai-footer__icon" aria-hidden="true"></i></a></li>
+            <li><a href="#sec-0" aria-label="LinkedIn"><i class="fa fa-linkedin-square senai-footer__icon" aria-hidden="true"></i></a></li>
+            <li><a href="#sec-0" aria-label="Facebook"><i class="fa fa-facebook-square senai-footer__icon" aria-hidden="true"></i></a></li>
+            <li><a href="#sec-0" aria-label="Youtube"><i class="fa fa-youtube-play senai-footer__icon" aria-hidden="true"></i></a></li>
+            <li><a href="#sec-0" aria-label="Twitter"><i class="fa fa-twitter senai-footer__icon" aria-hidden="true"></i></a></li>
+            <li><a href="#sec-0" aria-label="Flickr"><i class="fa fa-flickr senai-footer__icon" aria-hidden="true"></i></a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 1 — TIPOGRAFIA                                          -->
+<!-- ============================================================ -->
+<section id="sec-1" class="ds-section">
+  <h2 class="ds-section__title">1 · Tipografia</h2>
+  <p class="ds-section__lead">Família principal <strong>MuseoSans</strong> (com fallback Arial/sans-serif); rótulos de menu usam <strong>Open Sans</strong>. Hierarquia de leitura extraída das classes reais do site. Tamanhos baseados nos tokens <code>--fs-*</code> e nas regras de cada componente.</p>
+
+  <div class="ds-card">
+    <div class="ds-type-row">
+      <h1 class="fsi-home__h2" style="margin-top:0;text-align:left;">Page Title — fsi-home__h2</h1>
+      <span class="ds-type-row__spec">2.5em / 700</span>
+    </div>
+    <div class="ds-type-row">
+      <h2 class="fsi-titulo">Section Heading — fsi-titulo</h2>
+      <span class="ds-type-row__spec">~1em (h2) / 700</span>
+    </div>
+    <div class="ds-type-row">
+      <h3 class="fsi-noticias h3" style="font-size:1.3rem;font-weight:700;">Card Title (destaque) — fsi-noticias h3</h3>
+      <span class="ds-type-row__spec">1.3rem / 700</span>
+    </div>
+    <div class="ds-type-row">
+      <h3 style="font-size:1.1rem;margin:0;">Card Title — fsi-noticias h3</h3>
+      <span class="ds-type-row__spec">1.1rem / 700</span>
+    </div>
+    <div class="ds-type-row">
+      <p class="indnews-faixa__cartola" style="color:var(--fsi-clr-4);">Subtitle / Cartola — indnews-faixa__cartola</p>
+      <span class="ds-type-row__spec">.9rem / 800 · uppercase</span>
+    </div>
+    <div class="ds-type-row">
+      <p class="fsi__txt" style="margin:0;">Body Text — fsi__txt — line-height 1.6, cor var(--fsi-clr-txt). O conteúdo corrido das páginas usa esta classe para garantir legibilidade.</p>
+      <span class="ds-type-row__spec">1rem / 1.6</span>
+    </div>
+    <div class="ds-type-row">
+      <p class="new-text-style" style="margin:0;">Body Text com espaçamento — new-text-style — line-height calc(1.6em + .2vw), letter-spacing .8px.</p>
+      <span class="ds-type-row__spec">1rem / +letter-spacing</span>
+    </div>
+    <div class="ds-type-row">
+      <p style="margin:0;font-weight:300;line-height:1.7;">Body Text Small (chamada) — fsi-noticias p:nth-child(3) — peso 300.</p>
+      <span class="ds-type-row__spec">1rem / 300</span>
+    </div>
+    <div class="ds-type-row">
+      <span class="fsi__evento__dados" style="display:inline-flex;"><span>Label / Meta — fsi__evento__dados</span></span>
+      <span class="ds-type-row__spec">~.9rem · #6f6e6e</span>
+    </div>
+    <div class="ds-type-row">
+      <span style="font-size:.6rem;text-transform:uppercase;letter-spacing:1px;">Caption / Tag — fsi-noticias p:nth-child(1)</span>
+      <span class="ds-type-row__spec">.6rem · uppercase</span>
+    </div>
+  </div>
+
+  <h3 class="ds-h3">Truncamento (text-overflow: ellipsis)</h3>
+  <p class="ds-note">Demonstração do comportamento de truncamento em uma linha aplicado a um título longo.</p>
+  <div class="ds-card">
+    <p class="ds-trunc" style="margin:0;font-weight:700;color:var(--fsi-clr-1);">Institutos SENAI de Santa Catarina alcançam marca de R$ 1 bilhão em carteira de projetos</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 2 — CORES, SUPERFÍCIES E ESTADOS SEMÂNTICOS            -->
+<!-- ============================================================ -->
+<section id="sec-2" class="ds-section">
+  <h2 class="ds-section__title">2 · Cores, Superfícies e Estados</h2>
+  <p class="ds-section__lead">Todas as cores derivam dos tokens CSS originais (<code>--fsi-clr-*</code>) declarados em <code>body</code>. Os swatches abaixo são renderizados aplicando esses mesmos tokens.</p>
+
+  <h3 class="ds-h3">2.1 — Cores de Interface</h3>
+  <div class="ds-grid ds-grid--swatch">
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--5"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Background app</div><div class="ds-swatch__val">--fsi-clr-5</div></div></div>
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--6"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Cards / painéis</div><div class="ds-swatch__val">--fsi-clr-6</div></div></div>
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--10"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Card notícia / lista</div><div class="ds-swatch__val">--fsi-clr-10</div></div></div>
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--1"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Header / nav entidades</div><div class="ds-swatch__val">--fsi-clr-1 / primaria</div></div></div>
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--8"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Faixa Indústria News</div><div class="ds-swatch__val">--fsi-clr-8</div></div></div>
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--2"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Faixa multimídia</div><div class="ds-swatch__val">--fsi-clr-2</div></div></div>
+  </div>
+
+  <h3 class="ds-h3">2.2 — Cores Semânticas / Marca</h3>
+  <p class="ds-note">O site institucional usa uma paleta de marca (azuis) em vez de uma escala success/warning/error completa. Documentadas as cores realmente presentes.</p>
+  <div class="ds-grid ds-grid--swatch">
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--1"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Primária (info/marca)</div><div class="ds-swatch__val">hsl(220 74% 33%)</div></div></div>
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--8"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Azul escuro</div><div class="ds-swatch__val">hsl(232 86% 22%)</div></div></div>
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--btn"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Botão</div><div class="ds-swatch__val">hsl(239 79% 29%)</div></div></div>
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--btnh"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Botão hover</div><div class="ds-swatch__val">#005ca9</div></div></div>
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--servico"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Serviço (destaque)</div><div class="ds-swatch__val">#6dceff</div></div></div>
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--9"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Neutro / divisor</div><div class="ds-swatch__val">--fsi-clr-9</div></div></div>
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--4"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Texto principal</div><div class="ds-swatch__val">hsl(0 0% 16%)</div></div></div>
+    <div class="ds-swatch"><div class="ds-swatch__color ds-sw--txt"></div><div class="ds-swatch__meta"><div class="ds-swatch__name">Texto corpo</div><div class="ds-swatch__val">#333333</div></div></div>
+  </div>
+
+  <h3 class="ds-h3">Aplicação semântica — Tag / Badge de categoria</h3>
+  <div class="ds-card">
+    <ul class="fsi-noticias" style="margin:0;">
+      <li><p>Riscos Psicossociais</p></li>
+    </ul>
+    <p class="ds-note">Tag de categoria de notícia: fundo <code>--fsi-clr-2</code>, texto <code>--fsi-clr-4</code> (<code>.fsi-noticias p:nth-child(1)</code>).</p>
+  </div>
+
+  <h3 class="ds-h3">2.3 — Superfícies e Efeitos</h3>
+  <div class="ds-grid ds-grid--states">
+    <div><div class="ds-shadow-box ds-shadow-1">--fsi-shadow-1</div><p class="ds-note">Sombra padrão de card</p></div>
+    <div><div class="ds-shadow-box ds-shadow-card">card destaque</div><p class="ds-note">0 7px 10px rgba(0,0,0,.5)</p></div>
+    <div><div class="ds-shadow-box ds-shadow-hover">hover</div><p class="ds-note">.fsi__transition__shadow:hover</p></div>
+    <div><div class="ds-shadow-box ds-shadow-soft">serviço</div><p class="ds-note">0 1px 3px / 0 1px 2px</p></div>
+  </div>
+
+  <h3 class="ds-h3">Bordas, divisores e raio</h3>
+  <div class="ds-card">
+    <div class="ds-divider-demo"></div>
+    <p class="ds-note">Divisor 2px <code>--fsi-clr-9</code> · raio padrão <code>--fsi-border-rad: 20px</code> · raio de botão 5px / CTA 30px.</p>
+  </div>
+
+  <h3 class="ds-h3">Gradiente (título do rodapé)</h3>
+  <div class="ds-card">
+    <span style="background:linear-gradient(180deg, #465f92 0%, var(--fsi-clr-9) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-size:1.6rem;font-weight:700;text-transform:uppercase;">Gradiente de texto</span>
+    <p class="ds-note">linear-gradient(180deg, #465f92, var(--fsi-clr-9)) — usado em <code>.senai-title--footer span</code>.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 3 — NAVEGAÇÃO E ESTRUTURA                               -->
+<!-- ============================================================ -->
+<section id="sec-3" class="ds-section">
+  <h2 class="ds-section__title">3 · Navegação e Estrutura</h2>
+  <p class="ds-section__lead">Padrões de navegação reais do site: barra de entidades, mega-menu (header), breadcrumb e paginador. O mega-menu é totalmente funcional (jQuery + script original) — clique em "Institucional" ou "Áreas de atuação".</p>
+
+  <h3 class="ds-h3">3.1 / 3.2 — Header com mega-menu</h3>
+  <div class="ds-card" style="padding:0;overflow:visible;">
+    <nav class="fsi__nav--entidades" style="margin:0;padding-inline:1.5rem;" aria-label="Navegação entidades (demo)">
+      <ul>
+        <li><a href="#sec-3">FIESC</a></li>
+        <li><a href="#sec-3">CIESC</a></li>
+        <li><a href="#sec-3">SESI</a></li>
+        <li><a href="#sec-3">SENAI</a></li>
+        <li><a href="#sec-3">IEL</a></li>
+      </ul>
+    </nav>
+    <div class="fsi-nav">
+      <nav class="fsi-nav--header" style="padding-inline:1.5rem;">
+        <div class="fsi-nav__mobile">
+          <div>
+            <div class="mobile-menu">
+              <div role="menubar">
+                <ul id="mega-menu-demo" role="group" style="margin:0;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+                  <li class="has-drop">
+                    <a class="mega-menu-link" role="menuitem" tabindex="0"><span>Institucional</span><i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                    <div class="droplet" style="display:none;">
+                      <div class="mega-menu-open-items">
+                        <div><a href="#sec-3">Sobre a FIESC</a><a href="#sec-3">Diretorias e Conselhos</a><a href="#sec-3">Relatório Anual</a></div>
+                        <div><a href="#sec-3">Entidades</a><a href="#sec-3">Publicações</a><a href="#sec-3">Imprensa</a></div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="has-drop">
+                    <a class="mega-menu-link" role="menuitem" tabindex="0"><span>Áreas de atuação</span><i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                    <div class="droplet" style="display:none;">
+                      <div class="mega-menu-open-items">
+                        <div><a href="#sec-3">Associativismo</a><a href="#sec-3">Educação</a><a href="#sec-3">Inovação</a></div>
+                        <div><a href="#sec-3">Internacionalização</a><a href="#sec-3">Observatório FIESC</a></div>
+                      </div>
+                    </div>
+                  </li>
+                  <li><a class="mega-menu-link" role="menuitem" href="#sec-3"><span>Compliance</span></a></li>
+                  <li><a class="mega-menu-link" role="menuitem" href="#sec-3"><span>Indústria News</span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <p class="ds-note" style="padding:1rem 1.5rem 0;">Item: <code>.mega-menu-link</code> (default) · hover muda para <code>--fsi-clr-primaria</code> · <code>li.active</code> sublinha e rotaciona o ícone <code>.fa-angle-down</code> 180°.</p>
+    <div style="height:1.5rem;"></div>
+  </div>
+
+  <h3 class="ds-h3">3.3 — Breadcrumbs</h3>
+  <div class="ds-card">
+    <nav class="breadcrumb__breadcrumb__breadcrumb" role="navigation" aria-label="Trilha de navegação" style="margin:0;">
+      <ol class="breadcrumb__breadcrumb__breadcrumbList">
+        <li class="breadcrumb__breadcrumb__breadcrumbItem">Página Inicial</li>
+        <li class="breadcrumb__breadcrumb__breadcrumbItem">Institucional</li>
+        <li class="breadcrumb__breadcrumb__breadcrumbItem">Sobre a FIESC</li>
+      </ol>
+    </nav>
+  </div>
+
+  <h3 class="ds-h3">3.5 — Paginação</h3>
+  <p class="ds-note">Estilos do paginador do tema (<code>.pager__pager__*</code>): número ativo com fundo <code>--fsi-clr-primaria</code>, demais com borda e texto na cor primária.</p>
+  <div class="ds-card">
+    <nav class="pager__pager__pager" style="margin:0;">
+      <ul class="pager__pager__items" style="display:flex;gap:.5rem;list-style:none;padding:0;margin:0;align-items:center;">
+        <li class="pager__pager__number"><a href="#sec-3" style="display:block;padding:.4rem .8rem;text-decoration:none;">1</a></li>
+        <li class="pager__pager__number pager__pager__numberActive"><a href="#sec-3" style="display:block;padding:.4rem .8rem;text-decoration:none;">2</a></li>
+        <li class="pager__pager__number"><a href="#sec-3" style="display:block;padding:.4rem .8rem;text-decoration:none;">3</a></li>
+      </ul>
+    </nav>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 4 — COMPONENTES DE FORMULÁRIO                           -->
+<!-- ============================================================ -->
+<section id="sec-4" class="ds-section">
+  <h2 class="ds-section__title">4 · Componentes de Formulário</h2>
+  <p class="ds-section__lead">O site institucional (home) é majoritariamente de conteúdo e não expõe formulários densos. Os controles documentados são os realmente presentes no ecossistema FIESC: o <strong>select estilizado "Choices"</strong> (usado nos popups RD Station, com CSS incluído no original) e os botões de envio/CTA. Componentes inexistentes na referência foram omitidos conforme as regras.</p>
+
+  <h3 class="ds-h3">4.2 — Select / Dropdown (Choices · RD Station)</h3>
+  <p class="ds-note">Estados extraídos do bloco de CSS <code>.rd-choices*</code> presente no &lt;head&gt; do original.</p>
+  <div class="ds-grid ds-grid--states">
+    <div class="ds-state">
+      <span class="ds-state__label">Default (fechado)</span>
+      <div class="choices" data-type="select-one" style="width:100%;">
+        <div class="rd-choices__inner">
+          <div class="choices__list rd-choices__list rd-choices__list--single"><div class="rd-choices__item">Selecione um estado</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="ds-state">
+      <span class="ds-state__label">Focus / Open</span>
+      <div class="choices rd-is-focused rd-is-open" data-type="select-one" style="width:100%;position:relative;">
+        <div class="rd-choices__inner">
+          <div class="choices__list rd-choices__list rd-choices__list--single"><div class="rd-choices__item">Santa Catarina</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="ds-state">
+      <span class="ds-state__label">Disabled</span>
+      <div class="choices rd-is-disabled" data-type="select-one" style="width:100%;">
+        <div class="rd-choices__inner">
+          <div class="choices__list rd-choices__list rd-choices__list--single"><div class="rd-choices__item rd-choices__item--disabled">Indisponível</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="ds-h3">4.7 — Composição: assinatura Indústria News</h3>
+  <p class="ds-note">Padrão real de "formulário de conversão" da home — chamada + ações (CTAs), agrupadas no rodapé.</p>
+  <div class="ds-card" style="background:var(--fsi-clr-8);">
+    <p class="indnews-faixa__cartola">Indústria News</p>
+    <h3 class="indnews-faixa__title">Receba diariamente as atualizações da indústria de SC</h3>
+    <a href="#sec-4" class="fsi-cta fsi-cta--wired fsi-cta--arrow-right"><span>Assine agora</span><i class="fa fa-long-arrow-right fsi-cta__icon" aria-hidden="true"></i></a>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 5 — TABELAS E EXIBIÇÃO DE DADOS                         -->
+<!-- ============================================================ -->
+<section id="sec-5" class="ds-section">
+  <h2 class="ds-section__title">5 · Exibição de Dados</h2>
+  <p class="ds-section__lead">A aplicação não utiliza tabelas de dados tabulares — a informação é apresentada em <strong>cards</strong> e <strong>listas</strong>. Documentados os padrões reais: notícia em destaque, cards complementares, lista de links, eventos e publicações.</p>
+
+  <h3 class="ds-h3">5.1 — Notícia em destaque (card horizontal)</h3>
+  <ul class="fsi-noticias fsi-noticias--destaque">
+    <li>
+      <a href="#sec-5">
+        <div>
+          <p>Riscos Psicossociais</p>
+          <h3>STF suspende por 90 dias penalização a empresas que descumprirem NR-1</h3>
+          <p>Decisão judicial reconhece que a norma não estabelece regras claras sobre como incluir os fatores de riscos psicossociais no programa de gestão de riscos (PGR).</p>
+        </div>
+        <div>
+          <img loading="lazy" src="./refs/Página Inicial _ FIESC_files/54333425092_87fdf6b1cd_3k.jpg.webp" width="800" height="533" alt="Notícia em destaque">
+        </div>
+      </a>
+    </li>
+  </ul>
+
+  <h3 class="ds-h3">5.2 — Grid de cards complementares</h3>
+  <ul class="fsi-noticias fsi-noticias--compl">
+    <li>
+      <a href="#sec-5">
+        <div><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/4R3A9197 copiar.jpg.webp" width="800" height="533" alt="UniSENAI IA"></div>
+        <div><p>MERCADO</p><h3>UniSENAI forma nova turma de residência em Inteligência Artificial</h3></div>
+      </a>
+    </li>
+    <li>
+      <a href="#sec-5">
+        <div><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/40785577172_85bfdeaef9_3k.jpg.webp" width="800" height="533" alt="Institutos SENAI"></div>
+        <div><p>INOVAÇÃO</p><h3>Institutos SENAI de SC alcançam marca de R$ 1 bilhão em carteira de projetos</h3></div>
+      </a>
+    </li>
+    <li>
+      <a href="#sec-5">
+        <div><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/girl-coding-interactive-screen.jpg.webp" width="800" height="533" alt="Imersão IA"></div>
+        <div><p>OPORTUNIDADE</p><h3>Maior imersão gratuita em IA de SC ocorre em 14 cidades neste sábado</h3></div>
+      </a>
+    </li>
+  </ul>
+
+  <h3 class="ds-h3">Lista de links (notícias)</h3>
+  <ul class="fsi-noticias fsi-noticias--lista">
+    <li><a href="#sec-5">Institutos SENAI de SC apresentam projetos de baterias e tecnologia espacial no Energy Summit</a></li>
+    <li><a href="#sec-5">FIESC e UNDIME firmam parceria para fortalecer a educação em Santa Catarina</a></li>
+    <li><a href="#sec-5">Escola SESI de São José promove Mostra de Robótica no Continente Shopping</a></li>
+  </ul>
+
+  <h3 class="ds-h3">5.3 — Lista de eventos (agenda)</h3>
+  <div class="ds-card">
+    <div>
+      <a href="#sec-5" class="fsi__evento">
+        <div class="fsi__evento__data"><p class="fsi__evento__dia">02</p><p class="fsi__evento__mes">JUL</p></div>
+        <div>
+          <h3 class="fsi__evento__nome">Seminário Desvendando a Eficiência Operacional | 2ª edição - Blumenau</h3>
+          <ul class="fsi__evento__dados"><li>Quinta-feira</li><li>13:30</li></ul>
+        </div>
+      </a>
+    </div>
+    <div>
+      <a href="#sec-5" class="fsi__evento">
+        <div class="fsi__evento__data"><p class="fsi__evento__dia">02</p><p class="fsi__evento__mes">JUL</p></div>
+        <div>
+          <h3 class="fsi__evento__nome">Webinar: Financiamento às Exportações</h3>
+          <ul class="fsi__evento__dados"><li>Quinta-feira</li><li>10h</li></ul>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <h3 class="ds-h3">Grid de publicações</h3>
+  <ul class="publicacoes__lista">
+    <li>
+      <img loading="lazy" src="./refs/Página Inicial _ FIESC_files/capa-site_336x480px.png" width="336" height="480" alt="Relatório Anual">
+      <a href="#sec-5">Relatório Anual 2025</a>
+    </li>
+    <li>
+      <img loading="lazy" src="./refs/Página Inicial _ FIESC_files/reform-trib.jpg" width="333" height="480" alt="Reforma Tributária">
+      <a href="#sec-5">Reforma Tributária</a>
+    </li>
+    <li>
+      <img loading="lazy" src="./refs/Página Inicial _ FIESC_files/patrr-cult.jpg" width="700" height="1000" alt="Manual de Patrocínio">
+      <a href="#sec-5">Manual de Patrocínio Cultural e ESG: Rouanet para Empresas</a>
+    </li>
+  </ul>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 6 — COMPONENTES DE UI                                   -->
+<!-- ============================================================ -->
+<section id="sec-6" class="ds-section">
+  <h2 class="ds-section__title">6 · Componentes de UI</h2>
+  <p class="ds-section__lead">Botões, CTAs, tags e a faixa Indústria News — todas as variantes e estados presentes no original, lado a lado.</p>
+
+  <h3 class="ds-h3">6.1 — CTAs (.fsi-cta)</h3>
+  <div class="ds-grid ds-grid--states">
+    <div class="ds-state ds-state--dark">
+      <span class="ds-state__label">Primário</span>
+      <a href="#sec-6" class="fsi-cta fsi-cta--primario fsi-cta--arrow-right"><span>Saiba mais</span><i class="fa fa-long-arrow-right fsi-cta__icon" aria-hidden="true"></i></a>
+    </div>
+    <div class="ds-state ds-state--dark">
+      <span class="ds-state__label">Negativo</span>
+      <a href="#sec-6" class="fsi-cta fsi-cta--negativo fsi-cta--arrow-right"><span>Saiba mais</span><i class="fa fa-long-arrow-right fsi-cta__icon" aria-hidden="true"></i></a>
+    </div>
+    <div class="ds-state ds-state--dark">
+      <span class="ds-state__label">Wired (contorno)</span>
+      <a href="#sec-6" class="fsi-cta fsi-cta--wired fsi-cta--arrow-right"><span>Assine agora</span><i class="fa fa-long-arrow-right fsi-cta__icon" aria-hidden="true"></i></a>
+    </div>
+    <div class="ds-state">
+      <span class="ds-state__label">Link</span>
+      <a href="#sec-6" class="fsi-cta fsi-cta--link fsi-cta--arrow-right"><span>Ver mais notícias</span><i class="fa fa-long-arrow-right fsi-cta__icon" aria-hidden="true"></i></a>
+    </div>
+  </div>
+
+  <h3 class="ds-h3">6.1 — Botões (.fsi__button)</h3>
+  <div class="ds-grid ds-grid--states">
+    <div class="ds-state">
+      <span class="ds-state__label">Default</span>
+      <a href="#sec-6" class="fsi__button fsi__button__fit">Enviar</a>
+    </div>
+    <div class="ds-state ds-state--dark">
+      <span class="ds-state__label">Outline (button-2)</span>
+      <a href="#sec-6" class="fsi__button fsi__button-2 fsi__button__fit">Cancelar</a>
+    </div>
+    <div class="ds-state">
+      <span class="ds-state__label">Legado verde</span>
+      <a href="#sec-6" class="new-button new-button__verde" style="padding:.5rem 1rem;border:2px solid var(--fsi-clr-button);border-radius:5px;text-decoration:none;display:inline-block;">Acessar</a>
+    </div>
+  </div>
+
+  <h3 class="ds-h3">6.2 — Tags / Badges de categoria</h3>
+  <div class="ds-card">
+    <ul class="fsi-noticias" style="margin:0;display:flex;gap:1rem;flex-wrap:wrap;">
+      <li><p>MERCADO</p></li>
+      <li><p>INOVAÇÃO</p></li>
+      <li><p>INTERNACIONALIZAÇÃO</p></li>
+      <li><p>OPORTUNIDADE</p></li>
+    </ul>
+  </div>
+
+  <h3 class="ds-h3">6.x — Faixa Indústria News (banner promocional)</h3>
+  <ul class="indnews-faixa">
+    <li>
+      <div class="indnews-faixa__section">
+        <div>
+          <div class="indnews-faixa__img"><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/Logo-news-negativo.png" alt="Logo da Indústria News"></div>
+          <a href="#sec-6" class="fsi-cta fsi-cta--wired fsi-cta--arrow-right"><span>Assine agora</span><i class="fa fa-long-arrow-right fsi-cta__icon" aria-hidden="true"></i></a>
+        </div>
+        <div class="indnews-faixa__content">
+          <p class="indnews-faixa__cartola">Destaque do dia</p>
+          <h3 class="indnews-faixa__title">STF suspende penalização a empresas que descumprirem novas regras da NR-1</h3>
+          <p class="indnews-faixa__chamada">Decisão judicial reconhece que a norma não estabelece regras claras sobre os fatores de riscos psicossociais no PGR.</p>
+        </div>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 7 — LAYOUT E ESPAÇAMENTO                                -->
+<!-- ============================================================ -->
+<section id="sec-7" class="ds-section">
+  <h2 class="ds-section__title">7 · Layout e Espaçamento</h2>
+  <p class="ds-section__lead">Containers centralizados com largura máxima progressiva e grids responsivos extraídos do original.</p>
+
+  <h3 class="ds-h3">Containers</h3>
+  <div class="ds-card">
+    <ul style="line-height:1.8;margin:0;">
+      <li><code>.fsi__container</code> / <code>.fsi-container</code> — largura 100%−2rem → 940px (≥1024px) → 1140px (≥1240px)</li>
+      <li><code>.secao-completa</code> — largura 1200px, padding-inline 2rem</li>
+      <li><code>.fsi__container__p</code> — coluna de leitura <code>min(90ch, 100vw − 4rem)</code></li>
+      <li>Tokens de ritmo vertical: <code>--fsi-pad-bl: 2.5rem</code> · raio <code>--fsi-border-rad: 20px</code></li>
+    </ul>
+  </div>
+
+  <h3 class="ds-h3">Layout 1 — Grid de cards (3 colunas)</h3>
+  <p class="ds-note"><code>repeat(auto-fit, minmax(260px, 1fr))</code> com gap 2rem — usado nos cards complementares de notícia.</p>
+  <ul class="fsi-noticias fsi-noticias--compl">
+    <li><a href="#sec-7"><div><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/The-buildout-of-eight-Counter-Current-Decantation-CCD-units-continue.jpg.webp" width="800" height="533" alt="WEG"></div><div><p>INTERNACIONALIZAÇÃO</p><h3>WEG irá fornecer motores elétricos ao maior projeto de lítio dos EUA</h3></div></a></li>
+    <li><a href="#sec-7"><div><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/4R3A9197 copiar.jpg.webp" width="800" height="533" alt="UniSENAI"></div><div><p>MERCADO</p><h3>UniSENAI forma nova turma de residência em IA</h3></div></a></li>
+    <li><a href="#sec-7"><div><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/girl-coding-interactive-screen.jpg.webp" width="800" height="533" alt="Imersão"></div><div><p>OPORTUNIDADE</p><h3>Maior imersão gratuita em IA de SC</h3></div></a></li>
+  </ul>
+
+  <h3 class="ds-h3">Layout 2 — Banner duplo (2 colunas)</h3>
+  <p class="ds-note"><code>.banner-lista--homeduplo</code> — grid 1fr 1fr a partir de 650px.</p>
+  <ul class="banner-lista--homeduplo">
+    <li class="banner-item--homeduplo"><a href="#sec-7"><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/Banner Home FIESC Meio Desktop- 1000x455.jpg" width="2085" height="948" alt="Pessoas"></a></li>
+    <li class="banner-item--homeduplo"><a href="#sec-7"><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/Canton Fair Banner Home FIESC Meio Desktop- 1000x455_0.jpg" width="1001" height="456" alt="Canton Fair 2026"></a></li>
+  </ul>
+
+  <h3 class="ds-h3">Layout 3 — Mosaico de produções (grid-template-areas)</h3>
+  <p class="ds-note"><code>.producoes-lista</code> — 1 item grande + 2 menores empilhados (≥600px).</p>
+  <ul class="producoes-lista">
+    <li class="producoes-item"><a href="#sec-7"><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/JS-11_0_0.jpg" width="3000" height="2000" alt="RADAR Tech"></a></li>
+    <li class="producoes-item"><a href="#sec-7"><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/expo-def-26.webp" width="1166" height="656" alt="Expo Defense"></a></li>
+    <li class="producoes-item"><a href="#sec-7"><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/prod-3.png" width="1920" height="1080" alt="Moda"></a></li>
+  </ul>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 8 — MOTION E INTERAÇÃO                                  -->
+<!-- ============================================================ -->
+<section id="sec-8" class="ds-section">
+  <h2 class="ds-section__title">8 · Motion e Interação</h2>
+  <p class="ds-section__lead">Movimento extraído das classes reais. Passe o mouse sobre os exemplos para ver cada transição.</p>
+
+  <ul class="ds-motion-list">
+    <li><code>.fsi-cta__icon</code> — seta desliza <code>translateX(7px)</code> no hover (.5s).</li>
+    <li><code>.fsi-noticias a img</code> — zoom <code>scale(1.2)</code> em .3s no hover do card.</li>
+    <li><code>.fsi__cards__item</code> — eleva <code>translateY(20px)</code> e revela conteúdo (.4s/.5s).</li>
+    <li><code>.fsi__destaques__overlay/titulo</code> — fade do overlay + reposicionamento do título (.3s–.4s).</li>
+    <li><code>.fsi__evento:hover</code> — realce de fundo <code>#e1f4ff</code> + sublinhado do nome.</li>
+    <li><code>.droplet</code> (mega-menu) — <code>slideDown/slideUp(100)</code> via jQuery.</li>
+    <li><code>@keyframes pulse</code> — botão WhatsApp pulsante (1.5s infinito).</li>
+  </ul>
+
+  <h3 class="ds-h3">Galeria de Motion</h3>
+  <div class="ds-grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">
+    <div class="ds-card" style="text-align:center;">
+      <a href="#sec-8" class="fsi-cta fsi-cta--primario fsi-cta--arrow-right" style="margin-inline:auto;"><span>Hover na seta</span><i class="fa fa-long-arrow-right fsi-cta__icon" aria-hidden="true"></i></a>
+    </div>
+
+    <ul class="fsi-noticias fsi-noticias--compl" style="margin:0;">
+      <li><a href="#sec-8"><div><img loading="lazy" src="./refs/Página Inicial _ FIESC_files/4R3A9197 copiar.jpg.webp" width="800" height="533" alt="Zoom no hover"></div><div><p>HOVER</p><h3>Zoom da imagem (scale 1.2)</h3></div></a></li>
+    </ul>
+
+    <div class="fsi__cards">
+      <div class="fsi__cards__item">
+        <img loading="lazy" src="./refs/Página Inicial _ FIESC_files/girl-coding-interactive-screen.jpg.webp" alt="Card reveal">
+        <div class="fsi__cards__content">
+          <h3>Card hover</h3>
+          <p>Eleva e revela o conteúdo no hover.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="ds-h3">Animação keyframe — pulse (WhatsApp)</h3>
+  <div class="ds-card" style="display:flex;justify-content:center;padding:2.5rem;">
+    <a href="#sec-8" class="fsi__button__whatsapp" aria-label="WhatsApp" style="position:relative;bottom:auto;right:auto;"><i class="fa fa-whatsapp" aria-hidden="true"></i></a>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 9 — ÍCONES                                              -->
+<!-- ============================================================ -->
+<section id="sec-9" class="ds-section">
+  <h2 class="ds-section__title">9 · Ícones</h2>
+  <p class="ds-section__lead">Biblioteca <strong>FontAwesome 4.7.0</strong> (importada via CDN nas folhas de estilo do tema). Mesma marcação <code>&lt;i class="fa fa-..."&gt;</code> do original. Cor herdada via <code>color</code>; tamanhos definidos por contexto.</p>
+
+  <h3 class="ds-h3">Navegação</h3>
+  <div class="ds-icon-grid">
+    <div class="ds-icon-cell"><i class="fa fa-angle-down" aria-hidden="true"></i><code>fa-angle-down</code></div>
+    <div class="ds-icon-cell"><i class="fa fa-long-arrow-right" aria-hidden="true"></i><code>fa-long-arrow-right</code></div>
+    <div class="ds-icon-cell"><i class="fa fa-angle-right" aria-hidden="true"></i><code>fa-angle-right</code></div>
+  </div>
+
+  <h3 class="ds-h3">Contato</h3>
+  <div class="ds-icon-grid">
+    <div class="ds-icon-cell"><i class="fa fa-phone" aria-hidden="true"></i><code>fa-phone</code></div>
+    <div class="ds-icon-cell"><i class="fa fa-envelope" aria-hidden="true"></i><code>fa-envelope</code></div>
+    <div class="ds-icon-cell"><i class="fa fa-map-marker" aria-hidden="true"></i><code>fa-map-marker</code></div>
+  </div>
+
+  <h3 class="ds-h3">Redes sociais</h3>
+  <div class="ds-icon-grid">
+    <div class="ds-icon-cell"><i class="fa fa-instagram" aria-hidden="true"></i><code>fa-instagram</code></div>
+    <div class="ds-icon-cell"><i class="fa fa-linkedin-square" aria-hidden="true"></i><code>fa-linkedin-square</code></div>
+    <div class="ds-icon-cell"><i class="fa fa-facebook-square" aria-hidden="true"></i><code>fa-facebook-square</code></div>
+    <div class="ds-icon-cell"><i class="fa fa-youtube-play" aria-hidden="true"></i><code>fa-youtube-play</code></div>
+    <div class="ds-icon-cell"><i class="fa fa-twitter" aria-hidden="true"></i><code>fa-twitter (→ 𝕏)</code></div>
+    <div class="ds-icon-cell"><i class="fa fa-flickr" aria-hidden="true"></i><code>fa-flickr</code></div>
+    <div class="ds-icon-cell"><i class="fa fa-whatsapp" aria-hidden="true"></i><code>fa-whatsapp</code></div>
+  </div>
+
+  <h3 class="ds-h3">Variação de tamanho e herança de cor</h3>
+  <div class="ds-card" style="display:flex;align-items:baseline;gap:2rem;">
+    <i class="fa fa-long-arrow-right" style="font-size:.9rem;color:var(--fsi-clr-1);"></i>
+    <i class="fa fa-long-arrow-right" style="font-size:1.5rem;color:var(--fsi-clr-8);"></i>
+    <i class="fa fa-long-arrow-right" style="font-size:2.5rem;color:var(--fsi-clr-servico);"></i>
+    <span class="ds-note">.9rem · 1.5rem · 2.5rem — cor via <code>color</code>.</span>
+  </div>
+</section>
+
+<!-- ===================== SCRIPTS (comportamento original) ===================== -->
+<script>
+// Mega-menu — mesmo comportamento do bloco block-fsi-fiescnavegacao do original
+(function(){
+  var $breakpoint = 1024;
+  function openDropdown(item){
+    var droplet = $(item).next()[0];
+    $(".has-drop").removeClass("active");
+    if ($(window).width() < $breakpoint){
+      $(".droplet").removeClass("active");
+      $(droplet).show().addClass("active");
+      $(item).parent().delay(500).addClass("active");
+    } else {
+      $(".droplet").slideUp(100);
+      $(droplet).slideDown(100);
+      $(item).parent().addClass("active");
+    }
+  }
+  function closeDropdown(item){
+    var droplet = $(item).next();
+    if ($(window).width() < $breakpoint){
+      $(droplet).removeClass("active");
+    } else {
+      $(droplet).slideUp(100);
+    }
+    $(item).parent().removeClass("active");
+  }
+  function init(){
+    $(".droplet").hide();
+    $(".has-drop").each(function(){
+      $(this).on("click", function(){
+        if ($(this).hasClass("active")){
+          closeDropdown($(this).children(".mega-menu-link"));
+        } else {
+          openDropdown($(this).children(".mega-menu-link"));
+        }
+      });
+    });
+  }
+  $(document).ready(init);
+})();
+</script>
+
+</body>
+</html>

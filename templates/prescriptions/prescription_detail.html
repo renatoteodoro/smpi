@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{# Safe URL resolution for cross-app links #}
+{% url 'knowledge:document_list' as url_knowledge_docs %}
+
+{% block title %}Prescrição #{{ prescription.pk }}{% endblock %}
+{% block page_title %}Prescrição #{{ prescription.pk }}{% endblock %}
+
+{% block content %}
+<nav aria-label="Navegação estrutural"
+     style="font-size:var(--fs-100);color:#888;margin-bottom:1.25rem;display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
+  <a href="{% url 'prescriptions:prescription_list' %}" style="color:var(--fsi-clr-1);text-decoration:none">Prescrições</a>
+  <span class="material-icons" aria-hidden="true" style="font-size:.9rem">chevron_right</span>
+  <span aria-current="page">Prescrição #{{ prescription.pk }}</span>
+</nav>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
+
+  {# Event data card #}
+  <div class="smpi-card">
+    <div class="smpi-card__title">Dados do Evento</div>
+    <dl style="display:grid;grid-template-columns:auto 1fr;gap:.65rem 1.25rem;font-size:var(--fs-200)">
+      <dt style="font-weight:600;color:#666">Leitura</dt>
+      <dd style="margin:0">
+        <a href="{% url 'monitoring:reading_detail' prescription.sensor_reading.pk %}"
+           style="color:var(--fsi-clr-1);text-decoration:none">
+          #{{ prescription.sensor_reading.external_id|default:prescription.sensor_reading.pk }}
+        </a>
+      </dd>
+
+      <dt style="font-weight:600;color:#666">Equipamento</dt>
+      <dd style="margin:0">
+        {{ prescription.sensor_reading.measurement_point.equipment.name|default:"—" }}
+      </dd>
+
+      <dt style="font-weight:600;color:#666">Ponto de medição</dt>
+      <dd style="margin:0">{{ prescription.sensor_reading.measurement_point.name|default:"—" }}</dd>
+
+      <dt style="font-weight:600;color:#666">Tipo de defeito</dt>
+      <dd style="margin:0">
+        {% if prescription.defect_type %}
+        <code style="background:var(--fsi-clr-5);padding:.15rem .4rem;border-radius:6px">{{ prescription.defect_type }}</code>
+        {% else %}
+        <span style="color:#999">—</span>
+        {% endif %}
+      </dd>
+
+      <dt style="font-weight:600;color:#666">Ocorrências</dt>
+      <dd style="margin:0">{{ prescription.occurrences_count|default:"—" }}</dd>
+
+      <dt style="font-weight:600;color:#666">Frequência</dt>
+      <dd style="margin:0">{{ prescription.occurrences_frequency|default:"—" }}</dd>
+
+      <dt style="font-weight:600;color:#666">Gerada em</dt>
+      <dd style="margin:0">{{ prescription.created_at|date:"d/m/Y H:i" }}</dd>
+    </dl>
+
+    <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--fsi-clr-9)">
+      {% if prescription.is_grounded %}
+      <div class="smpi-alert smpi-alert--success" role="status">
+        <span class="material-icons" aria-hidden="true">verified</span>
+        Prescrição fundamentada em documentação técnica.
+      </div>
+      {% else %}
+      <div class="smpi-alert smpi-alert--warning" role="alert">
+        <span class="material-icons" aria-hidden="true">report_problem</span>
+        <div>
+          <strong>Defeito não documentado.</strong><br>
+          Nenhum documento orientativo foi encontrado para este defeito.
+          Registre um novo documento na base de conhecimento para fundamentar futuras ocorrências.
+          {% if url_knowledge_docs %}
+          <br>
+          <a href="{% url 'knowledge:document_create' %}"
+             class="smpi-btn smpi-btn--sm smpi-btn--outline"
+             style="margin-top:.5rem">
+            <span class="material-icons" aria-hidden="true" style="font-size:1rem">add</span>
+            Novo Documento
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {# Source documents card #}
+  <div class="smpi-card">
+    <div class="smpi-card__title">Fontes Documentais</div>
+    {% if source_chunks %}
+    <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.5rem"
+        aria-label="Fontes usadas para esta prescrição">
+      {% for chunk in source_chunks %}
+      <li style="padding:.6rem .75rem;background:var(--fsi-clr-5);border-radius:8px;font-size:var(--fs-100)">
+        <a href="{% url 'knowledge:document_detail' chunk.document.pk %}"
+           style="font-weight:600;color:var(--fsi-clr-1);text-decoration:none">
+          {{ chunk.document.title }}
+        </a>
+        <span style="color:#888"> — Trecho {{ chunk.chunk_index }}</span>
+        <p style="margin:.3rem 0 0;color:#666;line-height:1.4">{{ chunk.content|truncatechars:180 }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p style="color:#666;font-size:var(--fs-200)">
+      Nenhuma fonte documental associada a esta prescrição.
+    </p>
+    {% endif %}
+  </div>
+
+</div>
+
+{# Maintenance instructions card #}
+<div class="smpi-card">
+  <div class="smpi-card__title">Instruções de Manutenção</div>
+  {% if prescription.instructions %}
+  <div id="prescription-instructions"
+       style="font-size:var(--fs-200);line-height:1.8;background:var(--fsi-clr-5);border-radius:10px;padding:1.25rem">
+    {{ prescription.instructions|linebreaks }}
+  </div>
+  {% else %}
+  <div style="text-align:center;padding:2rem;color:#888" role="status">
+    <span class="material-icons" style="font-size:2.5rem;display:block;margin-bottom:.5rem;color:var(--fsi-clr-9)">pending</span>
+    <p style="margin:0;font-size:var(--fs-200)">Nenhuma instrução disponível para esta prescrição.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Usuários{% endblock %}
+{% block page_title %}Usuários{% endblock %}
+
+{% block content %}
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+  <p style="font-size:var(--fs-200);color:#666">
+    {{ users|length }} usuário{{ users|length|pluralize }} cadastrado{{ users|length|pluralize }}
+  </p>
+  <a href="{% url 'accounts:user_create' %}" class="smpi-btn smpi-btn--primary">
+    <span class="material-icons" aria-hidden="true" style="font-size:1rem">person_add</span>
+    Novo Usuário
+  </a>
+</div>
+
+<div class="smpi-card" style="padding:0;overflow:hidden">
+  <table class="smpi-table" aria-label="Lista de usuários do sistema">
+    <thead>
+      <tr>
+        <th scope="col">E-mail</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Perfil</th>
+        <th scope="col">Status</th>
+        <th scope="col">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ user.email }}</td>
+        <td>{{ user.name|default:"—" }}</td>
+        <td>{{ user.get_role_display }}</td>
+        <td>
+          {% if user.is_active %}
+          <span class="smpi-badge smpi-badge--success">Ativo</span>
+          {% else %}
+          <span class="smpi-badge smpi-badge--danger">Inativo</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'accounts:user_update' user.pk %}"
+             class="smpi-btn smpi-btn--sm smpi-btn--outline"
+             aria-label="Editar {{ user.email }}">
+            <span class="material-icons" style="font-size:.9rem" aria-hidden="true">edit</span>
+            Editar
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5"
+            style="text-align:center;color:#666;padding:2rem;font-size:var(--fs-200)">
+          Nenhum usuário cadastrado.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

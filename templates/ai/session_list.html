@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{# Safe URL resolution for AI endpoints #}
+{% url 'ai:session_create' as url_session_create %}
+
+{% block title %}Conversas com IA{% endblock %}
+{% block page_title %}Conversas com IA{% endblock %}
+
+{% block content %}
+<div style="display:flex;justify-content:flex-end;margin-bottom:1.25rem">
+  {% if url_session_create %}
+  <form method="post" action="{{ url_session_create }}" aria-label="Criar nova conversa">
+    {% csrf_token %}
+    <button type="submit" class="smpi-btn smpi-btn--primary">
+      <span class="material-icons" aria-hidden="true" style="font-size:1.1rem">add_comment</span>
+      Nova conversa
+    </button>
+  </form>
+  {% endif %}
+</div>
+
+<div class="smpi-card">
+  {% if sessions %}
+  <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.5rem"
+      role="list" aria-label="Lista de conversas">
+    {% for session in sessions %}
+    <li role="listitem">
+      <a href="{% url 'ai:session_detail' session.pk %}"
+         style="display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem;background:var(--fsi-clr-5);border-radius:10px;text-decoration:none;color:var(--fsi-clr-4);transition:background .15s"
+         onmouseover="this.style.background='var(--fsi-clr-3)'"
+         onmouseout="this.style.background='var(--fsi-clr-5)'"
+         aria-label="Conversa: {{ session.title }} — {{ session.updated_at|date:'d/m H:i' }}">
+        <span style="font-weight:600;font-size:var(--fs-200)">{{ session.title }}</span>
+        <span style="font-size:var(--fs-100);color:#888;white-space:nowrap">{{ session.updated_at|date:"d/m H:i" }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div style="text-align:center;padding:3rem;color:#888" role="status">
+    <span class="material-icons" style="font-size:3rem;display:block;margin-bottom:.5rem;color:var(--fsi-clr-9)">smart_toy</span>
+    <p style="margin:0 0 1rem;font-size:var(--fs-300)">Nenhuma conversa ainda.</p>
+    {% if url_session_create %}
+    <form method="post" action="{{ url_session_create }}" aria-label="Iniciar primeira conversa">
+      {% csrf_token %}
+      <button type="submit" class="smpi-btn smpi-btn--primary">
+        <span class="material-icons" aria-hidden="true" style="font-size:1.1rem">chat</span>
+        Iniciar primeira conversa
+      </button>
+    </form>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+
+{% if is_paginated %}
+<nav aria-label="Paginação de conversas" class="smpi-pagination">
+  {% if page_obj.has_previous %}
+  <a href="?page={{ page_obj.previous_page_number }}" aria-label="Página anterior">&laquo;</a>
+  {% endif %}
+  <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}" aria-label="Próxima página">&raquo;</a>
+  {% endif %}
+</nav>
+{% endif %}
+{% endblock %}

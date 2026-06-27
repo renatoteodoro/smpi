@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{# Safe URL resolution for cross-app links #}
+{% url 'monitoring:reading_detail' 0 as url_reading_base %}
+
+{% block title %}Prescrições{% endblock %}
+{% block page_title %}Prescrições Geradas{% endblock %}
+
+{% block content %}
+<div class="smpi-card" style="overflow-x:auto">
+  <table class="smpi-table" aria-label="Lista de prescrições geradas pelo sistema">
+    <thead>
+      <tr>
+        <th scope="col">Leitura</th>
+        <th scope="col">Equipamento</th>
+        <th scope="col">Tipo de defeito</th>
+        <th scope="col">Ocorrências</th>
+        <th scope="col">Fundamentada</th>
+        <th scope="col">Gerada em</th>
+        <th scope="col"><span class="sr-only">Ações</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in prescriptions %}
+      <tr>
+        <td>
+          <a href="{% url 'monitoring:reading_detail' p.sensor_reading.pk %}"
+             style="color:var(--fsi-clr-1);text-decoration:none;font-weight:600">
+            #{{ p.sensor_reading.external_id|default:p.sensor_reading.pk }}
+          </a>
+        </td>
+        <td>{{ p.sensor_reading.measurement_point.equipment.name|default:"—" }}</td>
+        <td>
+          {% if p.defect_type %}
+          <code style="font-size:.8rem;background:var(--fsi-clr-5);padding:.15rem .4rem;border-radius:4px">{{ p.defect_type }}</code>
+          {% else %}
+          <span style="color:#999">—</span>
+          {% endif %}
+        </td>
+        <td>{{ p.occurrences_count|default:"—" }}</td>
+        <td>
+          {% if p.is_grounded %}
+          <span class="smpi-badge smpi-badge--success">
+            <span class="material-icons" style="font-size:.9rem" aria-hidden="true">verified</span>
+            Sim
+          </span>
+          {% else %}
+          <span class="smpi-badge smpi-badge--warning">
+            <span class="material-icons" style="font-size:.9rem" aria-hidden="true">warning</span>
+            Não
+          </span>
+          {% endif %}
+        </td>
+        <td style="white-space:nowrap">{{ p.created_at|date:"d/m/Y H:i" }}</td>
+        <td>
+          <a href="{% url 'prescriptions:prescription_detail' p.pk %}"
+             class="smpi-btn smpi-btn--sm smpi-btn--outline"
+             aria-label="Ver prescrição {{ p.pk }}">
+            Ver
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" style="text-align:center;padding:2.5rem;color:#666">
+          <span class="material-icons" style="font-size:2.5rem;display:block;margin-bottom:.5rem;color:var(--fsi-clr-9)">medical_services</span>
+          Nenhuma prescrição gerada ainda.
+          Solicite a análise de uma leitura com defeito para gerar prescrições.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if is_paginated %}
+<nav aria-label="Paginação de prescrições" class="smpi-pagination">
+  {% if page_obj.has_previous %}
+  <a href="?page={{ page_obj.previous_page_number }}" aria-label="Página anterior">&laquo;</a>
+  {% endif %}
+  <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}" aria-label="Próxima página">&raquo;</a>
+  {% endif %}
+</nav>
+{% endif %}
+{% endblock %}

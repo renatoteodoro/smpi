@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}{{ equipment.name }}{% endblock %}
+{% block page_title %}{{ equipment.name }}{% endblock %}
+
+{% block content %}
+{# Breadcrumb #}
+<nav aria-label="Navegação estrutural" style="font-size:var(--fs-100);color:#888;margin-bottom:1.25rem;display:flex;gap:.4rem;align-items:center">
+  <a href="{% url 'assets:equipment_list' %}" style="color:var(--fsi-clr-1);text-decoration:none">Equipamentos</a>
+  <span class="material-icons" aria-hidden="true" style="font-size:.9rem">chevron_right</span>
+  <span aria-current="page">{{ equipment.name }}</span>
+</nav>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+
+  {# Info card #}
+  <div class="smpi-card">
+    <div class="smpi-card__title">Informações</div>
+    <dl style="display:grid;grid-template-columns:auto 1fr;gap:.65rem 1.25rem;font-size:var(--fs-200)">
+      <dt style="font-weight:600;color:#666">Tipo</dt>
+      <dd style="margin:0">{{ equipment.equipment_type }}</dd>
+
+      <dt style="font-weight:600;color:#666">Setor</dt>
+      <dd style="margin:0">{{ equipment.sector }}</dd>
+
+      <dt style="font-weight:600;color:#666">Status</dt>
+      <dd style="margin:0">
+        <span class="smpi-badge {% if equipment.status == 'active' %}smpi-badge--success{% elif equipment.status == 'maintenance' %}smpi-badge--warning{% else %}smpi-badge--danger{% endif %}">
+          {{ equipment.get_status_display }}
+        </span>
+      </dd>
+
+      <dt style="font-weight:600;color:#666">Desde</dt>
+      <dd style="margin:0">{{ equipment.created_at|date:"d/m/Y" }}</dd>
+    </dl>
+
+    {% if equipment.description %}
+    <p style="margin-top:1rem;font-size:var(--fs-200);color:#555;line-height:1.6;border-top:1px solid var(--fsi-clr-9);padding-top:1rem">
+      {{ equipment.description }}
+    </p>
+    {% endif %}
+
+    {% if request.user.role in "admin maintenance" %}
+    <div style="margin-top:1.25rem;display:flex;gap:.75rem;flex-wrap:wrap">
+      <a href="{% url 'assets:equipment_update' equipment.pk %}" class="smpi-btn smpi-btn--outline smpi-btn--sm">
+        <span class="material-icons" aria-hidden="true" style="font-size:1rem">edit</span> Editar
+      </a>
+      <a href="{% url 'assets:measurement_point_create' equipment.pk %}" class="smpi-btn smpi-btn--primary smpi-btn--sm">
+        <span class="material-icons" aria-hidden="true" style="font-size:1rem">add</span> Ponto de medição
+      </a>
+    </div>
+    {% endif %}
+  </div>
+
+  {# Measurement points card #}
+  <div class="smpi-card">
+    <div class="smpi-card__title">Pontos de Medição</div>
+    {% if measurement_points %}
+    <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.5rem"
+        aria-label="Pontos de medição do equipamento">
+      {% for mp in measurement_points %}
+      <li style="display:flex;justify-content:space-between;align-items:center;padding:.6rem .85rem;background:var(--fsi-clr-5);border-radius:10px;font-size:var(--fs-200)">
+        <span>
+          <strong>{{ mp.name }}</strong>
+          <span style="color:#888;font-size:var(--fs-100)"> &middot; Eixo {{ mp.axis }}</span>
+        </span>
+        <span style="color:#666;font-size:var(--fs-100)">{{ mp.sensor_type|default:"—" }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p style="color:#888;font-size:var(--fs-200);text-align:center;padding:1.5rem 0">
+      <span class="material-icons" style="font-size:2rem;display:block;margin-bottom:.5rem;color:var(--fsi-clr-9)">sensors_off</span>
+      Nenhum ponto de medição cadastrado.
+    </p>
+    {% if request.user.role in "admin maintenance" %}
+    <div style="text-align:center">
+      <a href="{% url 'assets:measurement_point_create' equipment.pk %}" class="smpi-btn smpi-btn--primary smpi-btn--sm">
+        Cadastrar ponto
+      </a>
+    </div>
+    {% endif %}
+    {% endif %}
+  </div>
+
+</div>
+
+{# Recent readings #}
+<div class="smpi-card" style="margin-top:1.5rem">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+    <div class="smpi-card__title" style="margin-bottom:0">Leituras Recentes</div>
+    <a href="{% url 'monitoring:reading_list' %}?equipment={{ equipment.pk }}"
+       class="smpi-btn smpi-btn--outline smpi-btn--sm">
+      Ver todas
+    </a>
+  </div>
+
+  {% if recent_readings %}
+  <div style="overflow-x:auto">
+    <table class="smpi-table" aria-label="Leituras recentes do equipamento {{ equipment.name }}">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Data</th>
+          <th>Defeito</th>
+          <th>Status</th>
+          <th><span class="sr-only">Ações</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in recent_readings %}
+        <tr>
+          <td>{{ r.external_id|default:r.pk }}</td>
+          <td>{{ r.event_created_at|date:"d/m/Y H:i"|default:"—" }}</td>
+          <td>
+            {% if r.fault %}
+            <code style="background:var(--fsi-clr-5);padding:.15rem .45rem;border-radius:6px;font-size:var(--fs-100)">{{ r.fault.code }}</code>
+            {% else %}
+            <span style="color:#999">—</span>
+            {% endif %}
+          </td>
+          <td>
+            <span class="smpi-badge {% if r.status_class == 'problem' %}smpi-badge--danger{% elif r.status_class == 'state' %}smpi-badge--success{% else %}smpi-badge--warning{% endif %}">
+              {{ r.get_status_class_display }}
+            </span>
+          </td>
+          <td>
+            <a href="{% url 'monitoring:reading_detail' r.pk %}"
+               class="smpi-btn smpi-btn--sm smpi-btn--outline"
+               aria-label="Ver leitura {{ r.pk }}">Ver</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p style="color:#888;font-size:var(--fs-200);text-align:center;padding:1.5rem 0" role="status">
+    Nenhuma leitura disponível para este equipamento.
+  </p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,191 @@
+version: '3.9'
+
+# Docker Swarm production stack for SMPI.
+# Networks: traefik_public (app only), smpi_v1_internal (all services), smpi_v1_egress (outbound).
+# TLS is handled by Traefik with DNS-01 via Cloudflare.
+#
+# Create secrets before deploy:
+#   echo "my_db_password"     | docker secret create smpi_db_password -
+#   echo "my_redis_password"  | docker secret create smpi_redis_password -
+#   echo "my_rabbit_password" | docker secret create smpi_rabbit_password -
+#   echo "sk-..."             | docker secret create smpi_openai_key -
+#   echo "my_secret_key"      | docker secret create smpi_django_secret -
+#   echo "my_evolution_key"   | docker secret create smpi_evolution_key -
+
+secrets:
+  smpi_db_password:
+    external: true
+  smpi_redis_password:
+    external: true
+  smpi_rabbit_password:
+    external: true
+  smpi_openai_key:
+    external: true
+  smpi_django_secret:
+    external: true
+  smpi_evolution_key:
+    external: true
+
+networks:
+  traefik_public:
+    external: true
+  smpi_v1_internal:
+    driver: overlay
+    attachable: true
+  smpi_v1_egress:
+    driver: overlay
+    attachable: true
+
+volumes:
+  postgres_data:
+    driver: local
+  media_data:
+    driver: local
+  evolution_redis_data:
+    driver: local
+
+services:
+  # ────────────────────────────────── Django app ──────────────────────────────
+  app:
+    image: smpi_app:latest
+    command: >
+      sh scripts/entrypoint.sh
+      gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers 4 --timeout 120
+    volumes:
+      - media_data:/app/media
+    env_file: .env
+    secrets:
+      - smpi_db_password
+      - smpi_redis_password
+      - smpi_rabbit_password
+      - smpi_openai_key
+      - smpi_django_secret
+    networks:
+      - traefik_public
+      - smpi_v1_internal
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.smpi.rule=Host(`${DOMAIN:-smpi.example.com}`)"
+        - "traefik.http.routers.smpi.entrypoints=websecure"
+        - "traefik.http.routers.smpi.tls.certresolver=cloudflare"
+        - "traefik.http.services.smpi.loadbalancer.server.port=8000"
+
+  # ─────────────────────────────── PostgreSQL + pgvector ──────────────────────
+  postgresql:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-smpi}
+      POSTGRES_USER: ${POSTGRES_USER:-smpi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - smpi_v1_internal
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-smpi}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─────────────────────────────────── Redis ──────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    networks:
+      - smpi_v1_internal
+    deploy:
+      replicas: 1
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─────────────────────────────── RabbitMQ ───────────────────────────────────
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-smpi}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    networks:
+      - smpi_v1_internal
+    deploy:
+      replicas: 1
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  # ─────────────────────────────── Celery Worker ──────────────────────────────
+  celery_worker:
+    image: smpi_app:latest
+    command: celery -A core worker -l info --concurrency 4
+    volumes:
+      - media_data:/app/media
+    env_file: .env
+    secrets:
+      - smpi_db_password
+      - smpi_redis_password
+      - smpi_rabbit_password
+      - smpi_openai_key
+    networks:
+      - smpi_v1_internal
+      - smpi_v1_egress
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+  # ─────────────────────────────── Celery Beat ────────────────────────────────
+  celery_beat:
+    image: smpi_app:latest
+    command: celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    env_file: .env
+    networks:
+      - smpi_v1_internal
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+
+  # ──────────────────────────────── Evolution API ─────────────────────────────
+  evolution_redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass ${EVOLUTION_REDIS_PASSWORD:-ev_redis_pass}
+    volumes:
+      - evolution_redis_data:/data
+    networks:
+      - smpi_v1_internal
+    deploy:
+      replicas: 1
+
+  evolution_api:
+    image: atendai/evolution-api:latest
+    environment:
+      SERVER_PORT: "8080"
+      AUTHENTICATION_API_KEY: ${EVOLUTION_API_KEY}
+      DATABASE_ENABLED: "false"
+      REDIS_ENABLED: "true"
+      REDIS_URI: redis://:${EVOLUTION_REDIS_PASSWORD:-ev_redis_pass}@evolution_redis:6379
+      WEBHOOK_GLOBAL_URL: "https://${DOMAIN:-smpi.example.com}/webhooks/whatsapp/"
+      WEBHOOK_GLOBAL_ENABLED: "true"
+    networks:
+      - smpi_v1_internal
+      - smpi_v1_egress
+    deploy:
+      replicas: 1

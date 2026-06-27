@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{# Safe URL resolution for apps that may not have urls wired yet #}
+{% url 'knowledge:document_list' as url_knowledge_docs %}
+
+{% block title %}Leitura {{ reading.external_id|default:reading.pk }}{% endblock %}
+{% block page_title %}Leitura #{{ reading.external_id|default:reading.pk }}{% endblock %}
+
+{% block content %}
+{# Breadcrumb #}
+<nav aria-label="Navegação estrutural" style="font-size:var(--fs-100);color:#888;margin-bottom:1.25rem;display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
+  <a href="{% url 'monitoring:reading_list' %}" style="color:var(--fsi-clr-1);text-decoration:none">Leituras</a>
+  <span class="material-icons" aria-hidden="true" style="font-size:.9rem">chevron_right</span>
+  <span aria-current="page">#{{ reading.external_id|default:reading.pk }}</span>
+</nav>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+
+  {# Reading info card #}
+  <div class="smpi-card">
+    <div class="smpi-card__title">Informações do Evento</div>
+    <dl style="display:grid;grid-template-columns:auto 1fr;gap:.65rem 1.25rem;font-size:var(--fs-200)">
+      <dt style="font-weight:600;color:#666">Equipamento</dt>
+      <dd style="margin:0">
+        <a href="{% url 'assets:equipment_detail' reading.measurement_point.equipment.pk %}"
+           style="color:var(--fsi-clr-1);text-decoration:none">
+          {{ reading.measurement_point.equipment.name }}
+        </a>
+      </dd>
+
+      <dt style="font-weight:600;color:#666">Ponto</dt>
+      <dd style="margin:0">{{ reading.measurement_point.name }}</dd>
+
+      <dt style="font-weight:600;color:#666">Data</dt>
+      <dd style="margin:0">{{ reading.event_created_at|date:"d/m/Y H:i:s"|default:"—" }}</dd>
+
+      <dt style="font-weight:600;color:#666">RPM</dt>
+      <dd style="margin:0">{{ reading.rpm|floatformat:0|default:"—" }}</dd>
+
+      <dt style="font-weight:600;color:#666">Defeito anotado</dt>
+      <dd style="margin:0">
+        {% if reading.fault %}
+        <code style="background:var(--fsi-clr-5);padding:.15rem .4rem;border-radius:6px">{{ reading.fault.code }}</code>
+        — {{ reading.fault.name }}
+        {% else %}
+        <span style="color:#999">—</span>
+        {% endif %}
+      </dd>
+
+      <dt style="font-weight:600;color:#666">Classificação</dt>
+      <dd style="margin:0">
+        <span class="smpi-badge {% if reading.status_class == 'problem' %}smpi-badge--danger{% elif reading.status_class == 'state' %}smpi-badge--success{% else %}smpi-badge--warning{% endif %}">
+          {{ reading.get_status_class_display }}
+        </span>
+      </dd>
+    </dl>
+
+    {# Trigger analysis button — always shown for problem readings #}
+    {% if reading.status_class == 'problem' %}
+    <div style="margin-top:1.25rem;border-top:1px solid var(--fsi-clr-9);padding-top:1.25rem">
+      <button class="smpi-btn smpi-btn--primary"
+              id="analyse-btn"
+              onclick="triggerAnalysis({{ reading.pk }}, this)"
+              aria-label="Solicitar análise por IA para esta leitura">
+        <span class="material-icons" aria-hidden="true" style="font-size:1rem">auto_awesome</span>
+        {% if prescription %}Reanalisar{% else %}Analisar agora{% endif %}
+      </button>
+      <p id="analyse-status" style="font-size:var(--fs-100);color:#666;margin:.5rem 0 0" aria-live="polite"></p>
+    </div>
+    {% endif %}
+  </div>
+
+  {# Prescription card #}
+  <div class="smpi-card">
+    <div class="smpi-card__title">Prescrição</div>
+    {% if prescription %}
+
+      {# is_grounded will be empty/falsy while prescriptions model is a placeholder #}
+      {% if prescription.is_grounded %}
+      <div class="smpi-alert smpi-alert--success" role="status">
+        <span class="material-icons" aria-hidden="true">verified</span>
+        Prescrição fundamentada em documentação técnica.
+      </div>
+      {% else %}
+      <div class="smpi-alert smpi-alert--warning" role="alert">
+        <span class="material-icons" aria-hidden="true">report_problem</span>
+        <div>
+          <strong>Defeito não documentado.</strong><br>
+          Não há documentos orientativos para este defeito. Registre um novo documento na base de conhecimento.
+          {% if url_knowledge_docs %}
+          <br>
+          <a href="{{ url_knowledge_docs }}" class="smpi-btn smpi-btn--sm smpi-btn--outline" style="margin-top:.5rem">
+            Ir para documentos
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      <dl style="display:grid;grid-template-columns:auto 1fr;gap:.65rem 1.25rem;font-size:var(--fs-200);margin-top:1rem">
+        <dt style="font-weight:600;color:#666">Tipo de defeito</dt>
+        <dd style="margin:0">{{ prescription.defect_type|default:"—" }}</dd>
+
+        <dt style="font-weight:600;color:#666">Ocorrências</dt>
+        <dd style="margin:0">{{ prescription.occurrences_count|default:"—" }}</dd>
+
+        <dt style="font-weight:600;color:#666">Frequência</dt>
+        <dd style="margin:0">{{ prescription.occurrences_frequency|default:"—" }}</dd>
+      </dl>
+
+      {% if prescription.instructions %}
+      <div style="margin-top:1.25rem">
+        <h3 style="font-size:var(--fs-300);font-weight:700;margin-bottom:.75rem">Instruções de solução</h3>
+        <div id="prescription-instructions"
+             style="font-size:var(--fs-200);line-height:1.7;background:var(--fsi-clr-5);border-radius:10px;padding:1rem">
+        </div>
+        {{ prescription.instructions|json_script:"prescription-raw" }}
+      </div>
+      {% endif %}
+
+      {% if prescription.source_chunks.exists %}
+      <details style="margin-top:1rem">
+        <summary style="cursor:pointer;font-weight:600;font-size:var(--fs-200)">
+          Fontes documentais ({{ prescription.source_chunks.count }})
+        </summary>
+        <ul style="margin-top:.5rem;padding-left:1.25rem;font-size:var(--fs-100);color:#555;line-height:1.8">
+          {% for chunk in prescription.source_chunks.all %}
+          <li>{{ chunk.document.title }} — trecho {{ chunk.chunk_index }}</li>
+          {% endfor %}
+        </ul>
+      </details>
+      {% endif %}
+
+    {% else %}
+    {# No prescription yet #}
+    <div style="text-align:center;padding:2rem;color:#888" role="status">
+      <span class="material-icons" style="font-size:2.5rem;display:block;margin-bottom:.75rem;color:var(--fsi-clr-9)">pending</span>
+      <p id="prescription-status" style="margin:0;font-size:var(--fs-200)">
+        {% if reading.status_class == 'state' %}
+        Este evento é classificado como estado operacional. Nenhuma prescrição é gerada.
+        {% elif reading.status_class == 'problem' %}
+        Aguardando análise. Clique em "Analisar agora" para iniciar.
+        {% else %}
+        Leitura ainda não analisada.
+        {% endif %}
+      </p>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+{# Metrics table #}
+<div class="smpi-card" style="margin-top:1.5rem">
+  <div class="smpi-card__title">Métricas do Evento</div>
+  <div style="overflow-x:auto">
+    <table class="smpi-table" aria-label="Métricas brutas do evento de sensor">
+      <thead>
+        <tr>
+          <th>Métrica</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for key, val in reading.metrics.items %}
+        <tr>
+          <td><code style="font-size:var(--fs-100)">{{ key }}</code></td>
+          <td>{{ val|default:"—" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2" style="text-align:center;color:#888;padding:1.5rem">Nenhuma métrica disponível.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Render stored markdown instructions on page load
+(function() {
+  var raw = document.getElementById('prescription-raw');
+  var box = document.getElementById('prescription-instructions');
+  if (raw && box) {
+    box.innerHTML = marked.parse(JSON.parse(raw.textContent));
+  }
+})();
+
+function triggerAnalysis(readingId, btn) {
+  btn.disabled = true;
+  btn.innerHTML = '<span class="smpi-spinner" aria-hidden="true"></span> Analisando...';
+
+  var statusEl = document.getElementById('analyse-status');
+  if (statusEl) statusEl.textContent = 'Aguarde — o pipeline de IA pode levar até 30 segundos...';
+
+  var url = '/monitoring/' + readingId + '/analyse/?sync=1';
+  fetch(url, {
+    method: 'POST',
+    headers: { 'X-CSRFToken': getCsrf() }
+  })
+    .then(function(resp) { return resp.json(); })
+    .then(function(data) {
+      if (data.status === 'queued') {
+        if (statusEl) statusEl.textContent = 'Análise em andamento. Você será notificado ao concluir.';
+        var prescStatusEl = document.getElementById('prescription-status');
+        if (prescStatusEl) prescStatusEl.textContent = 'Análise em andamento...';
+      } else if (data.status === 'done') {
+        // Synchronous execution (no Celery) — reload to show prescription
+        if (statusEl) statusEl.textContent = 'Análise concluída! Carregando...';
+        setTimeout(function() { window.location.reload(); }, 800);
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-icons" style="font-size:1rem">auto_awesome</span> Tentar novamente';
+        if (statusEl) statusEl.textContent = 'Erro: ' + (data.message || 'tente novamente.');
+      }
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.innerHTML = '<span class="material-icons" style="font-size:1rem">auto_awesome</span> Tentar novamente';
+      if (statusEl) statusEl.textContent = 'Falha ao conectar. Verifique sua conexão.';
+    });
+}
+</script>
+{% endblock %}

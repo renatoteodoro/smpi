@@ -1,0 +1,697 @@
+/* ==========================================================================
+   SMPI custom styles — extends FIESC design system tokens
+   ========================================================================== */
+
+:root {
+  --smpi-sidebar-width: 260px;
+  --smpi-header-height: 60px;
+}
+
+/* --------------------------------------------------------------------------
+   Layout
+   -------------------------------------------------------------------------- */
+.smpi-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--fsi-clr-5);
+}
+
+.smpi-sidebar {
+  width: var(--smpi-sidebar-width);
+  background: var(--fsi-clr-1);
+  color: #fff;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 200;
+  transition: transform .3s;
+}
+
+.smpi-content {
+  margin-left: var(--smpi-sidebar-width);
+  flex: 1;
+  padding: 1.5rem;
+  min-height: 100vh;
+}
+
+.smpi-topbar {
+  background: var(--fsi-clr-6);
+  border-bottom: 1px solid var(--fsi-clr-9);
+  padding: .75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: -1.5rem -1.5rem 1.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Sidebar
+   -------------------------------------------------------------------------- */
+.smpi-sidebar__logo {
+  border-bottom: 1px solid rgba(255,255,255,.15);
+}
+
+.smpi-sidebar__logo a {
+  text-decoration: none;
+  display: block;
+}
+
+/* Topo da sidebar — apenas nome do sistema */
+.smpi-sidebar__brand-bar {
+  padding: .85rem 1.25rem .75rem;
+  border-bottom: 1px solid rgba(255,255,255,.15);
+}
+
+.smpi-sidebar__brand-title {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  color: #fff;
+}
+
+.smpi-sidebar__brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  line-height: 1.2;
+}
+
+.smpi-sidebar__brand-sub {
+  color: rgba(255,255,255,.6);
+  font-size: var(--fs-100);
+  font-weight: 300;
+  margin-top: .1rem;
+}
+
+/* Rodapé da sidebar — logo FIESC */
+.smpi-sidebar__footer {
+  padding: .85rem 1.25rem 1rem;
+  border-top: 1px solid rgba(255,255,255,.15);
+  background: rgba(0,0,0,.15);
+}
+
+.smpi-sidebar__fiesc-logo {
+  width: 100%;
+  max-width: 190px;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  padding: .4rem .5rem;
+  background: rgba(255,255,255,.92);
+}
+
+.smpi-sidebar__footer-version {
+  margin-top: .45rem;
+  font-size: var(--fs-100);
+  color: rgba(255,255,255,.65);
+}
+
+.smpi-nav {
+  list-style: none;
+  padding: .5rem 0;
+  margin: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.smpi-nav__item a {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .65rem 1.5rem;
+  color: rgba(255,255,255,.8);
+  text-decoration: none;
+  font-size: var(--fs-200);
+  transition: background .2s;
+  border-left: 3px solid transparent;
+}
+
+.smpi-nav__item a:hover,
+.smpi-nav__item a.active {
+  background: rgba(255,255,255,.1);
+  color: #fff;
+  border-left-color: #fff;
+}
+
+.smpi-nav__item a .material-icons {
+  font-size: 1.25rem;
+}
+
+.smpi-nav__section {
+  font-size: var(--fs-100);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.5);
+  padding: 1rem 1.5rem .25rem;
+}
+
+/* --------------------------------------------------------------------------
+   Sidebar toggle button (hidden on desktop, shown on mobile)
+   -------------------------------------------------------------------------- */
+.smpi-sidebar-toggle-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fsi-clr-4);
+  padding: .25rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   Notification dropdown
+   -------------------------------------------------------------------------- */
+#notif-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 2.5rem;
+  width: 320px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--fsi-shadow-1);
+  z-index: 500;
+  padding: .5rem 0;
+}
+
+#notif-dropdown.open {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   Cards
+   -------------------------------------------------------------------------- */
+.smpi-card {
+  background: var(--fsi-clr-6);
+  border-radius: var(--fsi-border-rad);
+  padding: 1.5rem;
+  box-shadow: var(--fsi-shadow-1);
+}
+
+.smpi-card__title {
+  font-size: var(--fs-400);
+  font-weight: 700;
+  color: var(--fsi-clr-4);
+  margin-bottom: 1rem;
+}
+
+/* KPI cards */
+.smpi-kpi {
+  background: var(--fsi-clr-6);
+  border-radius: var(--fsi-border-rad);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--fsi-shadow-1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.smpi-kpi__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--fsi-clr-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fsi-clr-1);
+}
+
+.smpi-kpi__value {
+  font-size: var(--fs-700);
+  font-weight: 700;
+  color: var(--fsi-clr-4);
+  line-height: 1;
+}
+
+.smpi-kpi__label {
+  font-size: var(--fs-100);
+  color: #666;
+}
+
+/* --------------------------------------------------------------------------
+   Notification badge
+   -------------------------------------------------------------------------- */
+.smpi-notif-badge {
+  background: #e53e3e;
+  color: #fff;
+  border-radius: 999px;
+  font-size: .7rem;
+  padding: .1rem .4rem;
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+.smpi-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .6rem 1.5rem;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: var(--fs-200);
+  cursor: pointer;
+  border: none;
+  transition: .2s;
+  text-decoration: none;
+  font-family: MuseoSans, Arial, sans-serif;
+}
+
+.smpi-btn--primary {
+  background: var(--fsi-clr-button);
+  color: #fff;
+}
+
+.smpi-btn--primary:hover {
+  background: var(--fsi-clr-button-hover);
+  color: #fff;
+}
+
+.smpi-btn--outline {
+  border: 2px solid var(--fsi-clr-1);
+  color: var(--fsi-clr-1);
+  background: transparent;
+}
+
+.smpi-btn--outline:hover {
+  background: var(--fsi-clr-3);
+}
+
+.smpi-btn--danger {
+  background: #c53030;
+  color: #fff;
+}
+
+.smpi-btn--sm {
+  padding: .35rem 1rem;
+  font-size: var(--fs-100);
+}
+
+/* --------------------------------------------------------------------------
+   Forms
+   -------------------------------------------------------------------------- */
+.smpi-form-group {
+  margin-bottom: 1.25rem;
+}
+
+.smpi-form-group label {
+  display: block;
+  font-size: var(--fs-200);
+  font-weight: 600;
+  color: var(--fsi-clr-4);
+  margin-bottom: .4rem;
+}
+
+.smpi-form-group input,
+.smpi-form-group select,
+.smpi-form-group textarea {
+  width: 100%;
+  padding: .6rem 1rem;
+  border: 1.5px solid var(--fsi-clr-9);
+  border-radius: 10px;
+  font-size: var(--fs-300);
+  font-family: MuseoSans, Arial, sans-serif;
+  background: #fff;
+  transition: border-color .2s;
+}
+
+.smpi-form-group input:focus,
+.smpi-form-group select:focus,
+.smpi-form-group textarea:focus {
+  outline: none;
+  border-color: var(--fsi-clr-1);
+  box-shadow: 0 0 0 3px var(--fsi-clr-3);
+}
+
+/* --------------------------------------------------------------------------
+   Tables
+   -------------------------------------------------------------------------- */
+.smpi-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.smpi-table th {
+  background: var(--fsi-clr-5);
+  font-size: var(--fs-100);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: #666;
+  padding: .75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.smpi-table td {
+  padding: .75rem 1rem;
+  border-bottom: 1px solid var(--fsi-clr-9);
+  font-size: var(--fs-200);
+}
+
+.smpi-table tr:hover td {
+  background: var(--fsi-clr-5);
+}
+
+/* --------------------------------------------------------------------------
+   Status badges
+   -------------------------------------------------------------------------- */
+.smpi-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .25rem .75rem;
+  border-radius: 999px;
+  font-size: var(--fs-100);
+  font-weight: 600;
+}
+
+.smpi-badge--success { background: #c6f6d5; color: #276749; }
+.smpi-badge--danger  { background: #fed7d7; color: #c53030; }
+.smpi-badge--warning { background: #fefcbf; color: #744210; }
+.smpi-badge--info    { background: var(--fsi-clr-3); color: var(--fsi-clr-1); }
+
+/* --------------------------------------------------------------------------
+   Chat widget
+   -------------------------------------------------------------------------- */
+.smpi-chatbot-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--fsi-clr-button);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: transform .2s;
+}
+
+.smpi-chatbot-btn:hover {
+  transform: scale(1.1);
+}
+
+.smpi-chatbot-panel {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 2rem;
+  width: 380px;
+  max-height: 500px;
+  background: #fff;
+  border-radius: var(--fsi-border-rad);
+  box-shadow: 0 8px 30px rgba(0,0,0,.15);
+  z-index: 999;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.smpi-chatbot-panel.open {
+  display: flex;
+}
+
+.smpi-chatbot-header {
+  background: var(--fsi-clr-1);
+  color: #fff;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.smpi-chatbot-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  min-height: 200px;
+}
+
+.smpi-chatbot-input {
+  padding: .75rem;
+  border-top: 1px solid var(--fsi-clr-9);
+  display: flex;
+  gap: .5rem;
+}
+
+.smpi-chatbot-input input {
+  flex: 1;
+  border: 1.5px solid var(--fsi-clr-9);
+  border-radius: 20px;
+  padding: .5rem 1rem;
+  font-size: var(--fs-200);
+  font-family: MuseoSans, Arial, sans-serif;
+}
+
+.smpi-chatbot-input input:focus {
+  outline: none;
+  border-color: var(--fsi-clr-1);
+}
+
+.smpi-chat-msg {
+  padding: .6rem .9rem;
+  border-radius: 12px;
+  max-width: 85%;
+  font-size: var(--fs-200);
+  line-height: 1.5;
+}
+
+.smpi-chat-msg--user {
+  background: var(--fsi-clr-1);
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 2px;
+}
+
+.smpi-chat-msg--assistant {
+  background: var(--fsi-clr-5);
+  color: var(--fsi-clr-4);
+  align-self: flex-start;
+  border-bottom-left-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Spinner
+   -------------------------------------------------------------------------- */
+.smpi-spinner {
+  display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: smpi-spin .6s linear infinite;
+}
+
+@keyframes smpi-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   Alerts
+   -------------------------------------------------------------------------- */
+.smpi-alert {
+  padding: .85rem 1.25rem;
+  border-radius: 10px;
+  font-size: var(--fs-200);
+  display: flex;
+  gap: .75rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.smpi-alert--success { background: #c6f6d5; color: #276749; border-left: 4px solid #48bb78; }
+.smpi-alert--error   { background: #fed7d7; color: #c53030; border-left: 4px solid #fc8181; }
+.smpi-alert--info    { background: var(--fsi-clr-3); color: var(--fsi-clr-1); border-left: 4px solid var(--fsi-clr-1); }
+.smpi-alert--warning { background: #fefcbf; color: #744210; border-left: 4px solid #f6c90e; }
+
+/* --------------------------------------------------------------------------
+   Pagination
+   -------------------------------------------------------------------------- */
+.smpi-pagination {
+  display: flex;
+  gap: .5rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.smpi-pagination a,
+.smpi-pagination span {
+  padding: .4rem .9rem;
+  border-radius: 8px;
+  font-size: var(--fs-200);
+  border: 1.5px solid var(--fsi-clr-9);
+  color: var(--fsi-clr-4);
+  text-decoration: none;
+}
+
+.smpi-pagination a:hover {
+  border-color: var(--fsi-clr-1);
+  color: var(--fsi-clr-1);
+}
+
+.smpi-pagination .current {
+  background: var(--fsi-clr-1);
+  color: #fff;
+  border-color: var(--fsi-clr-1);
+}
+
+/* --------------------------------------------------------------------------
+   Screen-reader only utility
+   -------------------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Global focus styles (WCAG)
+   -------------------------------------------------------------------------- */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid rgba(0, 125, 250, 0.7);
+  outline-offset: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive — Tablet & Mobile
+   -------------------------------------------------------------------------- */
+
+/* Overlay escuro quando sidebar aberta no mobile */
+.smpi-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 199;
+}
+.smpi-sidebar-overlay.open { display: block; }
+
+@media (max-width: 768px) {
+  /* ── Sidebar ── */
+  .smpi-sidebar {
+    transform: translateX(-100%);
+    box-shadow: 4px 0 24px rgba(0,0,0,.25);
+  }
+  .smpi-sidebar.open { transform: none; }
+
+  /* ── Content ocupa tela toda ── */
+  .smpi-content {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  /* ── Topbar ── */
+  .smpi-topbar {
+    flex-wrap: wrap;
+    gap: .5rem;
+    padding: .6rem 1rem;
+    margin: -1rem -1rem 1rem;
+  }
+  .smpi-topbar h1,
+  .smpi-topbar .smpi-page-title {
+    font-size: var(--fs-300);
+  }
+
+  /* ── Toggle visível ── */
+  .smpi-sidebar-toggle-btn { display: flex; }
+
+  /* ── KPI grid empilha em 2 colunas no tablet, 1 no celular ── */
+  .smpi-kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: .75rem !important;
+  }
+
+  /* ── Cards com grid interno empilham ── */
+  .smpi-card [style*="grid-template-columns:1fr 1fr"],
+  .smpi-card [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Tabelas: scroll horizontal ── */
+  .smpi-table-wrapper,
+  [style*="overflow-x:auto"] {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .smpi-table {
+    min-width: 540px;
+  }
+
+  /* ── Chatbot ── */
+  .smpi-chatbot-panel {
+    width: calc(100vw - 1.5rem);
+    right: .75rem;
+    bottom: 5rem;
+    max-height: 70vh;
+  }
+  .smpi-chatbot-btn {
+    width: 52px;
+    height: 52px;
+    right: .75rem;
+    bottom: 1rem;
+  }
+
+  /* ── Formulários ── */
+  .smpi-form input,
+  .smpi-form select,
+  .smpi-form textarea {
+    font-size: 16px; /* evita zoom automático no iOS */
+  }
+
+  /* ── Paginação ── */
+  .smpi-pagination {
+    flex-wrap: wrap;
+    gap: .25rem;
+    justify-content: center;
+  }
+
+  /* ── Botões ── */
+  .smpi-btn { white-space: nowrap; }
+}
+
+@media (max-width: 480px) {
+  /* ── KPI grid em 1 coluna no celular pequeno ── */
+  .smpi-kpi-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── FIESC logo menor ── */
+  .smpi-sidebar__fiesc-logo { max-width: 130px; }
+  .smpi-sidebar__brand { font-size: 1.15rem; }
+
+  /* ── Topbar: esconde título longo ── */
+  .smpi-topbar .smpi-page-title {
+    font-size: var(--fs-200);
+  }
+
+  /* ── Notificações: painel mais estreito ── */
+  #notif-dropdown {
+    width: calc(100vw - 2rem);
+    right: -4rem;
+  }
+}

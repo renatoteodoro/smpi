@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Leituras de Sensor{% endblock %}
+{% block page_title %}Leituras de Sensor{% endblock %}
+
+{% block content %}
+{# KPI summary row #}
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem"
+     aria-label="Resumo das leituras">
+  <div class="smpi-kpi" role="status" aria-label="Total de leituras: {{ total_count|default:0 }}">
+    <div class="smpi-kpi__icon">
+      <span class="material-icons" aria-hidden="true">sensors</span>
+    </div>
+    <div>
+      <div class="smpi-kpi__value">{{ total_count|default:"—" }}</div>
+      <div class="smpi-kpi__label">Total de leituras</div>
+    </div>
+  </div>
+
+  <div class="smpi-kpi" role="status" aria-label="Problemas detectados: {{ problem_count|default:0 }}">
+    <div class="smpi-kpi__icon" style="background:hsl(0 100% 95%)">
+      <span class="material-icons" style="color:#c53030" aria-hidden="true">warning</span>
+    </div>
+    <div>
+      <div class="smpi-kpi__value" style="color:#c53030">{{ problem_count|default:"—" }}</div>
+      <div class="smpi-kpi__label">Problemas</div>
+    </div>
+  </div>
+
+  <div class="smpi-kpi" role="status" aria-label="Estados normais: {{ state_count|default:0 }}">
+    <div class="smpi-kpi__icon" style="background:#c6f6d5">
+      <span class="material-icons" style="color:#276749" aria-hidden="true">check_circle</span>
+    </div>
+    <div>
+      <div class="smpi-kpi__value" style="color:#276749">{{ state_count|default:"—" }}</div>
+      <div class="smpi-kpi__label">Estados normais</div>
+    </div>
+  </div>
+
+  <div class="smpi-kpi" role="status" aria-label="Aguardando análise: {{ pending_count|default:0 }}">
+    <div class="smpi-kpi__icon" style="background:#fefcbf">
+      <span class="material-icons" style="color:#744210" aria-hidden="true">pending</span>
+    </div>
+    <div>
+      <div class="smpi-kpi__value" style="color:#744210">{{ pending_count|default:"—" }}</div>
+      <div class="smpi-kpi__label">Aguardando análise</div>
+    </div>
+  </div>
+</div>
+
+{# Filters + actions #}
+<div style="display:flex;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap;justify-content:space-between;align-items:center">
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap" role="group" aria-label="Filtros de status">
+    <a href="?"
+       class="smpi-btn smpi-btn--sm {% if not request.GET.status %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}"
+       aria-pressed="{% if not request.GET.status %}true{% else %}false{% endif %}">
+      Todas
+    </a>
+    <a href="?status=problem"
+       class="smpi-btn smpi-btn--sm {% if request.GET.status == 'problem' %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}"
+       aria-pressed="{% if request.GET.status == 'problem' %}true{% else %}false{% endif %}">
+      Problemas
+    </a>
+    <a href="?status=state"
+       class="smpi-btn smpi-btn--sm {% if request.GET.status == 'state' %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}"
+       aria-pressed="{% if request.GET.status == 'state' %}true{% else %}false{% endif %}">
+      Estados
+    </a>
+    <a href="?status=pending"
+       class="smpi-btn smpi-btn--sm {% if request.GET.status == 'pending' %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}"
+       aria-pressed="{% if request.GET.status == 'pending' %}true{% else %}false{% endif %}">
+      Pendentes
+    </a>
+  </div>
+
+  <a href="{% url 'monitoring:reading_create' %}" class="smpi-btn smpi-btn--primary">
+    <span class="material-icons" aria-hidden="true" style="font-size:1.1rem">add</span>
+    Nova leitura
+  </a>
+</div>
+
+{# Table #}
+<div class="smpi-card" style="overflow-x:auto">
+  <table class="smpi-table" aria-label="Leituras de sensor">
+    <thead>
+      <tr>
+        <th>ID externo</th>
+        <th>Equipamento</th>
+        <th>Data do evento</th>
+        <th>Defeito</th>
+        <th>RPM</th>
+        <th>Status</th>
+        <th><span class="sr-only">Ações</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in readings %}
+      <tr>
+        <td style="font-family:monospace;font-size:var(--fs-100)">{{ r.external_id|default:r.pk }}</td>
+        <td>
+          <a href="{% url 'assets:equipment_detail' r.measurement_point.equipment.pk %}"
+             style="color:var(--fsi-clr-1);text-decoration:none;font-weight:500">
+            {{ r.measurement_point.equipment.name }}
+          </a>
+          <br>
+          <small style="color:#888">{{ r.measurement_point.name }}</small>
+        </td>
+        <td style="white-space:nowrap">{{ r.event_created_at|date:"d/m/Y H:i"|default:"—" }}</td>
+        <td>
+          {% if r.fault %}
+          <code style="font-size:var(--fs-100);background:var(--fsi-clr-5);padding:.1rem .4rem;border-radius:4px">{{ r.fault.code }}</code>
+          {% else %}
+          <span style="color:#999">—</span>
+          {% endif %}
+        </td>
+        <td>{{ r.rpm|floatformat:0|default:"—" }}</td>
+        <td>
+          <span class="smpi-badge
+            {% if r.status_class == 'problem' %}smpi-badge--danger
+            {% elif r.status_class == 'state' %}smpi-badge--success
+            {% else %}smpi-badge--warning{% endif %}">
+            {{ r.get_status_class_display }}
+          </span>
+        </td>
+        <td>
+          <a href="{% url 'monitoring:reading_detail' r.pk %}"
+             class="smpi-btn smpi-btn--sm smpi-btn--outline"
+             aria-label="Ver leitura {{ r.external_id|default:r.pk }}">
+            Ver
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" style="text-align:center;padding:2.5rem;color:#888">
+          <span class="material-icons" style="font-size:2.5rem;display:block;margin-bottom:.75rem;color:var(--fsi-clr-9)">sensors_off</span>
+          Nenhuma leitura encontrada.
+          <br>
+          <small style="margin-top:.5rem;display:inline-block">
+            Execute <code>python manage.py import_banner</code> para importar os dados históricos.
+          </small>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{# Pagination #}
+{% if is_paginated %}
+<nav aria-label="Paginação de leituras" class="smpi-pagination">
+  {% if page_obj.has_previous %}
+  <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"
+     aria-label="Página anterior">&laquo; Anterior</a>
+  {% endif %}
+  <span class="current">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"
+     aria-label="Próxima página">Próxima &raquo;</a>
+  {% endif %}
+</nav>
+{% endif %}
+{% endblock %}

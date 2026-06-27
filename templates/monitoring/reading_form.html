@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Nova Leitura Manual{% endblock %}
+{% block page_title %}Nova Leitura Manual{% endblock %}
+
+{% block content %}
+{# Breadcrumb #}
+<nav aria-label="Navegação estrutural" style="font-size:var(--fs-100);color:#888;margin-bottom:1.25rem;display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
+  <a href="{% url 'monitoring:reading_list' %}" style="color:var(--fsi-clr-1);text-decoration:none">Leituras</a>
+  <span class="material-icons" aria-hidden="true" style="font-size:.9rem">chevron_right</span>
+  <span aria-current="page">Nova Leitura Manual</span>
+</nav>
+
+<div class="smpi-card" style="max-width:640px">
+  <div class="smpi-alert smpi-alert--info" role="note" style="margin-bottom:1.25rem">
+    <span class="material-icons" aria-hidden="true">info</span>
+    <div>
+      Registre manualmente uma leitura de sensor. Os campos de unidade métrica serão extraídos automaticamente
+      dos dados JSON. Ao salvar, a análise de IA será enfileirada automaticamente.
+    </div>
+  </div>
+
+  <form method="post" novalidate aria-label="Formulário de leitura manual de sensor">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <div class="smpi-alert smpi-alert--error" role="alert">
+      <span class="material-icons" aria-hidden="true">error</span>
+      <div>{{ form.non_field_errors }}</div>
+    </div>
+    {% endif %}
+
+    {% for field in form %}
+    <div class="smpi-form-group">
+      <label for="{{ field.id_for_label }}">
+        {{ field.label }}
+        {% if field.field.required %}
+        <span aria-hidden="true" style="color:#c53030;margin-left:.2rem">*</span>
+        {% endif %}
+      </label>
+      {{ field }}
+      {% if field.help_text %}
+      <small style="color:#666;font-size:var(--fs-100);margin-top:.25rem;display:block">{{ field.help_text }}</small>
+      {% endif %}
+      {% if field.errors %}
+      <div style="color:#c53030;font-size:var(--fs-100);margin-top:.25rem" role="alert">
+        {{ field.errors.0 }}
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+    <div style="display:flex;gap:1rem;margin-top:1.75rem;flex-wrap:wrap">
+      <button type="submit" class="smpi-btn smpi-btn--primary"
+              onclick="smpiButtonLoading(this)"
+              aria-label="Registrar leitura e iniciar análise de IA">
+        <span class="material-icons" aria-hidden="true" style="font-size:1rem">sensors</span>
+        Registrar e Analisar
+      </button>
+      <a href="{% url 'monitoring:reading_list' %}" class="smpi-btn smpi-btn--outline">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

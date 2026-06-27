@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Meu Perfil{% endblock %}
+{% block page_title %}Meu Perfil{% endblock %}
+
+{% block content %}
+<div class="smpi-card" style="max-width:640px">
+  <div class="smpi-card__title">Informações da conta</div>
+
+  <dl style="display:grid;grid-template-columns:140px 1fr;gap:.85rem 1.5rem;font-size:var(--fs-200)">
+
+    <dt style="font-weight:600;color:#666">E-mail</dt>
+    <dd>{{ request.user.email }}</dd>
+
+    <dt style="font-weight:600;color:#666">Nome</dt>
+    <dd>{{ request.user.name|default:"—" }}</dd>
+
+    <dt style="font-weight:600;color:#666">Perfil</dt>
+    <dd>{{ request.user.get_role_display }}</dd>
+
+    <dt style="font-weight:600;color:#666">Telefone</dt>
+    <dd>{{ request.user.phone|default:"—" }}</dd>
+
+    <dt style="font-weight:600;color:#666">Membro desde</dt>
+    <dd>{{ request.user.created_at|date:"d/m/Y" }}</dd>
+
+  </dl>
+
+  <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--fsi-clr-9)">
+    <a href="{% url 'accounts:password_reset' %}"
+       class="smpi-btn smpi-btn--outline smpi-btn--sm">
+      <span class="material-icons" style="font-size:1rem" aria-hidden="true">lock_reset</span>
+      Alterar senha
+    </a>
+  </div>
+</div>
+{% endblock %}

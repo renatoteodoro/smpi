@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Base de Conhecimento{% endblock %}
+{% block page_title %}Base de Conhecimento{% endblock %}
+
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+  <form method="get" role="search" style="display:flex;gap:.5rem;flex:1;max-width:420px">
+    <label for="search-input" class="sr-only">Buscar documentos</label>
+    <input type="search"
+           id="search-input"
+           name="q"
+           value="{{ request.GET.q }}"
+           placeholder="Buscar por título ou tag..."
+           aria-label="Buscar documentos"
+           style="flex:1;padding:.5rem 1rem;border:1.5px solid var(--fsi-clr-9);border-radius:30px;font-family:MuseoSans,Arial,sans-serif;font-size:var(--fs-200);background:#fff">
+    <button type="submit" class="smpi-btn smpi-btn--primary smpi-btn--sm">Buscar</button>
+  </form>
+
+  {% if request.user.role == 'admin' or request.user.role == 'maintenance' %}
+  <a href="{% url 'knowledge:document_create' %}" class="smpi-btn smpi-btn--primary">
+    <span class="material-icons" aria-hidden="true" style="font-size:1.1rem">upload_file</span>
+    Novo Documento
+  </a>
+  {% endif %}
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem">
+  {% for doc in documents %}
+  <article class="smpi-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem">
+      <h2 style="font-size:var(--fs-300);font-weight:700;margin:0;line-height:1.4">
+        <a href="{% url 'knowledge:document_detail' doc.pk %}"
+           style="color:var(--fsi-clr-4);text-decoration:none">
+          {{ doc.title }}
+        </a>
+      </h2>
+      {% if doc.is_ingested %}
+      <span class="smpi-badge smpi-badge--success" title="Indexado no RAG">
+        <span class="material-icons" style="font-size:.9rem" aria-hidden="true">verified</span>
+      </span>
+      {% else %}
+      <span class="smpi-badge smpi-badge--warning" title="Aguardando indexação">
+        <span class="material-icons" style="font-size:.9rem" aria-hidden="true">pending</span>
+      </span>
+      {% endif %}
+    </div>
+
+    {% if doc.fault %}
+    <p style="font-size:var(--fs-100);color:#666;margin:.25rem 0">
+      Defeito:
+      <code style="background:var(--fsi-clr-5);padding:.1rem .4rem;border-radius:4px">{{ doc.fault.code }}</code>
+      — {{ doc.fault.name }}
+    </p>
+    {% endif %}
+
+    {% if doc.description %}
+    <p style="font-size:var(--fs-200);color:#555;margin:.5rem 0;line-height:1.5">
+      {{ doc.description|truncatechars:120 }}
+    </p>
+    {% endif %}
+
+    {% if doc.tags %}
+    <div style="display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.75rem">
+      {% for tag in doc.tags.split %}
+      <span style="background:var(--fsi-clr-5);color:var(--fsi-clr-1);padding:.15rem .5rem;border-radius:20px;font-size:.7rem;font-weight:600">#{{ tag }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div style="margin-top:1rem;padding-top:.75rem;border-top:1px solid var(--fsi-clr-9);font-size:var(--fs-100);color:#888;display:flex;justify-content:space-between;align-items:center">
+      <span>{{ doc.chunks.count }} chunks indexados</span>
+      <span>{{ doc.created_at|date:"d/m/Y" }}</span>
+    </div>
+  </article>
+  {% empty %}
+  <div style="grid-column:1/-1;text-align:center;padding:3rem;color:#666">
+    <span class="material-icons" style="font-size:3rem;display:block;margin-bottom:.75rem;color:var(--fsi-clr-9)">library_books</span>
+    <p style="margin:0 0 .5rem;font-size:var(--fs-300);font-weight:600">Nenhum documento encontrado.</p>
+    {% if request.GET.q %}
+    <p style="margin:0;font-size:var(--fs-200)">Tente outros termos de busca.</p>
+    {% else %}
+    <p style="margin:0;font-size:var(--fs-200)">Execute <code>python manage.py ingest_documents --dir data/</code> para importar documentos.</p>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+{% if is_paginated %}
+<nav aria-label="Paginação de documentos" class="smpi-pagination">
+  {% if page_obj.has_previous %}
+  <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}"
+     aria-label="Página anterior">&laquo;</a>
+  {% endif %}
+  <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+  <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number }}"
+     aria-label="Próxima página">&raquo;</a>
+  {% endif %}
+</nav>
+{% endif %}
+{% endblock %}

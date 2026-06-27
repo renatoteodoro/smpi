@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Defeitos e Estados{% endblock %}
+{% block page_title %}Catálogo de Defeitos e Estados{% endblock %}
+
+{% block content %}
+{# Filter bar #}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap" role="group" aria-label="Filtros de tipo">
+    <a href="?"
+       class="smpi-btn smpi-btn--sm {% if not request.GET.type %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}"
+       aria-pressed="{% if not request.GET.type %}true{% else %}false{% endif %}">
+      Todos
+    </a>
+    <a href="?type=problems"
+       class="smpi-btn smpi-btn--sm {% if request.GET.type == 'problems' %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}"
+       aria-pressed="{% if request.GET.type == 'problems' %}true{% else %}false{% endif %}">
+      <span class="material-icons" aria-hidden="true" style="font-size:.9rem">warning</span>
+      Problemas
+    </a>
+    <a href="?type=states"
+       class="smpi-btn smpi-btn--sm {% if request.GET.type == 'states' %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}"
+       aria-pressed="{% if request.GET.type == 'states' %}true{% else %}false{% endif %}">
+      <span class="material-icons" aria-hidden="true" style="font-size:.9rem">check_circle</span>
+      Estados
+    </a>
+  </div>
+
+  {% if request.user.role == 'admin' %}
+  <a href="{% url 'faults:fault_create' %}" class="smpi-btn smpi-btn--primary">
+    <span class="material-icons" aria-hidden="true" style="font-size:1.1rem">add</span> Novo
+  </a>
+  {% endif %}
+</div>
+
+{# Table #}
+<div class="smpi-card" style="overflow-x:auto">
+  <table class="smpi-table" aria-label="Catálogo de defeitos e estados operacionais">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nome</th>
+        <th>Tipo</th>
+        <th>Descrição</th>
+        {% if request.user.role == 'admin' %}<th><span class="sr-only">Ações</span></th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for fault in faults %}
+      <tr>
+        <td>
+          <code style="background:var(--fsi-clr-5);padding:.2rem .5rem;border-radius:6px;font-size:var(--fs-100);font-family:monospace">{{ fault.code }}</code>
+        </td>
+        <td style="font-weight:500">{{ fault.name }}</td>
+        <td>
+          {% if fault.is_problem %}
+          <span class="smpi-badge smpi-badge--danger">
+            <span class="material-icons" aria-hidden="true" style="font-size:.9rem">warning</span>
+            Problema
+          </span>
+          {% else %}
+          <span class="smpi-badge smpi-badge--success">
+            <span class="material-icons" aria-hidden="true" style="font-size:.9rem">check_circle</span>
+            Estado
+          </span>
+          {% endif %}
+        </td>
+        <td style="color:#666;font-size:var(--fs-100);max-width:320px">{{ fault.description|truncatechars:80|default:"—" }}</td>
+        {% if request.user.role == 'admin' %}
+        <td>
+          <a href="{% url 'faults:fault_update' fault.pk %}"
+             class="smpi-btn smpi-btn--sm smpi-btn--outline"
+             aria-label="Editar defeito {{ fault.code }}">
+            <span class="material-icons" aria-hidden="true" style="font-size:.9rem">edit</span>
+            Editar
+          </a>
+        </td>
+        {% endif %}
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="{% if request.user.role == 'admin' %}5{% else %}4{% endif %}"
+            style="text-align:center;color:#888;padding:2.5rem">
+          <span class="material-icons" style="font-size:2.5rem;display:block;margin-bottom:.75rem;color:var(--fsi-clr-9)">warning_amber</span>
+          Nenhum defeito/estado cadastrado.
+          {% if request.user.role == 'admin' %}
+          <br><small style="margin-top:.5rem;display:inline-block">Execute <code>python manage.py import_banner</code> para popular automaticamente.</small>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{# Pagination #}
+{% if is_paginated %}
+<nav aria-label="Paginação do catálogo" class="smpi-pagination">
+  {% if page_obj.has_previous %}
+  <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}"
+     aria-label="Página anterior">&laquo;</a>
+  {% endif %}
+  <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}"
+     aria-label="Próxima página">&raquo;</a>
+  {% endif %}
+</nav>
+{% endif %}
+{% endblock %}
