@@ -2,60 +2,136 @@
 
 ## Pré-requisitos
 
-- Python 3.13+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (inclui Docker Compose)
 - Git
 
-## Instalação
+> Para desenvolvimento sem Docker, veja a seção [Sem Docker](#sem-docker) no final desta página.
+
+## Com Docker (recomendado)
+
+### 1. Clonar e configurar
 
 ```bash
-# 1. Clonar o repositório
-git clone <url-do-repositorio>
+git clone https://github.com/renatoteodoro/smpi.git
 cd smpi
 
-# 2. Criar e ativar o ambiente virtual
+# Copiar template de variáveis e preencher
+cp .env.example .env
+```
+
+Abra o `.env` e preencha no mínimo:
+
+```
+OPENAI_API_KEY=sk-...          # obrigatório para o pipeline de IA
+POSTGRES_PASSWORD=senha_local  # qualquer senha para desenvolvimento
+REDIS_PASSWORD=senha_redis
+RABBITMQ_DEFAULT_PASS=senha_rabbit
+EVOLUTION_API_KEY=qualquer-chave-local
+```
+
+### 2. Subir a stack
+
+```bash
+docker compose up -d
+```
+
+Isso sobe: **app** (Django + Gunicorn), **postgresql** (PostgreSQL 16 + pgvector), **redis**, **rabbitmq**, **celery_worker**, **celery_beat** e **evolution_api** (WhatsApp).
+
+Aguarde alguns segundos e verifique que tudo subiu:
+
+```bash
+docker compose ps
+```
+
+### 3. Migrações e superusuário (apenas na primeira vez)
+
+```bash
+docker exec smpi-app-1 python manage.py migrate_with_lock
+docker exec smpi-app-1 python manage.py createsuperuser
+```
+
+### 4. (Opcional) Importar dados históricos
+
+```bash
+# 166.796 leituras de sensor do banner.csv
+docker exec smpi-app-1 python manage.py import_banner
+
+# Indexar documentos para RAG (coloque os arquivos PDF/DOCX/TXT em data/)
+docker exec smpi-app-1 python manage.py ingest_documents --dir data/
+```
+
+### 5. Acessar
+
+| URL | Descrição |
+|---|---|
+| http://localhost:8000 | Aplicação principal |
+| http://localhost:8000/admin/ | Django Admin |
+| http://localhost:8000/api/docs/ | Swagger UI |
+| http://localhost:8000/health/ | Healthcheck |
+| http://localhost:15672 | RabbitMQ Management (smpi / senha do .env) |
+| http://localhost:8080/manager | Evolution API Manager (WhatsApp) |
+
+### Logs e debug
+
+```bash
+# Logs da aplicação
+docker logs smpi-app-1 -f
+
+# Logs do Celery worker
+docker logs smpi-celery_worker-1 -f
+
+# Shell Django
+docker exec -it smpi-app-1 python manage.py shell
+
+# Reiniciar apenas o app após mudanças em settings
+docker compose restart app
+```
+
+### Atualizar após mudanças no código
+
+O volume `.:/app` monta o código-fonte e o Gunicorn usa `--reload`, então alterações em templates e views são refletidas imediatamente. Para mudanças em `settings.py` ou novos apps, reinicie:
+
+```bash
+docker compose restart app celery_worker
+```
+
+---
+
+## Sem Docker
+
+Para quem prefere rodar o Django diretamente no host (útil para debugging interativo):
+
+### Pré-requisitos adicionais
+
+- Python 3.13
+- PostgreSQL 16 com extensão `pgvector`
+- Redis 7
+- RabbitMQ 3
+
+### Instalação
+
+```bash
 python -m venv .venv
 
 # Windows
 .venv\Scripts\activate
-
-# Linux / macOS
+# Linux/macOS
 source .venv/bin/activate
 
-# 3. Instalar dependências
 pip install -r requirements.txt
+```
 
-# 4. Configurar variáveis de ambiente
-# Copie o .env e preencha os valores (veja docs/environment.md)
-cp .env .env.local   # opcional — o projeto lê .env por padrão
+Configure o `.env` com `POSTGRES_HOST=localhost`, `REDIS_URL=redis://localhost:6379/1`, etc.
 
-# 5. Aplicar migrações (banco SQLite por padrão em desenvolvimento)
-python manage.py migrate
-
-# 6. Rodar o servidor
+```bash
+python manage.py migrate_with_lock
+python manage.py createsuperuser
 python manage.py runserver
 ```
 
-O servidor estará disponível em `http://127.0.0.1:8000`.
-
-## Django Admin
+Celery em terminais separados:
 
 ```bash
-python manage.py createsuperuser
+celery -A core worker -l info
+celery -A core beat -l info
 ```
-
-Acesse em `http://127.0.0.1:8000/admin/`.
-
-## Dependências atuais
-
-| Pacote | Versão |
-|---|---|
-| Django | 6.0.6 |
-| asgiref | 3.11.1 |
-| sqlparse | 0.5.5 |
-| tzdata | 2026.2 |
-
-> O `requirements.txt` será expandido conforme os sprints avançam (PostgreSQL, pgvector, Celery, LangChain, etc.).
-
-## Banco de dados em desenvolvimento
-
-Por padrão, o `settings.py` usa **SQLite** (`db.sqlite3`). Para usar PostgreSQL (recomendado a partir do Sprint 3), defina `DATABASE_URL` no `.env` e ajuste o `settings.py` para lê-lo com `django-environ`.
