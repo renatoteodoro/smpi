@@ -13,6 +13,7 @@ class ChatSession(TimeStampedModel):
     class Meta:
         verbose_name = 'Sessão de Chat'
         ordering = ['-updated_at']
+        unique_together = [('user', 'title')]
 
     def __str__(self):
         return f'{self.user.email} — {self.title}'
