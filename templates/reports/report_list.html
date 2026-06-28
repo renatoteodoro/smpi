@@ -69,7 +69,7 @@
         <td>
           <span class="smpi-badge smpi-badge--info">{{ report.format|upper }}</span>
         </td>
-        <td>{{ report.get_status_filter_display|default:"Todos" }}</td>
+        <td>{{ report.filters.status|default:"Todos" }}</td>
         <td>
           {% if report.status == 'done' %}
           <span class="smpi-badge smpi-badge--success">
@@ -97,6 +97,14 @@
             <span class="material-icons" aria-hidden="true" style="font-size:1rem">download</span>
             Baixar
           </a>
+          {% elif report.status == 'failed' %}
+          <form method="post" action="{% url 'reports:report_retry' report.pk %}" style="display:inline">
+            {% csrf_token %}
+            <button type="submit" class="smpi-btn smpi-btn--sm smpi-btn--outline">
+              <span class="material-icons" aria-hidden="true" style="font-size:1rem">refresh</span>
+              Repetir
+            </button>
+          </form>
           {% else %}
           <span style="color:#999;font-size:var(--fs-100)">—</span>
           {% endif %}
