@@ -60,9 +60,7 @@ def process_inbound_whatsapp(self, message_id: int):
         if len(reply) > 4000:
             reply = reply[:3980] + '\n\n_(mensagem truncada)_'
 
-        # Usa reply_jid (remoteJid original) para responder ao chat correto
-        reply_to = msg.reply_jid or phone
-        send_text(reply_to, reply)
+        send_text(phone, reply)
 
         WhatsAppMessage.objects.create(
             direction='outbound',
