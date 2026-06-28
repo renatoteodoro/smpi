@@ -8,5 +8,6 @@ urlpatterns = [
     path('new/', views.SessionCreateView.as_view(), name='session_create'),
     path('<int:pk>/', views.SessionDetailView.as_view(), name='session_detail'),
     path('<int:session_id>/stream/', views.chat_stream, name='chat_stream'),
+    path('<int:pk>/delete/', views.SessionDeleteView.as_view(), name='session_delete'),
     path('chatbot/stream/', views.chatbot_stream, name='chatbot_stream'),
 ]

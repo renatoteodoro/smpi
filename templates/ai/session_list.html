@@ -24,15 +24,25 @@
   <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.5rem"
       role="list" aria-label="Lista de conversas">
     {% for session in sessions %}
-    <li role="listitem">
+    <li role="listitem" style="display:flex;gap:.5rem;align-items:center">
       <a href="{% url 'ai:session_detail' session.pk %}"
-         style="display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem;background:var(--fsi-clr-5);border-radius:10px;text-decoration:none;color:var(--fsi-clr-4);transition:background .15s"
+         style="flex:1;display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem;background:var(--fsi-clr-5);border-radius:10px;text-decoration:none;color:var(--fsi-clr-4);transition:background .15s"
          onmouseover="this.style.background='var(--fsi-clr-3)'"
          onmouseout="this.style.background='var(--fsi-clr-5)'"
          aria-label="Conversa: {{ session.title }} — {{ session.updated_at|date:'d/m H:i' }}">
         <span style="font-weight:600;font-size:var(--fs-200)">{{ session.title }}</span>
         <span style="font-size:var(--fs-100);color:#888;white-space:nowrap">{{ session.updated_at|date:"d/m H:i" }}</span>
       </a>
+      <form method="post" action="{% url 'ai:session_delete' session.pk %}"
+            onsubmit="return confirm('Excluir a conversa \'{{ session.title|escapejs }}\'?')">
+        {% csrf_token %}
+        <button type="submit"
+                class="smpi-btn smpi-btn--sm"
+                style="color:#c53030;border-color:#fed7d7;background:#fff5f5"
+                aria-label="Excluir conversa {{ session.title }}">
+          <span class="material-icons" aria-hidden="true" style="font-size:1rem">delete</span>
+        </button>
+      </form>
     </li>
     {% endfor %}
   </ul>

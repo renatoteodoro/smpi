@@ -5,6 +5,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
+from django.views.generic.edit import DeleteView
+from django.urls import reverse_lazy
 
 from .models import ChatMessage, ChatSession
 
@@ -17,6 +19,18 @@ class SessionListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user).exclude(title='Chatbot flutuante')
+
+
+class SessionDeleteView(LoginRequiredMixin, DeleteView):
+    model = ChatSession
+    success_url = reverse_lazy('ai:session_list')
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        # Confirma e exclui direto via POST; GET redireciona de volta
+        return self.post(request, *args, **kwargs)
 
 
 class SessionCreateView(LoginRequiredMixin, View):
@@ -37,6 +51,12 @@ class SessionDetailView(LoginRequiredMixin, DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx['messages_list'] = self.object.messages.all()
         return ctx
+
+
+def _trim_chatbot_history(session, keep=20):
+    """Deleta mensagens antigas mantendo apenas as `keep` mais recentes."""
+    ids_to_keep = session.messages.order_by('-created_at').values_list('id', flat=True)[:keep]
+    session.messages.exclude(id__in=list(ids_to_keep)).delete()
 
 
 def _sse_stream(session, user_message, history_limit=None):
@@ -86,6 +106,9 @@ def chatbot_stream(request):
         user=request.user, title='Chatbot flutuante'
     )
     ChatMessage.objects.create(session=session, role='user', content=user_message)
+
+    # Mantém apenas as 20 mensagens mais recentes no banco
+    _trim_chatbot_history(session, keep=20)
 
     response = StreamingHttpResponse(_sse_stream(session, user_message, history_limit=20), content_type='text/event-stream')
     response['Cache-Control'] = 'no-cache'
