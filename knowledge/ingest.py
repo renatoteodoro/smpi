@@ -143,7 +143,7 @@ def embed_texts(texts: list) -> list:
     if not texts:
         return []
     model = _get_embedding_model()
-    embeddings = model.encode(texts, show_progress_bar=False, batch_size=32)
+    embeddings = model.encode(texts, show_progress_bar=False, batch_size=8)
     return [e.tolist() for e in embeddings]
 
 
