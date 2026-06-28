@@ -62,13 +62,26 @@
       {{ eq.measurement_points.count }} ponto(s) de medição
     </div>
 
-    <a href="{% url 'assets:equipment_detail' eq.pk %}"
-       class="smpi-btn smpi-btn--outline smpi-btn--sm"
-       style="align-self:flex-start"
-       aria-label="Ver detalhes de {{ eq.name }}">
-      <span class="material-icons" aria-hidden="true" style="font-size:1rem">arrow_forward</span>
-      Ver detalhes
-    </a>
+    <div style="display:flex;gap:.5rem;align-items:center">
+      <a href="{% url 'assets:equipment_detail' eq.pk %}"
+         class="smpi-btn smpi-btn--outline smpi-btn--sm"
+         aria-label="Ver detalhes de {{ eq.name }}">
+        <span class="material-icons" aria-hidden="true" style="font-size:1rem">arrow_forward</span>
+        Ver detalhes
+      </a>
+      {% if request.user.role == 'admin' or request.user.role == 'maintenance' %}
+      <form method="post" action="{% url 'assets:equipment_delete' eq.pk %}"
+            onsubmit="return confirm('Excluir equipamento \'{{ eq.name|escapejs }}\'? Esta ação é irreversível.')">
+        {% csrf_token %}
+        <button type="submit"
+                class="smpi-btn smpi-btn--sm"
+                style="color:#c53030;border-color:#fed7d7;background:#fff5f5"
+                aria-label="Excluir {{ eq.name }}">
+          <span class="material-icons" aria-hidden="true" style="font-size:1rem">delete</span>
+        </button>
+      </form>
+      {% endif %}
+    </div>
   </article>
   {% empty %}
   <div style="grid-column:1/-1;text-align:center;padding:3rem;color:#888" role="status">

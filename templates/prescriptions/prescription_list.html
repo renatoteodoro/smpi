@@ -80,12 +80,22 @@
           {% endif %}
         </td>
         <td style="white-space:nowrap">{{ p.created_at|date:"d/m/Y H:i" }}</td>
-        <td>
+        <td style="display:flex;gap:.4rem;align-items:center">
           <a href="{% url 'prescriptions:prescription_detail' p.pk %}"
              class="smpi-btn smpi-btn--sm smpi-btn--outline"
              aria-label="Ver prescrição {{ p.pk }}">
             Ver
           </a>
+          <form method="post" action="{% url 'prescriptions:prescription_delete' p.pk %}"
+                onsubmit="return confirm('Excluir prescrição #{{ p.pk }}?')">
+            {% csrf_token %}
+            <button type="submit"
+                    class="smpi-btn smpi-btn--sm"
+                    style="color:#c53030;border-color:#fed7d7;background:#fff5f5"
+                    aria-label="Excluir prescrição {{ p.pk }}">
+              <span class="material-icons" aria-hidden="true" style="font-size:1rem">delete</span>
+            </button>
+          </form>
         </td>
       </tr>
       {% empty %}

@@ -55,6 +55,7 @@
         <th scope="col">Status</th>
         <th scope="col">Solicitado em</th>
         <th scope="col">Arquivo</th>
+        <th scope="col"><span class="sr-only">Excluir</span></th>
       </tr>
     </thead>
     <tbody>
@@ -104,10 +105,22 @@
           <span style="color:#999;font-size:var(--fs-100)">—</span>
           {% endif %}
         </td>
+        <td>
+          <form method="post" action="{% url 'reports:report_delete' report.pk %}"
+                onsubmit="return confirm('Excluir relatório #{{ report.pk }}?')">
+            {% csrf_token %}
+            <button type="submit"
+                    class="smpi-btn smpi-btn--sm"
+                    style="color:#c53030;border-color:#fed7d7;background:#fff5f5"
+                    aria-label="Excluir relatório {{ report.pk }}">
+              <span class="material-icons" aria-hidden="true" style="font-size:1rem">delete</span>
+            </button>
+          </form>
+        </td>
       </tr>
       {% empty %}
       <tr>
-        <td colspan="6" style="text-align:center;padding:2.5rem;color:#666">
+        <td colspan="7" style="text-align:center;padding:2.5rem;color:#666">
           <span class="material-icons" style="font-size:2.5rem;display:block;margin-bottom:.5rem;color:var(--fsi-clr-9)">description</span>
           Nenhum relatório gerado. Use o formulário acima para solicitar o primeiro relatório.
         </td>

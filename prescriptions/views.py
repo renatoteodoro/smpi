@@ -1,10 +1,12 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import DetailView, ListView
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+from django.views.generic.edit import DeleteView
 from django.views.decorators.http import require_POST
 
 from .models import Prescription
@@ -30,6 +32,18 @@ class PrescriptionListView(LoginRequiredMixin, ListView):
         if fault:
             qs = qs.filter(defect_type__icontains=fault)
         return qs
+
+
+class PrescriptionDeleteView(LoginRequiredMixin, DeleteView):
+    model = Prescription
+    success_url = reverse_lazy('prescriptions:prescription_list')
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Prescrição excluída.')
+        return super().form_valid(form)
 
 
 class PrescriptionDetailView(LoginRequiredMixin, DetailView):

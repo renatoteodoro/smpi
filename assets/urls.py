@@ -10,4 +10,5 @@ urlpatterns = [
     path('<int:pk>/edit/', views.EquipmentUpdateView.as_view(), name='equipment_update'),
     path('<int:pk>/points/create/', views.MeasurementPointCreateView.as_view(), name='measurement_point_create'),
     path('<int:pk>/summarize/', views.request_equipment_summary, name='summarize'),
+    path('<int:pk>/delete/', views.EquipmentDeleteView.as_view(), name='equipment_delete'),
 ]

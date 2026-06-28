@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
 from django.contrib import messages
 
@@ -74,6 +75,18 @@ class EquipmentUpdateView(MaintenanceRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         messages.success(self.request, 'Equipamento atualizado.')
+        return super().form_valid(form)
+
+
+class EquipmentDeleteView(MaintenanceRequiredMixin, DeleteView):
+    model = Equipment
+    success_url = reverse_lazy('assets:equipment_list')
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Equipamento excluído.')
         return super().form_valid(form)
 
 

@@ -2,8 +2,10 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView
+from django.views.generic.edit import DeleteView
 
 from .models import ReportRequest
 
@@ -20,7 +22,6 @@ class ReportListView(LoginRequiredMixin, ListView):
 
 class ReportCreateView(LoginRequiredMixin, View):
     def post(self, request):
-        from django.contrib import messages
         fmt = request.POST.get('format', 'csv')
         filters = {}
         if request.POST.get('status'):
@@ -31,7 +32,7 @@ class ReportCreateView(LoginRequiredMixin, View):
             filters['date_from'] = request.POST.get('date_from')
         if request.POST.get('date_to'):
             filters['date_to'] = request.POST.get('date_to')
-            report = ReportRequest.objects.create(
+        report = ReportRequest.objects.create(
             requested_by=request.user,
             format=fmt,
             filters=filters,
@@ -45,9 +46,23 @@ class ReportCreateView(LoginRequiredMixin, View):
         return redirect('reports:report_list')
 
 
+class ReportDeleteView(LoginRequiredMixin, DeleteView):
+    model = ReportRequest
+    success_url = reverse_lazy('reports:report_list')
+
+    def get_queryset(self):
+        return super().get_queryset().filter(requested_by=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Relatório excluído.')
+        return super().form_valid(form)
+
+
 class ReportDownloadView(LoginRequiredMixin, View):
     def get(self, request, pk):
-        from django.contrib import messages
         report = get_object_or_404(ReportRequest, pk=pk, requested_by=request.user)
         if not report.file:
             messages.error(request, 'Arquivo não disponível. Gere um novo relatório.')
@@ -55,28 +70,20 @@ class ReportDownloadView(LoginRequiredMixin, View):
         try:
             content = report.file.read()
         except (FileNotFoundError, OSError):
-            # Arquivo sumiu (ex: gerado em outro ambiente). Regenera agora.
             report.file = None
             report.status = 'pending'
             report.save(update_fields=['file', 'status', 'updated_at'])
-            try:
-                from .tasks import generate_report
-                generate_report.delay(report.pk)
-                messages.warning(request, 'Arquivo não encontrado — foi solicitada a regeneração. Aguarde e tente novamente.')
-            except Exception:
-                from .tasks import generate_report
-                generate_report(report.pk)
-                report.refresh_from_db()
-                if report.status == 'done':
-                    try:
-                        content = report.file.read()
-                    except Exception:
-                        messages.error(request, 'Não foi possível gerar o arquivo.')
-                        return redirect('reports:report_list')
-                else:
-                    messages.error(request, f'Erro ao gerar o relatório: {report.error}')
+            from .tasks import generate_report
+            generate_report(report.pk)
+            report.refresh_from_db()
+            if report.status == 'done':
+                try:
+                    content = report.file.read()
+                except Exception:
+                    messages.error(request, 'Não foi possível gerar o arquivo.')
                     return redirect('reports:report_list')
             else:
+                messages.error(request, f'Erro ao gerar o relatório: {report.error}')
                 return redirect('reports:report_list')
         content_type = 'text/csv' if report.format == 'csv' else 'application/pdf'
         filename = report.file.name.split('/')[-1]

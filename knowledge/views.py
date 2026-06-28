@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic.edit import DeleteView
 
 from base.mixins import MaintenanceRequiredMixin
 
@@ -46,6 +47,18 @@ class DocumentCreateView(MaintenanceRequiredMixin, CreateView):
                 'Documento salvo. Execute ingest_documents para indexar.'
             )
         return response
+
+
+class DocumentDeleteView(MaintenanceRequiredMixin, DeleteView):
+    model = KnowledgeDocument
+    success_url = reverse_lazy('knowledge:document_list')
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Documento excluído.')
+        return super().form_valid(form)
 
 
 class DocumentDetailView(LoginRequiredMixin, DetailView):
