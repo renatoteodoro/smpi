@@ -178,7 +178,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - smpi_v1_internal
+      smpi_v1_internal:
+        aliases:
+          - postgres
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-smpi} -d ${POSTGRES_DB:-smpi}"]
       interval: 10s
