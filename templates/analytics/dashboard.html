@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 
-{# Safe URL resolution — analytics:data may not exist in early sprints #}
-{% url 'analytics:data' as url_analytics_data %}
-
 {% block title %}Dashboard{% endblock %}
 {% block page_title %}Dashboard Analítico{% endblock %}
 
@@ -74,8 +71,7 @@
 
 </div>
 
-{# Charts row — only rendered when data endpoint is available #}
-{% if url_analytics_data %}
+{# Charts row #}
 <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5rem">
 
   <div class="smpi-card">
@@ -101,23 +97,16 @@
   </div>
 
 </div>
-{% else %}
-<div class="smpi-card" style="text-align:center;padding:3rem;color:#888">
-  <span class="material-icons" style="font-size:3rem;display:block;margin-bottom:.5rem;color:var(--fsi-clr-9)">bar_chart</span>
-  <p style="margin:0;font-size:var(--fs-200)">Os gráficos estarão disponíveis após a configuração do endpoint de dados analíticos.</p>
-</div>
-{% endif %}
 
 {% endblock %}
 
 {% block extra_scripts %}
-{% if url_analytics_data %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 (function () {
   'use strict';
 
-  var DATA_URL = '{{ url_analytics_data }}';
+  var DATA_URL = '{% url "analytics:data" %}';
   var FSI_BLUE = 'hsl(220, 74%, 33%)';
   var FSI_BLUE_ALPHA = 'hsla(220, 74%, 33%, 0.12)';
 
@@ -186,5 +175,4 @@
     });
 })();
 </script>
-{% endif %}
 {% endblock %}
