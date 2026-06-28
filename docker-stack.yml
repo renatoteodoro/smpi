@@ -62,7 +62,7 @@ volumes:
 services:
   # ─────────────────────────────── Traefik ────────────────────────────────────
   traefik:
-    image: traefik:v3.1
+    image: traefik:v2.11
     ports:
       - "80:80"
       - "443:443"
@@ -73,12 +73,12 @@ services:
       - CLOUDFLARE_DNS_API_TOKEN
     environment:
       CF_DNS_API_TOKEN_FILE: /run/secrets/CLOUDFLARE_DNS_API_TOKEN
-      DOCKER_API_VERSION: "1.41"
     command:
       - "--api.dashboard=true"
-      - "--providers.swarm=true"
-      - "--providers.swarm.exposedByDefault=false"
-      - "--providers.swarm.network=traefik_public"
+      - "--providers.docker=true"
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedByDefault=false"
+      - "--providers.docker.network=traefik_public"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
