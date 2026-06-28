@@ -73,6 +73,7 @@ services:
       - CLOUDFLARE_DNS_API_TOKEN
     environment:
       CF_DNS_API_TOKEN_FILE: /run/secrets/CLOUDFLARE_DNS_API_TOKEN
+      DOCKER_API_VERSION: "1.41"
     command:
       - "--api.dashboard=true"
       - "--providers.swarm=true"
