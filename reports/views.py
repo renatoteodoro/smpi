@@ -37,12 +37,28 @@ class ReportCreateView(LoginRequiredMixin, View):
             format=fmt,
             filters=filters,
         )
+        queued = False
         try:
             from .tasks import generate_report
-            generate_report(report.pk)
-            messages.success(request, 'Relatório gerado. Clique em Baixar.')
-        except Exception as exc:
-            messages.error(request, f'Erro ao gerar relatório: {exc}')
+            generate_report.delay(report.pk)
+            queued = True
+        except Exception:
+            pass
+
+        if queued:
+            messages.info(
+                request,
+                'Relatório sendo gerado em segundo plano. '
+                'Você receberá uma notificação quando estiver pronto e poderá navegar normalmente.'
+            )
+        else:
+            # Celery indisponível — executa de forma síncrona
+            try:
+                from .tasks import _run_generation
+                _run_generation(report)
+                messages.success(request, 'Relatório gerado. Clique em Baixar.')
+            except Exception as exc:
+                messages.error(request, f'Erro ao gerar relatório: {exc}')
         return redirect('reports:report_list')
 
 
@@ -99,10 +115,21 @@ class ReportRetryView(LoginRequiredMixin, View):
         report.status = 'pending'
         report.error = ''
         report.save(update_fields=['file', 'status', 'error', 'updated_at'])
+        queued = False
         try:
             from .tasks import generate_report
-            generate_report(report.pk)
-            messages.success(request, 'Relatório regenerado. Clique em Baixar.')
-        except Exception as exc:
-            messages.error(request, f'Erro ao regenerar relatório: {exc}')
+            generate_report.delay(report.pk)
+            queued = True
+        except Exception:
+            pass
+
+        if queued:
+            messages.info(request, 'Relatório sendo regenerado. Você será notificado quando estiver pronto.')
+        else:
+            try:
+                from .tasks import _run_generation
+                _run_generation(report)
+                messages.success(request, 'Relatório regenerado. Clique em Baixar.')
+            except Exception as exc:
+                messages.error(request, f'Erro ao regenerar relatório: {exc}')
         return redirect('reports:report_list')

@@ -25,6 +25,9 @@ def generate_csv(queryset) -> bytes:
     return buf.getvalue().encode('utf-8-sig')
 
 
+PDF_ROW_LIMIT = 5_000
+
+
 def generate_pdf(queryset) -> bytes:
     """Return PDF bytes for a SensorReading queryset using ReportLab."""
     from reportlab.lib.pagesizes import A4, landscape
@@ -38,11 +41,20 @@ def generate_pdf(queryset) -> bytes:
     styles = getSampleStyleSheet()
     elements = []
 
+    total = queryset.count()
+    qs_limited = queryset[:PDF_ROW_LIMIT]
+
     elements.append(Paragraph('SMPI — Relatório de Leituras de Sensor', styles['Title']))
+    if total > PDF_ROW_LIMIT:
+        elements.append(Paragraph(
+            f'Exibindo {PDF_ROW_LIMIT:,} de {total:,} registros. '
+            'Use o formato CSV para exportar todos os dados.',
+            styles['Normal']
+        ))
     elements.append(Spacer(1, 0.5*cm))
 
     data = [['ID', 'Equipamento', 'Data', 'Defeito', 'Status', 'RPM']]
-    for r in queryset.select_related('fault', 'measurement_point__equipment'):
+    for r in qs_limited.select_related('fault', 'measurement_point__equipment'):
         data.append([
             str(r.external_id or r.pk),
             r.measurement_point.equipment.name if r.measurement_point else '—',
