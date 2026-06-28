@@ -12,7 +12,7 @@
 set -euo pipefail
 
 STACK="${STACK_NAME:-smpi_v1}"
-COMPOSE_FILE="stack.yml"
+COMPOSE_FILE="docker-stack.yml"
 SKIP_BUILD=false
 
 for arg in "$@"; do
@@ -63,7 +63,7 @@ done
 [ "${DEBUG:-True}" = "False" ] || fail "DEBUG=${DEBUG:-True} no .env. Defina DEBUG=False antes do deploy."
 
 # 5. Domínio configurado
-[ -n "${DOMAIN:-}" ] || fail "DOMAIN não está definido no .env. Defina DOMAIN=www.techteo.com.br"
+[ -n "${DOMAIN:-}" ] || fail "DOMAIN não está definido no .env. Defina DOMAIN=techteo.com.br (domínio-raiz, sem www)"
 echo "${DOMAIN}" | grep -qP '\.' || fail "DOMAIN parece inválido: ${DOMAIN}"
 
 echo "[OK] Todas as pré-condições verificadas."

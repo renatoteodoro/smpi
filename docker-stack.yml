@@ -3,7 +3,7 @@ version: '3.9'
 # Docker Swarm production stack for SMPI.
 #
 # Pré-requisitos (executar UMA VEZ antes do primeiro deploy):
-#   docker swarm init
+#   docker swarm init --advertise-addr $(curl -s ifconfig.me)
 #   docker network create --driver overlay --attachable traefik_public
 #   docker network create --driver overlay --internal smpi_v1_internal
 #   docker network create --driver overlay smpi_v1_egress
@@ -19,7 +19,9 @@ version: '3.9'
 #   printf '%s' "cf_token"      | docker secret create CLOUDFLARE_DNS_API_TOKEN -
 #
 # Deploy:
-#   IMAGE=smpi_app:latest DOMAIN=www.techteo.com.br ./scripts/deploy.sh
+#   ./scripts/deploy.sh
+#
+# DOMAIN no .env deve ser o domínio-raiz, sem www: DOMAIN=techteo.com.br
 
 secrets:
   smpi_db_password:
@@ -43,10 +45,9 @@ networks:
   traefik_public:
     external: true
   smpi_v1_internal:
-    driver: overlay
-    internal: true
+    external: true
   smpi_v1_egress:
-    driver: overlay
+    external: true
 
 volumes:
   postgres_data:
@@ -98,7 +99,7 @@ services:
         max_attempts: 3
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.techteo.com.br`)"
+        - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.${DOMAIN:-techteo.com.br}`)"
         - "traefik.http.routers.traefik-dashboard.entrypoints=websecure"
         - "traefik.http.routers.traefik-dashboard.tls.certresolver=cloudflare"
         - "traefik.http.routers.traefik-dashboard.service=api@internal"
@@ -157,12 +158,12 @@ services:
           memory: 256M
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.smpi.rule=Host(`${DOMAIN:-smpi.example.com}`) || Host(`www.${DOMAIN:-smpi.example.com}`)"
+        - "traefik.http.routers.smpi.rule=Host(`${DOMAIN:-techteo.com.br}`) || Host(`www.${DOMAIN:-techteo.com.br}`)"
         - "traefik.http.routers.smpi.entrypoints=websecure"
         - "traefik.http.routers.smpi.tls=true"
         - "traefik.http.routers.smpi.tls.certresolver=cloudflare"
-        - "traefik.http.routers.smpi.tls.domains[0].main=${DOMAIN:-smpi.example.com}"
-        - "traefik.http.routers.smpi.tls.domains[0].sans=*.${DOMAIN:-smpi.example.com}"
+        - "traefik.http.routers.smpi.tls.domains[0].main=${DOMAIN:-techteo.com.br}"
+        - "traefik.http.routers.smpi.tls.domains[0].sans=*.${DOMAIN:-techteo.com.br}"
         - "traefik.http.services.smpi.loadbalancer.server.port=8000"
 
   # ─────────────────────────────── PostgreSQL + pgvector ──────────────────────
@@ -232,6 +233,7 @@ services:
     image: rabbitmq:3-management-alpine
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-smpi}
+      RABBITMQ_DEFAULT_PASS_FILE: /run/secrets/smpi_rabbit_password
     secrets:
       - smpi_rabbit_password
     volumes:
@@ -270,6 +272,7 @@ services:
       - smpi_rabbit_password
       - smpi_openai_key
       - smpi_evolution_key
+      - smpi_django_secret
     networks:
       - smpi_v1_internal
       - smpi_v1_egress
@@ -297,6 +300,7 @@ services:
       - smpi_db_password
       - smpi_redis_password
       - smpi_rabbit_password
+      - smpi_django_secret
     networks:
       - smpi_v1_internal
     deploy:
@@ -346,7 +350,7 @@ services:
   # Para conectar ao WhatsApp em produção:
   #   1. Acesse por SSH tunnel: ssh -L 8080:localhost:8080 user@vps
   #   2. Abra http://localhost:8080/manager no navegador
-  #   3. Login com EVOLUTION_API_KEY do secret smpi_evolution_key
+  #   3. Login com EVOLUTION_API_KEY (valor do secret smpi_evolution_key / .env EVOLUTION_API_KEY)
   #   4. Crie a instância "smpi" e escaneie o QR code
   evolution_api:
     image: evoapicloud/evolution-api:latest
@@ -360,7 +364,7 @@ services:
       CACHE_REDIS_URI: redis://:${EVOLUTION_REDIS_PASSWORD}@evolution_redis:6379
       CACHE_LOCAL_ENABLED: "false"
       CONFIG_SESSION_PHONE_VERSION: "2.3000.1015901307"
-      WEBHOOK_GLOBAL_URL: "https://${DOMAIN:-smpi.example.com}/webhooks/whatsapp/"
+      WEBHOOK_GLOBAL_URL: "https://www.${DOMAIN:-techteo.com.br}/webhooks/whatsapp/"
       WEBHOOK_GLOBAL_ENABLED: "true"
       WEBHOOK_GLOBAL_WEBHOOK_BY_EVENTS: "false"
       WEBHOOK_EVENTS_MESSAGES_UPSERT: "true"
