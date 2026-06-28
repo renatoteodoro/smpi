@@ -4,6 +4,7 @@ Uses django-environ for environment variable management.
 """
 
 from pathlib import Path
+from urllib.parse import quote
 import environ
 
 
@@ -216,13 +217,15 @@ _redis_secret = _read_secret('smpi_redis_password')
 _rabbit_secret = _read_secret('smpi_rabbit_password')
 if _redis_secret:
     _rh = env('REDIS_HOST', default='redis')
-    CELERY_RESULT_BACKEND = f'redis://:{_redis_secret}@{_rh}:6379/0'
-    REDIS_URL = f'redis://:{_redis_secret}@{_rh}:6379/1'
+    _rp = quote(_redis_secret, safe='')  # base64 may contain / + = which break URL parsing
+    CELERY_RESULT_BACKEND = f'redis://:{_rp}@{_rh}:6379/0'
+    REDIS_URL = f'redis://:{_rp}@{_rh}:6379/1'
     CACHES['default']['LOCATION'] = REDIS_URL
 if _rabbit_secret:
     _rmq_user = env('RABBITMQ_DEFAULT_USER', default='smpi')
     _rmq_host = env('RABBITMQ_HOST', default='rabbitmq')
-    CELERY_BROKER_URL = f'amqp://{_rmq_user}:{_rabbit_secret}@{_rmq_host}:5672/'
+    _rrp = quote(_rabbit_secret, safe='')
+    CELERY_BROKER_URL = f'amqp://{_rmq_user}:{_rrp}@{_rmq_host}:5672/'
 
 # ---------------------------------------------------------------------------
 # Django REST Framework
