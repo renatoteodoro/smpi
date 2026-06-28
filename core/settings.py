@@ -32,6 +32,9 @@ env = environ.Env(
     EMAIL_USE_TLS=(bool, True),
     EMAIL_HOST_USER=(str, ''),
     EMAIL_HOST_PASSWORD=(str, ''),
+    EVOLUTION_API_URL=(str, 'http://localhost:8080'),
+    EVOLUTION_API_KEY=(str, ''),
+    EVOLUTION_INSTANCE=(str, 'smpi'),
 )
 
 environ.Env.read_env(BASE_DIR / '.env')
@@ -255,6 +258,13 @@ EMBEDDINGS_MODEL = env('EMBEDDINGS_MODEL')
 OPENAI_API_KEY = env('OPENAI_API_KEY', default='')
 ANTHROPIC_API_KEY = env('ANTHROPIC_API_KEY', default='')
 LANGSMITH_API_KEY = env('LANGSMITH_API_KEY', default='')
+
+# ---------------------------------------------------------------------------
+# Evolution API (WhatsApp)
+# ---------------------------------------------------------------------------
+EVOLUTION_API_URL = env('EVOLUTION_API_URL')
+EVOLUTION_API_KEY = env('EVOLUTION_API_KEY')
+EVOLUTION_INSTANCE = env('EVOLUTION_INSTANCE')
 
 # ---------------------------------------------------------------------------
 # ML Artifacts

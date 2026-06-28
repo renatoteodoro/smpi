@@ -69,6 +69,9 @@ services:
       CELERY_BROKER_URL: amqp://${RABBITMQ_DEFAULT_USER:-smpi}:${RABBITMQ_DEFAULT_PASS:-smpi_rabbit_pass}@rabbitmq:5672/
       CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD:-smpi_redis_pass}@redis:6379/0
       REDIS_URL: redis://:${REDIS_PASSWORD:-smpi_redis_pass}@redis:6379/1
+      EVOLUTION_API_URL: http://evolution_api:8080
+      EVOLUTION_API_KEY: ${EVOLUTION_API_KEY:-smpi-evolution-key-2024}
+      EVOLUTION_INSTANCE: ${EVOLUTION_INSTANCE:-smpi}
     depends_on:
       postgresql:
         condition: service_healthy
@@ -93,12 +96,43 @@ services:
       CELERY_BROKER_URL: amqp://${RABBITMQ_DEFAULT_USER:-smpi}:${RABBITMQ_DEFAULT_PASS:-smpi_rabbit_pass}@rabbitmq:5672/
       CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD:-smpi_redis_pass}@redis:6379/0
       REDIS_URL: redis://:${REDIS_PASSWORD:-smpi_redis_pass}@redis:6379/1
+      EVOLUTION_API_URL: http://evolution_api:8080
+      EVOLUTION_API_KEY: ${EVOLUTION_API_KEY:-smpi-evolution-key-2024}
+      EVOLUTION_INSTANCE: ${EVOLUTION_INSTANCE:-smpi}
     depends_on:
       postgresql:
         condition: service_healthy
       redis:
         condition: service_healthy
       rabbitmq:
+        condition: service_healthy
+
+  # -----------------------------------------------------------------------
+  # Evolution API (WhatsApp)
+  # -----------------------------------------------------------------------
+  evolution_api:
+    image: atendai/evolution-api:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - evolution_data:/evolution/instances
+    environment:
+      SERVER_URL: http://localhost:8080
+      AUTHENTICATION_TYPE: apikey
+      AUTHENTICATION_API_KEY: ${EVOLUTION_API_KEY:-smpi-evolution-key-2024}
+      AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES: "true"
+      DATABASE_ENABLED: "false"
+      REDIS_ENABLED: "true"
+      REDIS_URI: redis://:${REDIS_PASSWORD:-smpi_redis_pass}@redis:6379/3
+      REDIS_PREFIX_KEY: evolution
+      STORE_MESSAGES: "true"
+      STORE_CONTACTS: "true"
+      STORE_CHATS: "true"
+      WEBHOOK_GLOBAL_URL: ""
+      WEBHOOK_GLOBAL_ENABLED: "false"
+      LOG_LEVEL: ERROR
+    depends_on:
+      redis:
         condition: service_healthy
 
   # -----------------------------------------------------------------------
@@ -127,3 +161,4 @@ services:
 volumes:
   postgres_data:
   media_data:
+  evolution_data:
