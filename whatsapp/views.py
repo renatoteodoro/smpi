@@ -32,7 +32,13 @@ class WebhookView(View):
             if key.get('fromMe'):
                 return JsonResponse({'status': 'ignored'})
 
-            phone = key.get('remoteJid', '').split('@')[0]
+            remote_jid = key.get('remoteJid', '')
+        sender_pn = key.get('senderPn', '')
+        # remoteJid com @lid é ID interno do WhatsApp — usa senderPn para o número real
+        if remote_jid.endswith('@lid') and sender_pn:
+            phone = sender_pn.split('@')[0]
+        else:
+            phone = remote_jid.split('@')[0]
             message_id = key.get('id', '')
             content = (
                 msg_data.get('conversation')
