@@ -62,6 +62,15 @@ class ReportCreateView(LoginRequiredMixin, View):
         return redirect('reports:report_list')
 
 
+class ReportDetailRedirectView(LoginRequiredMixin, View):
+    """Redireciona /reports/<pk>/ para download ou lista caso arquivo não exista."""
+    def get(self, request, pk):
+        report = get_object_or_404(ReportRequest, pk=pk, requested_by=request.user)
+        if report.status == 'done' and report.file:
+            return redirect('reports:report_download', pk=pk)
+        return redirect('reports:report_list')
+
+
 class ReportDeleteView(LoginRequiredMixin, DeleteView):
     model = ReportRequest
     success_url = reverse_lazy('reports:report_list')
