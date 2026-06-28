@@ -31,32 +31,17 @@ class ReportCreateView(LoginRequiredMixin, View):
             filters['date_from'] = request.POST.get('date_from')
         if request.POST.get('date_to'):
             filters['date_to'] = request.POST.get('date_to')
-        report = ReportRequest.objects.create(
+            report = ReportRequest.objects.create(
             requested_by=request.user,
             format=fmt,
             filters=filters,
         )
-        # Tenta Celery; se worker não estiver disponível, executa de forma síncrona
-        queued = False
         try:
             from .tasks import generate_report
-            generate_report.delay(report.pk)
-            queued = True
-        except Exception:
-            pass
-
-        if not queued:
-            try:
-                from .tasks import generate_report
-                generate_report(report.pk)
-            except Exception as exc:
-                messages.error(request, f'Erro ao gerar relatório: {exc}')
-                return redirect('reports:report_list')
-
-        if queued:
-            messages.success(request, 'Relatório sendo gerado em background. Você será notificado ao concluir.')
-        else:
-            messages.success(request, 'Relatório gerado com sucesso. Clique em Baixar.')
+            generate_report(report.pk)
+            messages.success(request, 'Relatório gerado. Clique em Baixar.')
+        except Exception as exc:
+            messages.error(request, f'Erro ao gerar relatório: {exc}')
         return redirect('reports:report_list')
 
 
@@ -107,18 +92,10 @@ class ReportRetryView(LoginRequiredMixin, View):
         report.status = 'pending'
         report.error = ''
         report.save(update_fields=['file', 'status', 'error', 'updated_at'])
-        queued = False
         try:
             from .tasks import generate_report
-            generate_report.delay(report.pk)
-            queued = True
-        except Exception:
-            pass
-        if not queued:
-            from .tasks import generate_report
             generate_report(report.pk)
-        if queued:
-            messages.info(request, 'Relatório sendo regenerado em background.')
-        else:
             messages.success(request, 'Relatório regenerado. Clique em Baixar.')
+        except Exception as exc:
+            messages.error(request, f'Erro ao regenerar relatório: {exc}')
         return redirect('reports:report_list')
