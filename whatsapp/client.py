@@ -16,11 +16,12 @@ def _headers():
 
 
 def send_text(phone: str, text: str) -> dict:
-    """Send a plain-text WhatsApp message via Evolution API v1."""
+    """Send a plain-text WhatsApp message via Evolution API v2."""
     url = f'{EVOLUTION_API_URL}/message/sendText/{EVOLUTION_INSTANCE}'
     payload = {
         'number': phone.lstrip('+').replace(' ', ''),
-        'textMessage': {'text': text},
+        'text': text,
+        'delay': 1200,
     }
     try:
         resp = requests.post(url, json=payload, headers=_headers(), timeout=15)

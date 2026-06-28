@@ -6,6 +6,14 @@ Uses django-environ for environment variable management.
 from pathlib import Path
 import environ
 
+
+def _read_secret(name: str) -> str:
+    """Read a Docker Secret from /run/secrets/. Returns '' if file not found."""
+    try:
+        return (Path('/run/secrets') / name).read_text().strip()
+    except OSError:
+        return ''
+
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
@@ -42,7 +50,7 @@ environ.Env.read_env(BASE_DIR / '.env', overwrite=False)
 # ---------------------------------------------------------------------------
 # Core
 # ---------------------------------------------------------------------------
-SECRET_KEY = env('SECRET_KEY', default='django-insecure-change-me-in-production')
+SECRET_KEY = env('SECRET_KEY', default=None) or _read_secret('smpi_django_secret') or 'django-insecure-change-me-in-production'
 DEBUG = env('DEBUG')
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS')
@@ -131,7 +139,7 @@ else:
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': env('POSTGRES_DB', default='smpi'),
             'USER': env('POSTGRES_USER', default='smpi'),
-            'PASSWORD': env('POSTGRES_PASSWORD', default='smpi'),
+            'PASSWORD': _read_secret('smpi_db_password') or env('POSTGRES_PASSWORD', default='smpi'),
             'HOST': env('POSTGRES_HOST', default='localhost'),
             'PORT': env('POSTGRES_PORT', default='5432'),
         }
@@ -202,6 +210,21 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_RESULT_EXTENDED = True
 
 # ---------------------------------------------------------------------------
+# Docker Secrets — sobrescreve credenciais de conexão em produção
+# ---------------------------------------------------------------------------
+_redis_secret = _read_secret('smpi_redis_password')
+_rabbit_secret = _read_secret('smpi_rabbit_password')
+if _redis_secret:
+    _rh = env('REDIS_HOST', default='redis')
+    CELERY_RESULT_BACKEND = f'redis://:{_redis_secret}@{_rh}:6379/0'
+    REDIS_URL = f'redis://:{_redis_secret}@{_rh}:6379/1'
+    CACHES['default']['LOCATION'] = REDIS_URL
+if _rabbit_secret:
+    _rmq_user = env('RABBITMQ_DEFAULT_USER', default='smpi')
+    _rmq_host = env('RABBITMQ_HOST', default='rabbitmq')
+    CELERY_BROKER_URL = f'amqp://{_rmq_user}:{_rabbit_secret}@{_rmq_host}:5672/'
+
+# ---------------------------------------------------------------------------
 # Django REST Framework
 # ---------------------------------------------------------------------------
 REST_FRAMEWORK = {
@@ -255,7 +278,7 @@ DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER', default='noreply@smpi.local')
 LLM_PROVIDER = env('LLM_PROVIDER')
 LLM_MODEL = env('LLM_MODEL')
 EMBEDDINGS_MODEL = env('EMBEDDINGS_MODEL')
-OPENAI_API_KEY = env('OPENAI_API_KEY', default='')
+OPENAI_API_KEY = env('OPENAI_API_KEY', default='') or _read_secret('smpi_openai_key')
 ANTHROPIC_API_KEY = env('ANTHROPIC_API_KEY', default='')
 LANGSMITH_API_KEY = env('LANGSMITH_API_KEY', default='')
 
@@ -263,7 +286,7 @@ LANGSMITH_API_KEY = env('LANGSMITH_API_KEY', default='')
 # Evolution API (WhatsApp)
 # ---------------------------------------------------------------------------
 EVOLUTION_API_URL = env('EVOLUTION_API_URL')
-EVOLUTION_API_KEY = env('EVOLUTION_API_KEY')
+EVOLUTION_API_KEY = env('EVOLUTION_API_KEY') or _read_secret('smpi_evolution_key')
 EVOLUTION_INSTANCE = env('EVOLUTION_INSTANCE')
 
 # ---------------------------------------------------------------------------
@@ -276,3 +299,16 @@ SCALER_PATH = BASE_DIR / 'ml_artifacts' / 'scaler.pkl'
 # ---------------------------------------------------------------------------
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 SESSION_COOKIE_AGE = 86400 * 7  # 7 days
+
+# ---------------------------------------------------------------------------
+# Segurança HTTP (produção — atrás do Traefik/proxy reverso)
+# ---------------------------------------------------------------------------
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_REDIRECT_EXEMPT = [r'^health/$']
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
