@@ -121,17 +121,30 @@ services:
       AUTHENTICATION_TYPE: apikey
       AUTHENTICATION_API_KEY: ${EVOLUTION_API_KEY:-smpi-evolution-key-2024}
       AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES: "true"
-      DATABASE_ENABLED: "false"
-      REDIS_ENABLED: "true"
-      REDIS_URI: redis://:${REDIS_PASSWORD:-smpi_redis_pass}@redis:6379/3
-      REDIS_PREFIX_KEY: evolution
-      STORE_MESSAGES: "true"
-      STORE_CONTACTS: "true"
-      STORE_CHATS: "true"
-      WEBHOOK_GLOBAL_URL: ""
+      # Database (PostgreSQL compartilhado — Prisma cria suas próprias tabelas)
+      DATABASE_ENABLED: "true"
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: postgresql://${POSTGRES_USER:-smpi}:${POSTGRES_PASSWORD:-smpi_dev_password}@postgresql:5432/evolution
+      DATABASE_CONNECTION_CLIENT_NAME: evolution
+      DATABASE_SAVE_DATA_INSTANCE: "true"
+      DATABASE_SAVE_DATA_NEW_MESSAGE: "true"
+      DATABASE_SAVE_MESSAGE_UPDATE: "true"
+      DATABASE_SAVE_DATA_CONTACTS: "true"
+      DATABASE_SAVE_DATA_CHATS: "true"
+      DATABASE_SAVE_DATA_LABELS: "true"
+      DATABASE_SAVE_DATA_HISTORIC: "true"
+      # Cache
+      CACHE_REDIS_ENABLED: "true"
+      CACHE_REDIS_URI: redis://:${REDIS_PASSWORD:-smpi_redis_pass}@redis:6379/3
+      CACHE_REDIS_PREFIX_KEY: evolution
+      CACHE_REDIS_SAVE_INSTANCES: "false"
+      # Webhook global desativado (configurado por instância)
       WEBHOOK_GLOBAL_ENABLED: "false"
+      QRCODE_LIMIT: "30"
       LOG_LEVEL: ERROR
     depends_on:
+      postgresql:
+        condition: service_healthy
       redis:
         condition: service_healthy
 
