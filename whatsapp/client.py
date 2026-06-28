@@ -12,11 +12,11 @@ EVOLUTION_INSTANCE = getattr(settings, 'EVOLUTION_INSTANCE', 'smpi')
 
 
 def send_text(phone: str, text: str) -> dict:
-    """Send a plain-text WhatsApp message via Evolution API."""
+    """Send a plain-text WhatsApp message via Evolution API v1."""
     url = f'{EVOLUTION_API_URL}/message/sendText/{EVOLUTION_INSTANCE}'
     payload = {
         'number': phone.lstrip('+').replace(' ', ''),
-        'text': text,
+        'textMessage': {'text': text},
     }
     try:
         resp = requests.post(
