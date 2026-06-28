@@ -27,6 +27,10 @@ class ReportCreateView(LoginRequiredMixin, View):
             filters['status'] = request.POST.get('status')
         if request.POST.get('fault'):
             filters['fault'] = request.POST.get('fault')
+        if request.POST.get('date_from'):
+            filters['date_from'] = request.POST.get('date_from')
+        if request.POST.get('date_to'):
+            filters['date_to'] = request.POST.get('date_to')
         report = ReportRequest.objects.create(
             requested_by=request.user,
             format=fmt,

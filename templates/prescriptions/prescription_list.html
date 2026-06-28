@@ -7,6 +7,34 @@
 {% block page_title %}Prescrições Geradas{% endblock %}
 
 {% block content %}
+
+<form method="get" aria-label="Filtros de prescrições" style="margin-bottom:1.25rem">
+  <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-end">
+    <div class="smpi-form-group" style="margin:0;min-width:140px">
+      <label for="pl-date-from" style="font-size:var(--fs-100)">De</label>
+      <input type="date" id="pl-date-from" name="date_from" value="{{ request.GET.date_from }}" style="padding:.35rem .6rem;font-size:var(--fs-200)">
+    </div>
+    <div class="smpi-form-group" style="margin:0;min-width:140px">
+      <label for="pl-date-to" style="font-size:var(--fs-100)">Até</label>
+      <input type="date" id="pl-date-to" name="date_to" value="{{ request.GET.date_to }}" style="padding:.35rem .6rem;font-size:var(--fs-200)">
+    </div>
+    <div class="smpi-form-group" style="margin:0;min-width:160px">
+      <label for="pl-fault" style="font-size:var(--fs-100)">Tipo de defeito</label>
+      <input type="text" id="pl-fault" name="fault" value="{{ request.GET.fault }}" placeholder="ex: cocked_rotor" style="padding:.35rem .6rem;font-size:var(--fs-200)">
+    </div>
+    <button type="submit" class="smpi-btn smpi-btn--outline smpi-btn--sm">
+      <span class="material-icons" aria-hidden="true" style="font-size:1rem">filter_alt</span>
+      Filtrar
+    </button>
+    {% if request.GET.date_from or request.GET.date_to or request.GET.fault %}
+    <a href="?" class="smpi-btn smpi-btn--sm" style="color:#666">
+      <span class="material-icons" aria-hidden="true" style="font-size:1rem">close</span>
+      Limpar
+    </a>
+    {% endif %}
+  </div>
+</form>
+
 <div class="smpi-card" style="overflow-x:auto">
   <table class="smpi-table" aria-label="Lista de prescrições geradas pelo sistema">
     <thead>

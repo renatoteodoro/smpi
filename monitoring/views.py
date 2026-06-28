@@ -27,6 +27,12 @@ class ReadingListView(LoginRequiredMixin, ListView):
         equipment = self.request.GET.get('equipment')
         if equipment:
             qs = qs.filter(measurement_point__equipment_id=equipment)
+        date_from = self.request.GET.get('date_from')
+        if date_from:
+            qs = qs.filter(event_created_at__date__gte=date_from)
+        date_to = self.request.GET.get('date_to')
+        if date_to:
+            qs = qs.filter(event_created_at__date__lte=date_to)
         return qs
 
     def get_context_data(self, **kwargs):

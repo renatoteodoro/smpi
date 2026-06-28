@@ -17,9 +17,19 @@ class PrescriptionListView(LoginRequiredMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return super().get_queryset().select_related(
+        qs = super().get_queryset().select_related(
             'fault', 'sensor_reading__measurement_point__equipment'
         )
+        date_from = self.request.GET.get('date_from')
+        if date_from:
+            qs = qs.filter(created_at__date__gte=date_from)
+        date_to = self.request.GET.get('date_to')
+        if date_to:
+            qs = qs.filter(created_at__date__lte=date_to)
+        fault = self.request.GET.get('fault')
+        if fault:
+            qs = qs.filter(defect_type__icontains=fault)
+        return qs
 
 
 class PrescriptionDetailView(LoginRequiredMixin, DetailView):

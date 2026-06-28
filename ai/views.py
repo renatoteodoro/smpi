@@ -16,7 +16,7 @@ class SessionListView(LoginRequiredMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return super().get_queryset().filter(user=self.request.user)
+        return super().get_queryset().filter(user=self.request.user).exclude(title='Chatbot flutuante')
 
 
 class SessionCreateView(LoginRequiredMixin, View):
@@ -39,12 +39,12 @@ class SessionDetailView(LoginRequiredMixin, DetailView):
         return ctx
 
 
-def _sse_stream(session, user_message):
+def _sse_stream(session, user_message, history_limit=None):
     """Generator that yields SSE-formatted data lines."""
     from .agent import stream_chat_with_agent
     full_response = ''
     try:
-        for chunk in stream_chat_with_agent(session.pk, user_message):
+        for chunk in stream_chat_with_agent(session.pk, user_message, history_limit=history_limit):
             full_response += chunk
             yield f"data: {chunk.replace(chr(10), '\\n').replace(chr(13), '')}\n\n"
     except Exception as e:
@@ -87,7 +87,7 @@ def chatbot_stream(request):
     )
     ChatMessage.objects.create(session=session, role='user', content=user_message)
 
-    response = StreamingHttpResponse(_sse_stream(session, user_message), content_type='text/event-stream')
+    response = StreamingHttpResponse(_sse_stream(session, user_message, history_limit=20), content_type='text/event-stream')
     response['Cache-Control'] = 'no-cache'
     response['X-Accel-Buffering'] = 'no'
     return response

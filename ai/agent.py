@@ -479,9 +479,13 @@ def _get_agent():
     return create_react_agent(get_llm(), _TOOLS, prompt=SYSTEM_PROMPT)
 
 
-def _build_history(session):
+def _build_history(session, limit=None):
+    qs = session.messages.all()
+    if limit:
+        qs = qs.order_by('-created_at')[:limit]
+        qs = reversed(list(qs))
     history = []
-    for msg in session.messages.all():
+    for msg in qs:
         if msg.role == 'user':
             history.append(HumanMessage(content=msg.content))
         elif msg.role == 'assistant':
@@ -499,11 +503,11 @@ def chat_with_agent(session_id: int, user_message: str) -> str:
     return last.content if hasattr(last, 'content') else str(last)
 
 
-def stream_chat_with_agent(session_id: int, user_message: str):
+def stream_chat_with_agent(session_id: int, user_message: str, history_limit=None):
     """Yield string chunks from the agent stream."""
     from ai.models import ChatSession
     session = ChatSession.objects.prefetch_related('messages').get(pk=session_id)
-    history = _build_history(session)
+    history = _build_history(session, limit=history_limit)
     history.append(HumanMessage(content=user_message))
 
     try:

@@ -18,7 +18,7 @@
       </select>
     </div>
     <div class="smpi-form-group">
-      <label for="report-status">Filtrar leituras por status (opcional)</label>
+      <label for="report-status">Status das leituras (opcional)</label>
       <select id="report-status" name="status">
         <option value="">Todos os status</option>
         <option value="problem">Problemas</option>
@@ -26,7 +26,17 @@
         <option value="pending">Pendentes</option>
       </select>
     </div>
-    <button type="submit" class="smpi-btn smpi-btn--primary">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+      <div class="smpi-form-group" style="margin:0">
+        <label for="report-date-from">De (data)</label>
+        <input type="date" id="report-date-from" name="date_from" style="padding:.4rem .6rem;font-size:var(--fs-200)">
+      </div>
+      <div class="smpi-form-group" style="margin:0">
+        <label for="report-date-to">Até (data)</label>
+        <input type="date" id="report-date-to" name="date_to" style="padding:.4rem .6rem;font-size:var(--fs-200)">
+      </div>
+    </div>
+    <button type="submit" class="smpi-btn smpi-btn--primary" style="margin-top:.5rem">
       <span class="material-icons" aria-hidden="true" style="font-size:1rem">file_download</span>
       Solicitar Geração
     </button>

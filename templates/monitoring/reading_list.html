@@ -49,35 +49,53 @@
 </div>
 
 {# Filters + actions #}
-<div style="display:flex;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap;justify-content:space-between;align-items:center">
-  <div style="display:flex;gap:.5rem;flex-wrap:wrap" role="group" aria-label="Filtros de status">
-    <a href="?"
-       class="smpi-btn smpi-btn--sm {% if not request.GET.status %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}"
-       aria-pressed="{% if not request.GET.status %}true{% else %}false{% endif %}">
-      Todas
+<form method="get" aria-label="Filtros de leituras">
+  <div style="display:flex;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap;align-items:flex-end">
+    <div class="smpi-form-group" style="margin:0;min-width:140px">
+      <label for="rl-date-from" style="font-size:var(--fs-100)">De</label>
+      <input type="date" id="rl-date-from" name="date_from" value="{{ request.GET.date_from }}" style="padding:.35rem .6rem;font-size:var(--fs-200)">
+    </div>
+    <div class="smpi-form-group" style="margin:0;min-width:140px">
+      <label for="rl-date-to" style="font-size:var(--fs-100)">Até</label>
+      <input type="date" id="rl-date-to" name="date_to" value="{{ request.GET.date_to }}" style="padding:.35rem .6rem;font-size:var(--fs-200)">
+    </div>
+    <input type="hidden" name="status" value="{{ request.GET.status }}">
+    <button type="submit" class="smpi-btn smpi-btn--outline smpi-btn--sm">
+      <span class="material-icons" aria-hidden="true" style="font-size:1rem">filter_alt</span>
+      Filtrar
+    </button>
+    {% if request.GET.date_from or request.GET.date_to %}
+    <a href="?status={{ request.GET.status }}" class="smpi-btn smpi-btn--sm" style="color:#666">
+      <span class="material-icons" aria-hidden="true" style="font-size:1rem">close</span>
+      Limpar datas
     </a>
-    <a href="?status=problem"
-       class="smpi-btn smpi-btn--sm {% if request.GET.status == 'problem' %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}"
-       aria-pressed="{% if request.GET.status == 'problem' %}true{% else %}false{% endif %}">
-      Problemas
-    </a>
-    <a href="?status=state"
-       class="smpi-btn smpi-btn--sm {% if request.GET.status == 'state' %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}"
-       aria-pressed="{% if request.GET.status == 'state' %}true{% else %}false{% endif %}">
-      Estados
-    </a>
-    <a href="?status=pending"
-       class="smpi-btn smpi-btn--sm {% if request.GET.status == 'pending' %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}"
-       aria-pressed="{% if request.GET.status == 'pending' %}true{% else %}false{% endif %}">
-      Pendentes
+    {% endif %}
+  </div>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;justify-content:space-between;align-items:center">
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap" role="group" aria-label="Filtros de status">
+      <a href="?date_from={{ request.GET.date_from }}&date_to={{ request.GET.date_to }}"
+         class="smpi-btn smpi-btn--sm {% if not request.GET.status %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}">
+        Todas
+      </a>
+      <a href="?status=problem&date_from={{ request.GET.date_from }}&date_to={{ request.GET.date_to }}"
+         class="smpi-btn smpi-btn--sm {% if request.GET.status == 'problem' %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}">
+        Problemas
+      </a>
+      <a href="?status=state&date_from={{ request.GET.date_from }}&date_to={{ request.GET.date_to }}"
+         class="smpi-btn smpi-btn--sm {% if request.GET.status == 'state' %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}">
+        Estados
+      </a>
+      <a href="?status=pending&date_from={{ request.GET.date_from }}&date_to={{ request.GET.date_to }}"
+         class="smpi-btn smpi-btn--sm {% if request.GET.status == 'pending' %}smpi-btn--primary{% else %}smpi-btn--outline{% endif %}">
+        Pendentes
+      </a>
+    </div>
+    <a href="{% url 'monitoring:reading_create' %}" class="smpi-btn smpi-btn--primary">
+      <span class="material-icons" aria-hidden="true" style="font-size:1.1rem">add</span>
+      Nova leitura
     </a>
   </div>
-
-  <a href="{% url 'monitoring:reading_create' %}" class="smpi-btn smpi-btn--primary">
-    <span class="material-icons" aria-hidden="true" style="font-size:1.1rem">add</span>
-    Nova leitura
-  </a>
-</div>
+</form>
 
 {# Table #}
 <div class="smpi-card" style="overflow-x:auto">

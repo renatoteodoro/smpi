@@ -19,6 +19,10 @@ def generate_report(self, report_id: int):
             qs = qs.filter(status_class=report.filters['status'])
         if report.filters.get('fault'):
             qs = qs.filter(fault__code=report.filters['fault'])
+        if report.filters.get('date_from'):
+            qs = qs.filter(event_created_at__date__gte=report.filters['date_from'])
+        if report.filters.get('date_to'):
+            qs = qs.filter(event_created_at__date__lte=report.filters['date_to'])
 
         if report.format == 'csv':
             from .generators import generate_csv
