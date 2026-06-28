@@ -56,6 +56,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // ── Chatbot: restaura histórico da sessão do navegador ───────────────────
+  _chatbotLoadHistory();
+
   // ── Chatbot Enter-key support ─────────────────────────────────────────────
   const chatInput = document.getElementById('chatbot-input');
   if (chatInput) {
@@ -92,50 +95,78 @@ function getCsrf() {
 
 // ── Floating chatbot ─────────────────────────────────────────────────────────
 
-/**
- * Toggle the chatbot panel open/closed.
- */
+var CHATBOT_SESSION_KEY = 'smpi_chatbot_history';
+var CHATBOT_MAX_MSGS    = 20;
+
+function _chatbotLoadHistory() {
+  var messages = document.getElementById('chatbot-messages');
+  if (!messages) return;
+  try {
+    var stored = sessionStorage.getItem(CHATBOT_SESSION_KEY);
+    if (!stored) return;
+    var history = JSON.parse(stored);
+    history.forEach(function(m) {
+      var bubble = document.createElement('div');
+      bubble.className = 'smpi-chat-msg smpi-chat-msg--' + m.role;
+      if (m.role === 'assistant' && window.marked) {
+        bubble.innerHTML = window.marked.parse(m.content);
+      } else {
+        bubble.textContent = m.content;
+      }
+      messages.appendChild(bubble);
+    });
+    messages.scrollTop = messages.scrollHeight;
+  } catch (e) {}
+}
+
+function _chatbotSaveMessage(role, content) {
+  try {
+    var stored = sessionStorage.getItem(CHATBOT_SESSION_KEY);
+    var history = stored ? JSON.parse(stored) : [];
+    history.push({ role: role, content: content });
+    if (history.length > CHATBOT_MAX_MSGS) {
+      history = history.slice(history.length - CHATBOT_MAX_MSGS);
+    }
+    sessionStorage.setItem(CHATBOT_SESSION_KEY, JSON.stringify(history));
+  } catch (e) {}
+}
+
 function toggleChatbot() {
-  const panel = document.getElementById('chatbot-panel');
-  const btn   = document.querySelector('.smpi-chatbot-btn');
+  var panel = document.getElementById('chatbot-panel');
+  var btn   = document.querySelector('.smpi-chatbot-btn');
   if (!panel) return;
-  const isOpen = panel.classList.toggle('open');
+  var isOpen = panel.classList.toggle('open');
   if (btn) btn.setAttribute('aria-expanded', isOpen);
   if (isOpen) {
-    const input = document.getElementById('chatbot-input');
+    var input = document.getElementById('chatbot-input');
     if (input) input.focus();
   }
 }
 
-/**
- * Send a message via the floating chatbot.
- * POSTs to /ai/chatbot/stream/ and reads the SSE response body directly.
- */
 function sendChatbotMessage() {
-  const input    = document.getElementById('chatbot-input');
-  const messages = document.getElementById('chatbot-messages');
+  var input    = document.getElementById('chatbot-input');
+  var messages = document.getElementById('chatbot-messages');
   if (!input || !messages) return;
 
-  const text = input.value.trim();
+  var text = input.value.trim();
   if (!text) return;
 
   input.value = '';
   input.disabled = true;
 
-  // User bubble
-  const userBubble = document.createElement('div');
+  var userBubble = document.createElement('div');
   userBubble.className = 'smpi-chat-msg smpi-chat-msg--user';
   userBubble.textContent = text;
   messages.appendChild(userBubble);
+  _chatbotSaveMessage('user', text);
 
-  // Assistant loading bubble
-  const asstBubble = document.createElement('div');
+  var asstBubble = document.createElement('div');
   asstBubble.className = 'smpi-chat-msg smpi-chat-msg--assistant';
   asstBubble.innerHTML = '<span class="smpi-spinner" aria-label="Processando..."></span>';
   messages.appendChild(asstBubble);
   messages.scrollTop = messages.scrollHeight;
 
-  const formData = new FormData();
+  var formData = new FormData();
   formData.append('message', text);
   formData.append('csrfmiddlewaretoken', getCsrf());
 
@@ -143,23 +174,26 @@ function sendChatbotMessage() {
     .then(function(response) {
       if (!response.ok) throw new Error('HTTP ' + response.status);
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let sseBuffer = '';
-      let fullText = '';
+      var reader = response.body.getReader();
+      var decoder = new TextDecoder();
+      var sseBuffer = '';
+      var fullText = '';
 
       function readChunk() {
         return reader.read().then(function(result) {
           if (result.done) return;
           sseBuffer += decoder.decode(result.value, { stream: true });
-          const lines = sseBuffer.split('\n');
+          var lines = sseBuffer.split('\n');
           sseBuffer = lines.pop();
 
-          for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
+          for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
             if (!line.startsWith('data: ')) continue;
-            const token = line.slice(6);
-            if (token === '[DONE]') return;
+            var token = line.slice(6);
+            if (token === '[DONE]') {
+              _chatbotSaveMessage('assistant', fullText);
+              return;
+            }
             if (token.startsWith('[ERROR]')) {
               asstBubble.textContent = 'Erro: ' + token.slice(8);
               return;

@@ -175,16 +175,6 @@ body {
         </a>
       </li>
 
-      <li class="smpi-nav__section" aria-hidden="true">IA &amp; Chat</li>
-
-      <li class="smpi-nav__item">
-        <a href="{{ url_ai|default:'#' }}"
-           {% if request.resolver_match.namespace == 'ai' %}class="active" aria-current="page"{% endif %}>
-          <span class="material-icons" aria-hidden="true">chat</span>
-          Chat IA
-        </a>
-      </li>
-
       <li class="smpi-nav__section" aria-hidden="true">Relatórios</li>
 
       <li class="smpi-nav__item">
@@ -403,7 +393,7 @@ body {
 
 {# ── SMPI JS ── #}
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="{% static 'js/smpi.js' %}?v=3"></script>
+<script src="{% static 'js/smpi.js' %}?v=4"></script>
 
 {% block extra_scripts %}{% endblock %}
 </body>
