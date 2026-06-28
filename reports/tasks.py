@@ -42,7 +42,7 @@ def generate_report(self, report_id: int):
             title='Relatório pronto',
             message=f'Seu relatório {report.format.upper()} foi gerado.',
             level='success',
-            link=f'/reports/{report.pk}/',
+            link=f'/reports/{report.pk}/download/',
         )
     except Exception as exc:
         report.status = 'failed'
