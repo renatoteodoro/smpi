@@ -385,6 +385,8 @@ services:
       WEBHOOK_EVENTS_CONNECTION_UPDATE: "true"
       QRCODE_LIMIT: "30"
       LOG_LEVEL: ERROR
+    ports:
+      - "127.0.0.1:8080:8080"
     networks:
       - smpi_v1_internal
       - smpi_v1_egress
