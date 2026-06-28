@@ -53,6 +53,7 @@ class WebhookView(View):
                     defaults={
                         'direction': 'inbound',
                         'phone': phone,
+                        'reply_jid': remote_jid,  # JID original para responder
                         'content': content,
                         'raw_payload': payload,
                     }

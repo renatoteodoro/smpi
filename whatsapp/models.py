@@ -10,6 +10,7 @@ class WhatsAppMessage(TimeStampedModel):
 
     direction = models.CharField(max_length=10, choices=Direction.choices)
     phone = models.CharField(max_length=30)
+    reply_jid = models.CharField(max_length=100, blank=True)  # remoteJid para envio de resposta
     message_id = models.CharField(max_length=200, unique=True)
     content = models.TextField()
     raw_payload = models.JSONField(default=dict, blank=True)
