@@ -146,6 +146,16 @@ else:
         }
     }
 
+# Força client_encoding=UTF8 independente do encoding do servidor PostgreSQL.
+# Sem isso, bancos criados com SQL_ASCII fazem psycopg3 usar latin-1 e corrompem
+# caracteres multi-byte (ç, ã, é, etc.) ao gravar/ler texto do LLM.
+DATABASES['default'].setdefault('OPTIONS', {})
+_existing_opts = DATABASES['default']['OPTIONS'].get('options', '')
+if 'client_encoding' not in _existing_opts:
+    DATABASES['default']['OPTIONS']['options'] = (
+        (_existing_opts + ' -c client_encoding=UTF8').strip()
+    )
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ---------------------------------------------------------------------------

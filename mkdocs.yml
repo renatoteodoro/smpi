@@ -53,6 +53,7 @@ extra:
 
 nav:
   - Início: index.md
+  - Manual do Usuário: manual-usuario.md
   - Arquitetura:
     - Visão geral: architecture/overview.md
     - Modelo de dados: architecture/data-model.md

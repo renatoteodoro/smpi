@@ -40,8 +40,9 @@
                   color:{% if msg.role == 'user' %}white{% else %}var(--fsi-clr-4){% endif %};
                   box-shadow:0 1px 3px rgba(0,0,0,.1);
                   font-size:var(--fs-200);
-                  line-height:1.6">
-        {{ msg.content|linebreaks }}
+                  line-height:1.6"
+           {% if msg.role == 'assistant' %}data-md-bubble="true"{% endif %}>
+        {% if msg.role == 'assistant' %}<pre style="display:none;white-space:pre-wrap">{{ msg.content }}</pre>{% else %}{{ msg.content|linebreaks }}{% endif %}
       </div>
     </div>
     {% empty %}
@@ -101,6 +102,22 @@
 {% endblock %}
 
 {% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+// Render Markdown on stored assistant messages loaded from DB
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof marked === 'undefined') return;
+  document.querySelectorAll('[data-md-bubble]').forEach(function (bubble) {
+    var pre = bubble.querySelector('pre');
+    if (!pre) return;
+    try {
+      bubble.innerHTML = marked.parse(pre.textContent);
+    } catch (e) {
+      bubble.textContent = pre.textContent;
+    }
+  });
+});
+</script>
 <script>
 (function () {
   'use strict';

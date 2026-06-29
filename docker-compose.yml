@@ -10,6 +10,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-smpi}
       POSTGRES_USER: ${POSTGRES_USER:-smpi}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-smpi_dev_password}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C.UTF-8"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -65,6 +66,9 @@ services:
     env_file:
       - .env
     environment:
+      PYTHONIOENCODING: utf-8
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
       DATABASE_URL: postgresql://${POSTGRES_USER:-smpi}:${POSTGRES_PASSWORD:-smpi_dev_password}@postgresql:5432/${POSTGRES_DB:-smpi}
       CELERY_BROKER_URL: amqp://${RABBITMQ_DEFAULT_USER:-smpi}:${RABBITMQ_DEFAULT_PASS:-smpi_rabbit_pass}@rabbitmq:5672/
       CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD:-smpi_redis_pass}@redis:6379/0
@@ -92,6 +96,9 @@ services:
     env_file:
       - .env
     environment:
+      PYTHONIOENCODING: utf-8
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
       DATABASE_URL: postgresql://${POSTGRES_USER:-smpi}:${POSTGRES_PASSWORD:-smpi_dev_password}@postgresql:5432/${POSTGRES_DB:-smpi}
       CELERY_BROKER_URL: amqp://${RABBITMQ_DEFAULT_USER:-smpi}:${RABBITMQ_DEFAULT_PASS:-smpi_rabbit_pass}@rabbitmq:5672/
       CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD:-smpi_redis_pass}@redis:6379/0

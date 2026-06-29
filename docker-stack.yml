@@ -117,6 +117,10 @@ services:
       - media_data:/app/media
       - staticfiles_data:/app/staticfiles
       - model_cache:/app/ml_artifacts
+    environment:
+      PYTHONIOENCODING: utf-8
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
     env_file: .env
     secrets:
       - smpi_db_password
@@ -174,6 +178,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-smpi}
       POSTGRES_USER: ${POSTGRES_USER:-smpi}
       POSTGRES_PASSWORD_FILE: /run/secrets/smpi_db_password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C.UTF-8"
     secrets:
       - smpi_db_password
     volumes:
@@ -275,6 +280,10 @@ services:
     volumes:
       - media_data:/app/media
       - model_cache:/app/ml_artifacts
+    environment:
+      PYTHONIOENCODING: utf-8
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
     env_file: .env
     secrets:
       - smpi_db_password
@@ -305,6 +314,10 @@ services:
   celery_beat:
     image: ${IMAGE:-smpi_app:latest}
     command: celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    environment:
+      PYTHONIOENCODING: utf-8
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
     env_file: .env
     secrets:
       - smpi_db_password
