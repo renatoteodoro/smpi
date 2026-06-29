@@ -215,6 +215,25 @@
   
   
   
+    <li class="md-tabs__item">
+      <a href="../manual-usuario/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual do Usuário
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
     
     
       <li class="md-tabs__item">
@@ -355,6 +374,33 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../manual-usuario/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual do Usuário
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -369,10 +415,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   
@@ -390,8 +436,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -512,10 +558,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -533,8 +579,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -654,10 +700,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
             
   
   
@@ -675,8 +721,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -814,10 +860,43 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#evolution-api-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evolution API (WhatsApp)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#e-mail-smtp" class="md-nav__link">
     <span class="md-ellipsis">
       
         E-mail (SMTP)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#imagem-docker-deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Imagem Docker (deploy)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-secrets-producao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker Secrets (produção)
       
     </span>
   </a>
@@ -853,36 +932,49 @@
 
 
 <h1 id="variaveis-de-ambiente">Variáveis de ambiente<a class="headerlink" href="#variaveis-de-ambiente" title="Permanent link">&para;</a></h1>
-<p>O arquivo <code>.env</code> na raiz do projeto contém todas as variáveis necessárias. O arquivo é gitignored — nunca versione valores reais.</p>
+<p>O arquivo <code>.env</code> na raiz do projeto contém todas as variáveis de ambiente. O <code>.env</code> é gitignored — nunca versione valores reais. Use <code>.env.example</code> como template.</p>
+<p>Em <strong>produção</strong>, senhas e chaves de API são gerenciadas por <strong>Docker Secrets</strong> (ver seção abaixo). O <code>.env</code> de produção contém apenas configurações não-sensíveis.</p>
+<hr />
 <h2 id="django">Django<a class="headerlink" href="#django" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Variável</th>
-<th>Exemplo</th>
+<th>Dev</th>
+<th>Prod</th>
 <th>Descrição</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>SECRET_KEY</code></td>
-<td>—</td>
-<td>Chave secreta do Django. Gere com <code>python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"</code></td>
+<td>qualquer valor</td>
+<td>via Secret <code>smpi_django_secret</code></td>
+<td>Chave secreta do Django</td>
 </tr>
 <tr>
 <td><code>DEBUG</code></td>
 <td><code>True</code></td>
-<td><code>False</code> em produção</td>
+<td><code>False</code></td>
+<td>Modo debug</td>
 </tr>
 <tr>
 <td><code>ALLOWED_HOSTS</code></td>
-<td><code>localhost,127.0.0.1</code></td>
-<td>Hosts permitidos (separados por vírgula)</td>
+<td><code>localhost,127.0.0.1,app</code></td>
+<td><code>www.techteo.com.br,techteo.com.br,localhost,127.0.0.1</code></td>
+<td>Hosts permitidos (vírgula)</td>
 </tr>
 <tr>
 <td><code>CSRF_TRUSTED_ORIGINS</code></td>
 <td><code>http://localhost:8000</code></td>
-<td>Origens confiáveis para CSRF</td>
+<td><code>https://www.techteo.com.br,https://techteo.com.br</code></td>
+<td>Origens CSRF confiáveis</td>
+</tr>
+<tr>
+<td><code>DOMAIN</code></td>
+<td><code>localhost</code></td>
+<td><code>www.techteo.com.br</code></td>
+<td>Domínio principal (usado pelo Traefik e Evolution API)</td>
 </tr>
 </tbody>
 </table>
@@ -891,7 +983,7 @@
 <thead>
 <tr>
 <th>Variável</th>
-<th>Exemplo</th>
+<th>Padrão</th>
 <th>Descrição</th>
 </tr>
 </thead>
@@ -913,7 +1005,8 @@
 <thead>
 <tr>
 <th>Variável</th>
-<th>Exemplo</th>
+<th>Dev</th>
+<th>Prod</th>
 <th>Descrição</th>
 </tr>
 </thead>
@@ -921,22 +1014,38 @@
 <tr>
 <td><code>POSTGRES_DB</code></td>
 <td><code>smpi</code></td>
+<td><code>smpi</code></td>
 <td>Nome do banco</td>
 </tr>
 <tr>
 <td><code>POSTGRES_USER</code></td>
 <td><code>smpi</code></td>
+<td><code>smpi</code></td>
 <td>Usuário</td>
 </tr>
 <tr>
 <td><code>POSTGRES_PASSWORD</code></td>
-<td>—</td>
+<td><code>smpi_dev_password</code></td>
+<td>via Secret <code>smpi_db_password</code></td>
 <td>Senha</td>
 </tr>
 <tr>
+<td><code>POSTGRES_HOST</code></td>
+<td><code>localhost</code></td>
+<td><code>postgresql</code></td>
+<td>Host (nome do serviço Docker)</td>
+</tr>
+<tr>
+<td><code>POSTGRES_PORT</code></td>
+<td><code>5432</code></td>
+<td><code>5432</code></td>
+<td>Porta</td>
+</tr>
+<tr>
 <td><code>DATABASE_URL</code></td>
-<td><code>postgres://smpi:senha@localhost:5432/smpi</code></td>
-<td>URL completa (alternativa às variáveis individuais)</td>
+<td><code>postgresql://smpi:senha@localhost:5432/smpi</code></td>
+<td>gerado via secrets</td>
+<td>URL completa (alternativa)</td>
 </tr>
 </tbody>
 </table>
@@ -945,17 +1054,25 @@
 <thead>
 <tr>
 <th>Variável</th>
-<th>Descrição</th>
+<th>Dev</th>
+<th>Prod</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>RABBITMQ_DEFAULT_USER</code></td>
-<td>Usuário do RabbitMQ</td>
+<td><code>smpi</code></td>
+<td><code>smpi</code></td>
 </tr>
 <tr>
 <td><code>RABBITMQ_DEFAULT_PASS</code></td>
-<td>Senha do RabbitMQ</td>
+<td><code>smpi_rabbit_pass</code></td>
+<td>via Secret <code>smpi_rabbit_password</code></td>
+</tr>
+<tr>
+<td><code>RABBITMQ_HOST</code></td>
+<td><code>localhost</code></td>
+<td><code>rabbitmq</code></td>
 </tr>
 </tbody>
 </table>
@@ -964,25 +1081,41 @@
 <thead>
 <tr>
 <th>Variável</th>
-<th>Exemplo</th>
+<th>Dev</th>
+<th>Prod</th>
 <th>Descrição</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>CELERY_BROKER_URL</code></td>
-<td><code>amqp://user:pass@localhost:5672/</code></td>
-<td>URL do broker (RabbitMQ)</td>
+<td><code>amqp://smpi:pass@localhost:5672/</code></td>
+<td>gerado via secrets</td>
+<td>URL do broker</td>
 </tr>
 <tr>
 <td><code>CELERY_RESULT_BACKEND</code></td>
-<td><code>redis://localhost:6379/0</code></td>
+<td><code>redis://:pass@localhost:6379/0</code></td>
+<td>gerado via secrets</td>
 <td>Backend de resultados</td>
 </tr>
 <tr>
 <td><code>REDIS_URL</code></td>
-<td><code>redis://localhost:6379/1</code></td>
-<td>Redis para cache do app</td>
+<td><code>redis://:pass@localhost:6379/1</code></td>
+<td>gerado via secrets</td>
+<td>Redis para cache</td>
+</tr>
+<tr>
+<td><code>REDIS_PASSWORD</code></td>
+<td><code>smpi_redis_pass</code></td>
+<td>via Secret <code>smpi_redis_password</code></td>
+<td>Senha do Redis</td>
+</tr>
+<tr>
+<td><code>REDIS_HOST</code></td>
+<td><code>localhost</code></td>
+<td><code>redis</code></td>
+<td>Host do Redis</td>
 </tr>
 </tbody>
 </table>
@@ -991,25 +1124,77 @@
 <thead>
 <tr>
 <th>Variável</th>
+<th>Padrão</th>
 <th>Descrição</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>OPENAI_API_KEY</code></td>
-<td>Chave da API OpenAI (para GPT-5.5-mini)</td>
+<td>—</td>
+<td>Chave OpenAI · via Secret <code>smpi_openai_key</code> em prod</td>
 </tr>
 <tr>
-<td><code>OPENAI_MODEL</code></td>
-<td>Modelo a usar (ex.: <code>gpt-5.5-mini</code>)</td>
+<td><code>LLM_PROVIDER</code></td>
+<td><code>openai</code></td>
+<td>Provider do LLM (<code>openai</code> | <code>local</code>)</td>
+</tr>
+<tr>
+<td><code>LLM_MODEL</code></td>
+<td><code>gpt-4o-mini</code></td>
+<td>Modelo LLM (ex.: <code>gpt-4o-mini</code>, <code>gpt-4o</code>)</td>
+</tr>
+<tr>
+<td><code>EMBEDDINGS_MODEL</code></td>
+<td><code>text-embedding-3-small</code></td>
+<td>Modelo de embeddings</td>
 </tr>
 <tr>
 <td><code>ANTHROPIC_API_KEY</code></td>
-<td>Chave Anthropic (opcional)</td>
+<td>—</td>
+<td>Opcional (Anthropic)</td>
 </tr>
 <tr>
 <td><code>LANGSMITH_API_KEY</code></td>
-<td>Chave LangSmith para tracing (opcional)</td>
+<td>—</td>
+<td>Opcional (tracing LangSmith)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="evolution-api-whatsapp">Evolution API (WhatsApp)<a class="headerlink" href="#evolution-api-whatsapp" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Dev</th>
+<th>Prod</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EVOLUTION_API_URL</code></td>
+<td><code>http://localhost:8080</code></td>
+<td><code>http://evolution_api:8080</code></td>
+<td>URL da Evolution API</td>
+</tr>
+<tr>
+<td><code>EVOLUTION_API_KEY</code></td>
+<td><code>smpi-evolution-key-2024</code></td>
+<td>via Secret <code>smpi_evolution_key</code></td>
+<td>API key da Evolution</td>
+</tr>
+<tr>
+<td><code>EVOLUTION_INSTANCE</code></td>
+<td><code>smpi</code></td>
+<td><code>smpi</code></td>
+<td>Nome da instância WhatsApp</td>
+</tr>
+<tr>
+<td><code>EVOLUTION_REDIS_PASSWORD</code></td>
+<td><code>smpi_redis_pass</code></td>
+<td>via Secret <code>smpi_evolution_redis_password</code></td>
+<td>Senha do Redis dedicado</td>
 </tr>
 </tbody>
 </table>
@@ -1018,43 +1203,131 @@
 <thead>
 <tr>
 <th>Variável</th>
-<th>Padrão dev</th>
+<th>Dev</th>
+<th>Prod</th>
 <th>Descrição</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>EMAIL_BACKEND</code></td>
-<td><code>django.core.mail.backends.console.EmailBackend</code></td>
-<td>Em dev: imprime no console</td>
+<td><code>console.EmailBackend</code></td>
+<td><code>smtp.EmailBackend</code></td>
+<td>Backend de e-mail</td>
 </tr>
 <tr>
 <td><code>EMAIL_HOST</code></td>
-<td>—</td>
+<td><code>smtp.gmail.com</code></td>
+<td>seu SMTP</td>
 <td>Servidor SMTP</td>
 </tr>
 <tr>
 <td><code>EMAIL_PORT</code></td>
 <td><code>587</code></td>
-<td>Porta SMTP</td>
+<td><code>587</code></td>
+<td>Porta</td>
+</tr>
+<tr>
+<td><code>EMAIL_USE_TLS</code></td>
+<td><code>True</code></td>
+<td><code>True</code></td>
+<td>TLS</td>
 </tr>
 <tr>
 <td><code>EMAIL_HOST_USER</code></td>
 <td>—</td>
+<td>seu e-mail</td>
 <td>Usuário SMTP</td>
 </tr>
 <tr>
 <td><code>EMAIL_HOST_PASSWORD</code></td>
 <td>—</td>
+<td>senha de app</td>
 <td>Senha SMTP</td>
 </tr>
 </tbody>
 </table>
+<h2 id="imagem-docker-deploy">Imagem Docker (deploy)<a class="headerlink" href="#imagem-docker-deploy" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Dev</th>
+<th>Prod single-node</th>
+<th>Prod multi-node</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IMAGE</code></td>
+<td><code>smpi_app:latest</code></td>
+<td><code>smpi_app:latest</code></td>
+<td><code>ghcr.io/usuario/smpi_v1:latest</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="docker-secrets-producao">Docker Secrets (produção)<a class="headerlink" href="#docker-secrets-producao" title="Permanent link">&para;</a></h2>
+<p>Em produção, as senhas nunca ficam no <code>.env</code>. São criadas como Docker Secrets e lidas pelo <code>settings.py</code> a partir de <code>/run/secrets/</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Secret</th>
+<th>Variável equivalente</th>
+<th>Como criar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>smpi_django_secret</code></td>
+<td><code>SECRET_KEY</code></td>
+<td><code>printf '%s' "$(openssl rand -base64 50)" \| docker secret create smpi_django_secret -</code></td>
+</tr>
+<tr>
+<td><code>smpi_db_password</code></td>
+<td><code>POSTGRES_PASSWORD</code></td>
+<td><code>printf '%s' "$(openssl rand -base64 32)" \| docker secret create smpi_db_password -</code></td>
+</tr>
+<tr>
+<td><code>smpi_redis_password</code></td>
+<td><code>REDIS_PASSWORD</code></td>
+<td><code>printf '%s' "$(openssl rand -base64 32)" \| docker secret create smpi_redis_password -</code></td>
+</tr>
+<tr>
+<td><code>smpi_rabbit_password</code></td>
+<td><code>RABBITMQ_DEFAULT_PASS</code></td>
+<td><code>printf '%s' "$(openssl rand -base64 32)" \| docker secret create smpi_rabbit_password -</code></td>
+</tr>
+<tr>
+<td><code>smpi_evolution_redis_password</code></td>
+<td><code>EVOLUTION_REDIS_PASSWORD</code></td>
+<td><code>printf '%s' "$(openssl rand -base64 32)" \| docker secret create smpi_evolution_redis_password -</code></td>
+</tr>
+<tr>
+<td><code>smpi_openai_key</code></td>
+<td><code>OPENAI_API_KEY</code></td>
+<td><code>printf '%s' "sk-..." \| docker secret create smpi_openai_key -</code></td>
+</tr>
+<tr>
+<td><code>smpi_evolution_key</code></td>
+<td><code>EVOLUTION_API_KEY</code></td>
+<td><code>printf '%s' "api_key" \| docker secret create smpi_evolution_key -</code></td>
+</tr>
+<tr>
+<td><code>CLOUDFLARE_DNS_API_TOKEN</code></td>
+<td>—</td>
+<td><code>printf '%s' "cf_token" \| docker secret create CLOUDFLARE_DNS_API_TOKEN -</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>O <code>settings.py</code> lê <code>/run/secrets/&lt;nome&gt;</code> primeiro; se não existir, cai no valor do <code>.env</code>. Isso garante que dev e prod usem o mesmo código sem alteração.</p>
+</blockquote>
 <h2 id="notas-de-seguranca">Notas de segurança<a class="headerlink" href="#notas-de-seguranca" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Em produção, as senhas e chaves são gerenciadas por <strong>Docker Secrets</strong>, não por <code>.env</code>.</li>
-<li>Nunca use <code>source .env</code> em scripts shell — caracteres como <code>&amp;</code>, <code>$</code>, <code>*</code> e <code>@</code> quebram o shell. Use um parser de <code>KEY=VALUE</code>.</li>
-<li>O <code>.env</code> está no <code>.gitignore</code>; versione apenas <code>.env.example</code> com valores vazios.</li>
+<li>Nunca use <code>source .env</code> em scripts shell — caracteres como <code>&amp;</code>, <code>$</code>, <code>*</code> e <code>@</code> quebram o shell. Use um parser de <code>KEY=VALUE</code> (como o <code>deploy.sh</code>).</li>
+<li>O <code>.env</code> está no <code>.gitignore</code>; versione apenas <code>.env.example</code>.</li>
+<li>Em produção, o <code>.env</code> contém apenas configurações não-sensíveis (hosts, domínio, nomes de banco). Senhas ficam nos Secrets.</li>
 </ul>
 
 

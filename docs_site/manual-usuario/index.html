@@ -1,0 +1,2387 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica do SMPI · FIESC">
+      
+      
+        <meta name="author" content="Equipe FIESC">
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../architecture/overview/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Manual do Usuário - SMPI — Manutenção Prescritiva Inteligente</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#manual-do-usuario-smpi" class="md-skip">
+          Ir para o conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="SMPI — Manutenção Prescritiva Inteligente" class="md-header__button md-logo" aria-label="SMPI — Manutenção Prescritiva Inteligente" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 18v2h4v-2zm0-4v2h10v-2zm6 4v2h4v-2zm6-4v2h4v-2zm0 4v2h4v-2zM2 22V8l5 4V8l5 4V8l5 4 1-10h3l1 10v10z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SMPI — Manutenção Prescritiva Inteligente
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Manual do Usuário
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando a pesquisa
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual do Usuário
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../architecture/overview/" class="md-tabs__link">
+          
+  
+  
+  Arquitetura
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../deploy/swarm/" class="md-tabs__link">
+          
+  
+  
+  Deploy
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../api/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  API REST
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../dev/commands/" class="md-tabs__link">
+          
+  
+  
+  Desenvolvimento
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SMPI — Manutenção Prescritiva Inteligente" class="md-nav__button md-logo" aria-label="SMPI — Manutenção Prescritiva Inteligente" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 18v2h4v-2zm0-4v2h10v-2zm6 4v2h4v-2zm6-4v2h4v-2zm0 4v2h4v-2zM2 22V8l5 4V8l5 4V8l5 4 1-10h3l1 10v10z"/></svg>
+
+    </a>
+    SMPI — Manutenção Prescritiva Inteligente
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual do Usuário
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual do Usuário
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sistema-de-manutencao-prescritiva-inteligente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sistema de Manutenção Prescritiva Inteligente
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#o-que-e-o-smpi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que é o SMPI?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#perfis-de-acesso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Perfis de Acesso
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-acesso-ao-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Acesso ao Sistema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Acesso ao Sistema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entrar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#esqueci-minha-senha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Esqueci minha senha
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-dashboard-principal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Dashboard Principal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Dashboard Principal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-voce-ve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que você vê
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#graficos-disponiveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gráficos disponíveis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-equipamentos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Equipamentos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Equipamentos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ver-lista-de-equipamentos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ver lista de equipamentos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ver-detalhes-de-um-equipamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ver detalhes de um equipamento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resumo-com-ia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumo com IA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cadastrar-equipamento-somente-admin-e-tecnico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cadastrar equipamento (somente Admin e Técnico)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adicionar-ponto-de-medicao-somente-admin-e-tecnico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adicionar ponto de medição (somente Admin e Técnico)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-eventos-de-sensor-monitoramento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Eventos de Sensor (Monitoramento)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Eventos de Sensor (Monitoramento)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-e-um-evento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que é um evento?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lista-de-eventos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lista de eventos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detalhes-de-um-evento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detalhes de um evento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iniciar-analise-manualmente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iniciar análise manualmente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resumo-com-ia_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumo com IA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registrar-evento-manualmente-somente-admin-e-tecnico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registrar evento manualmente (somente Admin e Técnico)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-prescricoes-recomendacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Prescrições (Recomendações)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Prescrições (Recomendações)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-e-uma-prescricao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que é uma prescrição?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indicador-de-confiabilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indicador de confiabilidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-base-de-conhecimento-documentos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Base de Conhecimento (Documentos)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Base de Conhecimento (Documentos)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-e-a-base-de-conhecimento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que é a base de conhecimento?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ver-documentos-indexados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ver documentos indexados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adicionar-novo-documento-somente-admin-e-tecnico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adicionar novo documento (somente Admin e Técnico)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quando-adicionar-um-documento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quando adicionar um documento?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-chat-com-ia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Chat com IA
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Chat com IA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-e-o-chat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que é o Chat?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplos-de-perguntas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplos de perguntas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#como-usar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Como usar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chatbot-flutuante" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chatbot Flutuante
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-relatorios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Relatórios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Relatórios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tipos-de-relatorio-disponiveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipos de relatório disponíveis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gerar-um-relatorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gerar um relatório
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#baixar-o-relatorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Baixar o relatório
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-catalogo-de-defeitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Catálogo de Defeitos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-notificacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Notificações
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-atendimento-via-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Atendimento via WhatsApp
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Atendimento via WhatsApp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-e-possivel-pelo-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que é possível pelo WhatsApp
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-gestao-de-usuarios-somente-administrador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Gestão de Usuários (somente Administrador)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Gestão de Usuários (somente Administrador)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cadastrar-novo-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cadastrar novo usuário
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#editar-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Editar usuário
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-meu-perfil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Meu Perfil
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#duvidas-frequentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dúvidas frequentes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitetura
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Arquitetura
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modelo de dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/ai-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pipeline IA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Deploy
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy/swarm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker Swarm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy/env-vars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Variáveis de ambiente
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Desenvolvimento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup local
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sistema-de-manutencao-prescritiva-inteligente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sistema de Manutenção Prescritiva Inteligente
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#o-que-e-o-smpi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que é o SMPI?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#perfis-de-acesso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Perfis de Acesso
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-acesso-ao-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Acesso ao Sistema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Acesso ao Sistema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entrar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#esqueci-minha-senha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Esqueci minha senha
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-dashboard-principal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Dashboard Principal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Dashboard Principal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-voce-ve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que você vê
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#graficos-disponiveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gráficos disponíveis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-equipamentos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Equipamentos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Equipamentos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ver-lista-de-equipamentos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ver lista de equipamentos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ver-detalhes-de-um-equipamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ver detalhes de um equipamento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resumo-com-ia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumo com IA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cadastrar-equipamento-somente-admin-e-tecnico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cadastrar equipamento (somente Admin e Técnico)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adicionar-ponto-de-medicao-somente-admin-e-tecnico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adicionar ponto de medição (somente Admin e Técnico)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-eventos-de-sensor-monitoramento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Eventos de Sensor (Monitoramento)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Eventos de Sensor (Monitoramento)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-e-um-evento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que é um evento?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lista-de-eventos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lista de eventos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detalhes-de-um-evento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detalhes de um evento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iniciar-analise-manualmente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iniciar análise manualmente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resumo-com-ia_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumo com IA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registrar-evento-manualmente-somente-admin-e-tecnico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registrar evento manualmente (somente Admin e Técnico)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-prescricoes-recomendacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Prescrições (Recomendações)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Prescrições (Recomendações)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-e-uma-prescricao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que é uma prescrição?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indicador-de-confiabilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indicador de confiabilidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-base-de-conhecimento-documentos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Base de Conhecimento (Documentos)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Base de Conhecimento (Documentos)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-e-a-base-de-conhecimento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que é a base de conhecimento?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ver-documentos-indexados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ver documentos indexados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adicionar-novo-documento-somente-admin-e-tecnico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adicionar novo documento (somente Admin e Técnico)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quando-adicionar-um-documento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quando adicionar um documento?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-chat-com-ia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Chat com IA
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Chat com IA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-e-o-chat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que é o Chat?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplos-de-perguntas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplos de perguntas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#como-usar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Como usar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chatbot-flutuante" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chatbot Flutuante
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-relatorios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Relatórios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Relatórios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tipos-de-relatorio-disponiveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipos de relatório disponíveis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gerar-um-relatorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gerar um relatório
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#baixar-o-relatorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Baixar o relatório
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-catalogo-de-defeitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Catálogo de Defeitos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-notificacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Notificações
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-atendimento-via-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Atendimento via WhatsApp
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Atendimento via WhatsApp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-e-possivel-pelo-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O que é possível pelo WhatsApp
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-gestao-de-usuarios-somente-administrador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Gestão de Usuários (somente Administrador)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Gestão de Usuários (somente Administrador)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cadastrar-novo-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cadastrar novo usuário
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#editar-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Editar usuário
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-meu-perfil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Meu Perfil
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#duvidas-frequentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dúvidas frequentes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="manual-do-usuario-smpi">Manual do Usuário — SMPI<a class="headerlink" href="#manual-do-usuario-smpi" title="Permanent link">&para;</a></h1>
+<h2 id="sistema-de-manutencao-prescritiva-inteligente">Sistema de Manutenção Prescritiva Inteligente<a class="headerlink" href="#sistema-de-manutencao-prescritiva-inteligente" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Acesso ao site em produção:</strong> https://www.techteo.com.br</li>
+<li><strong>Acesso ao GitHub:</strong> https://github.com/renatoteodoro/smpi#</li>
+</ul>
+<hr />
+<h2 id="o-que-e-o-smpi">O que é o SMPI?<a class="headerlink" href="#o-que-e-o-smpi" title="Permanent link">&para;</a></h2>
+<p>O SMPI monitora equipamentos industriais em tempo real. Quando um sensor detecta uma anomalia, o sistema identifica o tipo de problema, busca ocorrências históricas semelhantes e gera automaticamente uma recomendação de manutenção — baseada nos manuais técnicos da empresa.</p>
+<hr />
+<h2 id="perfis-de-acesso">Perfis de Acesso<a class="headerlink" href="#perfis-de-acesso" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Perfil</th>
+<th>Quem é</th>
+<th>O que pode fazer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Administrador</strong></td>
+<td>Gestor da planta</td>
+<td>Acesso total: usuários, equipamentos, configurações</td>
+</tr>
+<tr>
+<td><strong>Técnico de Manutenção</strong></td>
+<td>Técnico responsável</td>
+<td>Visualizar e agir sobre eventos, prescrições e documentos</td>
+</tr>
+<tr>
+<td><strong>Visualizador</strong></td>
+<td>Engenheiro/Gestor</td>
+<td>Somente leitura — dashboards e relatórios</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-acesso-ao-sistema">1. Acesso ao Sistema<a class="headerlink" href="#1-acesso-ao-sistema" title="Permanent link">&para;</a></h2>
+<h3 id="entrar">Entrar<a class="headerlink" href="#entrar" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Acesse https://www.techteo.com.br</li>
+<li>Digite o <strong>e-mail:</strong> <em>renatoteodoro2@gmail.com</em></li>
+<li>Digite a<strong>senha:</strong> <em>Smpi@2026</em></li>
+<li>Clique em <strong>Entrar</strong></li>
+</ol>
+<h3 id="esqueci-minha-senha">Esqueci minha senha<a class="headerlink" href="#esqueci-minha-senha" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Na tela de login, clique em <strong>Esqueceu a senha?</strong></li>
+<li>Informe seu e-mail</li>
+<li>Você receberá um link por e-mail para redefinir a senha</li>
+</ol>
+<blockquote>
+<p><strong>No momento esta função está desativada!</strong> O cadastro de novos usuários é feito pelo <strong>Administrador</strong> — não há autocadastro.</p>
+</blockquote>
+<hr />
+<h2 id="2-dashboard-principal">2. Dashboard Principal<a class="headerlink" href="#2-dashboard-principal" title="Permanent link">&para;</a></h2>
+<p>Após o login, você é direcionado ao <strong>Dashboard</strong> — a visão geral do sistema.</p>
+<h3 id="o-que-voce-ve">O que você vê<a class="headerlink" href="#o-que-voce-ve" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Total de equipamentos</strong> monitorados</li>
+<li><strong>Leituras recebidas</strong> (total histórico)</li>
+<li><strong>Eventos com problema</strong> detectados</li>
+<li><strong>Defeitos mais frequentes</strong></li>
+</ul>
+<h3 id="graficos-disponiveis">Gráficos disponíveis<a class="headerlink" href="#graficos-disponiveis" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Ocorrências ao longo do tempo (linha)</li>
+<li>Frequência por tipo de defeito (barras)</li>
+<li>Ranking de equipamentos com mais problemas</li>
+</ul>
+<blockquote>
+<p>Acesso rápido pelo menu lateral: <strong>Dashboard</strong></p>
+</blockquote>
+<hr />
+<h2 id="3-equipamentos">3. Equipamentos<a class="headerlink" href="#3-equipamentos" title="Permanent link">&para;</a></h2>
+<p>Caminho: menu lateral → <strong>Equipamentos</strong></p>
+<h3 id="ver-lista-de-equipamentos">Ver lista de equipamentos<a class="headerlink" href="#ver-lista-de-equipamentos" title="Permanent link">&para;</a></h3>
+<p>Exibe todos os equipamentos cadastrados com status (ativo, inativo, em manutenção).</p>
+<h3 id="ver-detalhes-de-um-equipamento">Ver detalhes de um equipamento<a class="headerlink" href="#ver-detalhes-de-um-equipamento" title="Permanent link">&para;</a></h3>
+<p>Clique no nome do equipamento para ver:
+- Informações gerais (tipo, setor, status)
+- Últimas leituras de sensor
+- Pontos de medição instalados</p>
+<h3 id="resumo-com-ia">Resumo com IA<a class="headerlink" href="#resumo-com-ia" title="Permanent link">&para;</a></h3>
+<p>Na tela de detalhes do equipamento, clique em <strong>Resumir com IA</strong>. O sistema gera um resumo inteligente do histórico do equipamento. Você será notificado quando estiver pronto.</p>
+<h3 id="cadastrar-equipamento-somente-admin-e-tecnico">Cadastrar equipamento <em>(somente Admin e Técnico)</em><a class="headerlink" href="#cadastrar-equipamento-somente-admin-e-tecnico" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Clique em <strong>Novo Equipamento</strong></li>
+<li>Preencha: nome, tipo, setor, status</li>
+<li>Clique em <strong>Salvar</strong></li>
+</ol>
+<h3 id="adicionar-ponto-de-medicao-somente-admin-e-tecnico">Adicionar ponto de medição <em>(somente Admin e Técnico)</em><a class="headerlink" href="#adicionar-ponto-de-medicao-somente-admin-e-tecnico" title="Permanent link">&para;</a></h3>
+<p>Na tela de detalhes do equipamento, clique em <strong>Adicionar Ponto de Medição</strong> e informe o eixo (X ou Z) e tipo de sensor.</p>
+<hr />
+<h2 id="4-eventos-de-sensor-monitoramento">4. Eventos de Sensor (Monitoramento)<a class="headerlink" href="#4-eventos-de-sensor-monitoramento" title="Permanent link">&para;</a></h2>
+<p>Caminho: menu lateral → <strong>Monitoramento</strong></p>
+<h3 id="o-que-e-um-evento">O que é um evento?<a class="headerlink" href="#o-que-e-um-evento" title="Permanent link">&para;</a></h3>
+<p>Cada vez que o sensor envia uma leitura de vibração, temperatura ou aceleração, ela é registrada como um <strong>evento</strong>. O sistema analisa automaticamente se é um estado normal ou um problema.</p>
+<h3 id="lista-de-eventos">Lista de eventos<a class="headerlink" href="#lista-de-eventos" title="Permanent link">&para;</a></h3>
+<p>Exibe todos os eventos com filtros por:
+- Equipamento
+- Tipo de defeito
+- Data (início e fim)
+- Status (estado / problema)</p>
+<h3 id="detalhes-de-um-evento">Detalhes de um evento<a class="headerlink" href="#detalhes-de-um-evento" title="Permanent link">&para;</a></h3>
+<p>Clique no evento para ver:
+- Métricas do sensor (velocidade, aceleração, temperatura, etc.)
+- Classificação: <strong>Estado</strong> (normal, baseline, etc.) ou <strong>Problema</strong>
+- Prescrição gerada (se houver)</p>
+<h3 id="iniciar-analise-manualmente">Iniciar análise manualmente<a class="headerlink" href="#iniciar-analise-manualmente" title="Permanent link">&para;</a></h3>
+<p>Se o evento ainda não foi analisado, clique em <strong>Analisar</strong>. O sistema executa o pipeline de IA e gera a prescrição. Você será notificado quando concluir.</p>
+<h3 id="resumo-com-ia_1">Resumo com IA<a class="headerlink" href="#resumo-com-ia_1" title="Permanent link">&para;</a></h3>
+<p>Clique em <strong>Resumir evento</strong> para obter uma análise contextualizada do evento em linguagem natural.</p>
+<h3 id="registrar-evento-manualmente-somente-admin-e-tecnico">Registrar evento manualmente <em>(somente Admin e Técnico)</em><a class="headerlink" href="#registrar-evento-manualmente-somente-admin-e-tecnico" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Clique em <strong>Novo Evento</strong></li>
+<li>Selecione o ponto de medição</li>
+<li>Preencha as métricas disponíveis</li>
+<li>Clique em <strong>Salvar</strong> — a análise é disparada automaticamente</li>
+</ol>
+<hr />
+<h2 id="5-prescricoes-recomendacoes">5. Prescrições (Recomendações)<a class="headerlink" href="#5-prescricoes-recomendacoes" title="Permanent link">&para;</a></h2>
+<p>Caminho: menu lateral → <strong>Prescrições</strong></p>
+<h3 id="o-que-e-uma-prescricao">O que é uma prescrição?<a class="headerlink" href="#o-que-e-uma-prescricao" title="Permanent link">&para;</a></h3>
+<p>É a recomendação gerada pelo sistema após analisar um evento problemático. Contém:</p>
+<ul>
+<li><strong>Tipo de defeito</strong> identificado</li>
+<li><strong>Quantidade de ocorrências</strong> históricas similares</li>
+<li><strong>Frequência</strong> com que esse defeito ocorre</li>
+<li><strong>Instruções de solução</strong> — baseadas nos manuais técnicos da empresa</li>
+</ul>
+<h3 id="indicador-de-confiabilidade">Indicador de confiabilidade<a class="headerlink" href="#indicador-de-confiabilidade" title="Permanent link">&para;</a></h3>
+<p>Cada prescrição exibe se é <strong>fundamentada</strong> (baseada em documentação existente) ou <strong>sem documentação</strong>:</p>
+<ul>
+<li>✅ <strong>Fundamentada</strong> — instruções geradas a partir dos manuais da empresa, com citação das fontes</li>
+<li>⚠️ <strong>Sem documentação</strong> — o sistema identificou o defeito mas não encontrou manual correspondente. Neste caso, ele <strong>não inventa</strong> uma solução — apenas informa e sugere cadastrar um novo documento técnico</li>
+</ul>
+<hr />
+<h2 id="6-base-de-conhecimento-documentos">6. Base de Conhecimento (Documentos)<a class="headerlink" href="#6-base-de-conhecimento-documentos" title="Permanent link">&para;</a></h2>
+<p>Caminho: menu lateral → <strong>Documentos</strong></p>
+<h3 id="o-que-e-a-base-de-conhecimento">O que é a base de conhecimento?<a class="headerlink" href="#o-que-e-a-base-de-conhecimento" title="Permanent link">&para;</a></h3>
+<p>É o repositório de manuais técnicos, procedimentos e relatórios de manutenção da empresa. O sistema lê e indexa esses documentos automaticamente para fundamentar as prescrições.</p>
+<h3 id="ver-documentos-indexados">Ver documentos indexados<a class="headerlink" href="#ver-documentos-indexados" title="Permanent link">&para;</a></h3>
+<p>Lista todos os documentos com status de indexação (processando / indexado) e número de trechos gerados.</p>
+<h3 id="adicionar-novo-documento-somente-admin-e-tecnico">Adicionar novo documento <em>(somente Admin e Técnico)</em><a class="headerlink" href="#adicionar-novo-documento-somente-admin-e-tecnico" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Clique em <strong>Novo Documento</strong></li>
+<li>Preencha o título e o tipo de defeito associado (opcional)</li>
+<li>Faça o upload do arquivo (PDF, DOCX ou TXT)</li>
+<li>Clique em <strong>Salvar</strong> — a indexação começa automaticamente em segundo plano</li>
+</ol>
+<blockquote>
+<p>Você receberá uma notificação quando o documento estiver indexado e disponível para uso nas prescrições.</p>
+</blockquote>
+<h3 id="quando-adicionar-um-documento">Quando adicionar um documento?<a class="headerlink" href="#quando-adicionar-um-documento" title="Permanent link">&para;</a></h3>
+<p>Sempre que o sistema emitir o aviso <em>"Defeito sem documentação"</em> em uma prescrição. Cadastre o manual ou procedimento correspondente para que as próximas ocorrências sejam fundamentadas.</p>
+<hr />
+<h2 id="7-chat-com-ia">7. Chat com IA<a class="headerlink" href="#7-chat-com-ia" title="Permanent link">&para;</a></h2>
+<p>Caminho: menu lateral → <strong>Chat</strong></p>
+<h3 id="o-que-e-o-chat">O que é o Chat?<a class="headerlink" href="#o-que-e-o-chat" title="Permanent link">&para;</a></h3>
+<p>Um assistente inteligente que responde perguntas sobre os dados do sistema — equipamentos, eventos, defeitos, prescrições e histórico. Funciona como uma conversa em tempo real.</p>
+<h3 id="exemplos-de-perguntas">Exemplos de perguntas<a class="headerlink" href="#exemplos-de-perguntas" title="Permanent link">&para;</a></h3>
+<ul>
+<li><em>"Quais defeitos ocorreram nas últimas 2 semanas?"</em></li>
+<li><em>"Qual equipamento teve mais problemas este mês?"</em></li>
+<li><em>"O que diz a prescrição do evento 114387?"</em></li>
+<li><em>"Quais são os defeitos mais frequentes no setor de produção?"</em></li>
+</ul>
+<h3 id="como-usar">Como usar<a class="headerlink" href="#como-usar" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Clique em <strong>Nova Conversa</strong> ou escolha uma sessão existente</li>
+<li>Digite sua pergunta no campo de texto</li>
+<li>A resposta aparece em tempo real, palavra por palavra</li>
+<li>O histórico da conversa fica salvo para consulta posterior</li>
+</ol>
+<h3 id="chatbot-flutuante">Chatbot Flutuante<a class="headerlink" href="#chatbot-flutuante" title="Permanent link">&para;</a></h3>
+<p>O ícone de chat no canto inferior direito de qualquer tela do sistema abre o <strong>chatbot flutuante</strong> — acesso rápido ao assistente sem sair da página atual. Clique no ícone para abrir ou fechar.</p>
+<hr />
+<h2 id="8-relatorios">8. Relatórios<a class="headerlink" href="#8-relatorios" title="Permanent link">&para;</a></h2>
+<p>Caminho: menu lateral → <strong>Relatórios</strong></p>
+<h3 id="tipos-de-relatorio-disponiveis">Tipos de relatório disponíveis<a class="headerlink" href="#tipos-de-relatorio-disponiveis" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Relatório</th>
+<th>Conteúdo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Histórico de eventos</td>
+<td>Leituras por período e equipamento</td>
+</tr>
+<tr>
+<td>Frequência de defeitos</td>
+<td>Ranking de defeitos no período</td>
+</tr>
+<tr>
+<td>Prescrições geradas</td>
+<td>Recomendações com fontes documentais</td>
+</tr>
+<tr>
+<td>Saúde dos equipamentos</td>
+<td>Status e ocorrências por equipamento</td>
+</tr>
+</tbody>
+</table>
+<h3 id="gerar-um-relatorio">Gerar um relatório<a class="headerlink" href="#gerar-um-relatorio" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Clique em <strong>Novo Relatório</strong></li>
+<li>Selecione o tipo de relatório</li>
+<li>Informe o período (data início e data fim)</li>
+<li>Clique em <strong>Gerar</strong></li>
+</ol>
+<p>A geração ocorre em segundo plano. Você receberá uma notificação quando estiver pronto.</p>
+<h3 id="baixar-o-relatorio">Baixar o relatório<a class="headerlink" href="#baixar-o-relatorio" title="Permanent link">&para;</a></h3>
+<p>Na lista de relatórios, clique em <strong>Baixar</strong> para obter o arquivo em <strong>PDF</strong> ou <strong>CSV</strong>.</p>
+<hr />
+<h2 id="9-catalogo-de-defeitos">9. Catálogo de Defeitos<a class="headerlink" href="#9-catalogo-de-defeitos" title="Permanent link">&para;</a></h2>
+<p>Caminho: menu lateral → <strong>Defeitos</strong></p>
+<p>Lista todos os tipos de defeito cadastrados no sistema com sua classificação (estado ou problema).</p>
+<p><strong>Somente Administradores</strong> podem cadastrar ou editar defeitos.</p>
+<hr />
+<h2 id="10-notificacoes">10. Notificações<a class="headerlink" href="#10-notificacoes" title="Permanent link">&para;</a></h2>
+<p>O sino ( 🔔 ) no topo da tela exibe notificações do sistema, como:</p>
+<ul>
+<li>Prescrição gerada para um evento</li>
+<li>Documento indexado com sucesso</li>
+<li>Resumo com IA concluído</li>
+<li>Relatório pronto para download</li>
+</ul>
+<p>Clique em uma notificação para ir diretamente à tela correspondente. Clique em <strong>Marcar todas como lidas</strong> para limpar a lista.</p>
+<hr />
+<h2 id="11-atendimento-via-whatsapp">11. Atendimento via WhatsApp<a class="headerlink" href="#11-atendimento-via-whatsapp" title="Permanent link">&para;</a></h2>
+<p>Técnicos de campo podem interagir com o sistema diretamente pelo WhatsApp, sem precisar acessar o computador.</p>
+<h3 id="o-que-e-possivel-pelo-whatsapp">O que é possível pelo WhatsApp<a class="headerlink" href="#o-que-e-possivel-pelo-whatsapp" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Consultar eventos recentes</li>
+<li>Verificar prescrições de defeitos</li>
+<li>Perguntar sobre equipamentos</li>
+<li>Receber notificações de análise concluída</li>
+</ul>
+<p>Basta enviar uma mensagem de texto para o número conectado ao sistema. O assistente responde automaticamente com base nos dados reais da planta.</p>
+<hr />
+<h2 id="12-gestao-de-usuarios-somente-administrador">12. Gestão de Usuários <em>(somente Administrador)</em><a class="headerlink" href="#12-gestao-de-usuarios-somente-administrador" title="Permanent link">&para;</a></h2>
+<p>Caminho: menu lateral → <strong>Usuários</strong></p>
+<h3 id="cadastrar-novo-usuario">Cadastrar novo usuário<a class="headerlink" href="#cadastrar-novo-usuario" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Clique em <strong>Novo Usuário</strong></li>
+<li>Preencha nome, e-mail e selecione o perfil (Administrador, Técnico ou Visualizador)</li>
+<li>Clique em <strong>Salvar</strong></li>
+</ol>
+<p>O usuário receberá um e-mail para definir a própria senha.</p>
+<h3 id="editar-usuario">Editar usuário<a class="headerlink" href="#editar-usuario" title="Permanent link">&para;</a></h3>
+<p>Clique no ícone de edição ao lado do nome do usuário para alterar nome, e-mail, perfil ou status (ativo/inativo).</p>
+<hr />
+<h2 id="13-meu-perfil">13. Meu Perfil<a class="headerlink" href="#13-meu-perfil" title="Permanent link">&para;</a></h2>
+<p>Clique no seu nome no topo da tela → <strong>Meu Perfil</strong> para atualizar seu nome e e-mail.</p>
+<p>Para alterar a senha, use a opção <strong>Esqueceu a senha?</strong> na tela de login.</p>
+<hr />
+<h2 id="duvidas-frequentes">Dúvidas frequentes<a class="headerlink" href="#duvidas-frequentes" title="Permanent link">&para;</a></h2>
+<p><strong>O sistema está analisando um evento mas não aparece a prescrição — o que fazer?</strong>
+A análise é assíncrona. Aguarde a notificação no sino ( 🔔 ) que indica quando a prescrição foi gerada. Em casos de lentidão, atualize a página.</p>
+<p><strong>A prescrição diz "sem documentação" — o que significa?</strong>
+O sistema identificou o tipo de defeito mas não há manual técnico cadastrado para ele. Adicione o documento correspondente em <strong>Documentos → Novo Documento</strong> associando-o ao defeito identificado.</p>
+<p><strong>Como enviar eventos de sensores automaticamente?</strong>
+O sistema possui uma API REST. O endpoint é <code>POST https://www.techteo.com.br/api/v1/readings/</code> autenticado por API Key. Consulte a documentação em <code>/api/docs/</code> ou fale com o Administrador para obter a chave de acesso.</p>
+<p><strong>Posso acessar pelo celular?</strong>
+Sim. O sistema é responsivo e funciona em navegadores de celular. Além disso, técnicos de campo podem usar o <strong>WhatsApp</strong> para consultar o sistema sem abrir o navegador.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar ao topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://fiesc.com.br" target="_blank" rel="noopener" title="FIESC" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M32 32C14.3 32 0 46.3 0 64v368c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V152.2c0-18.2-19.4-29.7-35.4-21.1L320 215.4v-63.2c0-18.2-19.4-29.7-35.4-21.1L128 215.4V64c0-17.7-14.3-32-32-32z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
